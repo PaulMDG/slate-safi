@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { listPress } from "@/lib/content.functions";
+import type { PressItem } from "@/lib/content.types";
 
 export const Route = createFileRoute("/about")({
-  loader: () => listPress(),
+  loader: (): Promise<PressItem[]> => listPress(),
   head: () => ({
     meta: [
       { title: "About Slate Safi — Nairobi Film Production Company" },
