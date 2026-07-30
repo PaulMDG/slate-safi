@@ -83,11 +83,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Slate Safi is a Nairobi-based film production company making Kenyan stories built to travel. Home of Boda Love and Kibera Hustle.",
+          "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences.",
       },
       { name: "author", content: "Slate Safi" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Slate Safi — Kenyan Film Production Company" },
+      { name: "twitter:title", content: "Slate Safi — Kenyan Film Production Company" },
+      { property: "og:description", content: "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences." },
+      { name: "twitter:description", content: "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/896eda11-ae2a-46ff-918e-ccd6a4b3694c/id-preview-5dae560f--bec2303c-9a08-4f73-8c2c-4f3c2f5d9608.lovable.app-1785424656094.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/896eda11-ae2a-46ff-918e-ccd6a4b3694c/id-preview-5dae560f--bec2303c-9a08-4f73-8c2c-4f3c2f5d9608.lovable.app-1785424656094.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -97,7 +103,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Manrope:wght@400;500;600&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,
