@@ -1,24 +1,237 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Play } from "lucide-react";
+import { listFilms, listPosts, listPress } from "@/lib/content.functions";
+import { FilmCard } from "@/components/site/film-card";
+import { LaurelStrip } from "@/components/site/laurel-strip";
+import { NewsletterForm } from "@/components/site/newsletter-form";
+import type { FilmSummary, PressItem, PostSummary } from "@/lib/content.types";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  loader: async (): Promise<{
+    films: FilmSummary[];
+    press: PressItem[];
+    posts: PostSummary[];
+  }> => {
+    const [films, press, posts] = await Promise.all([listFilms(), listPress(), listPosts()]);
+    return { films, press, posts: posts.slice(0, 3) };
+  },
+  head: () => ({
+    meta: [
+      { title: "Slate Safi — Kenyan Film Production Company" },
+      {
+        name: "description",
+        content:
+          "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences.",
+      },
+      { property: "og:title", content: "Slate Safi — Kenyan Film Production Company" },
+      {
+        property: "og:description",
+        content:
+          "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences.",
+      },
+    ],
+  }),
+  errorComponent: () => <LoadFailure />,
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function LoadFailure() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="mx-auto max-w-2xl px-5 py-40 text-center">
+      <h1 className="text-3xl">We couldn't load the slate</h1>
+      <p className="mt-4 text-sm text-muted-foreground">Please refresh to try again.</p>
     </div>
+  );
+}
+
+function Home() {
+  const {
+    films,
+    press,
+    posts,
+  }: {
+    films: FilmSummary[];
+    press: PressItem[];
+    posts: PostSummary[];
+  } = Route.useLoaderData();
+  const hero = films.find((f) => f.featured) ?? films[0];
+  const quotes = press.filter((p) => p.kind === "quote");
+
+  return (
+    <>
+      <section className="relative min-h-[92svh] w-full overflow-hidden">
+        {hero?.hero_image_url ? (
+          <img
+            src={hero.hero_image_url}
+            alt={`${hero.title} — key still`}
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : null}
+        <div className="absolute inset-0 veil" />
+
+        <div className="relative mx-auto flex min-h-[92svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
+          <p className="eyebrow">
+            {hero?.status === "released" ? "Now showing" : "In production"} · Slate Safi
+          </p>
+          <h1 className="mt-5 max-w-4xl text-6xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">
+            {hero?.title ?? "Slate Safi"}
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {hero?.logline}
+          </p>
+          <div className="mt-10">
+            {hero ? (
+              <Link
+                to="/films/$slug"
+                params={{ slug: hero.slug }}
+                className="inline-flex items-center gap-3 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                <Play className="h-4 w-4 fill-current" />
+                Watch the trailer
+              </Link>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      <LaurelStrip items={press} />
+
+      <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
+          <div className="min-w-0">
+            <h2 className="eyebrow">The slate</h2>
+            <p className="mt-4 max-w-xl text-3xl leading-tight sm:text-4xl">
+              Two features. One point of view.
+            </p>
+          </div>
+          <Link
+            to="/films"
+            className="hidden shrink-0 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-primary sm:inline-flex"
+          >
+            All films <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {films.map((film, i) => (
+            <FilmCard
+              key={film.id}
+              slug={film.slug}
+              title={film.title}
+              tagline={film.tagline}
+              status={film.status}
+              release_year={film.release_year}
+              genre={film.genre}
+              image={film.hero_image_url ?? film.poster_url}
+              priority={i === 0}
+            />
+          ))}
+        </div>
+      </section>
+
+      {quotes.length > 0 && (
+        <section className="rule-top border-b border-border">
+          <div className="mx-auto grid max-w-[1400px] gap-10 px-5 py-16 md:grid-cols-3 md:px-10 md:py-20">
+            {quotes.map((q) => (
+              <blockquote key={q.id} className="min-w-0">
+                <p className="font-display text-xl leading-snug">“{q.quote}”</p>
+                <footer className="mt-4 text-xs uppercase tracking-[0.2em] text-primary">
+                  {q.outlet}
+                </footer>
+              </blockquote>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
+          <div className="min-w-0">
+            <h2 className="eyebrow">Latest</h2>
+            <p className="mt-4 text-3xl leading-tight sm:text-4xl">From the studio</p>
+          </div>
+          <Link
+            to="/news"
+            className="hidden shrink-0 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-primary sm:inline-flex"
+          >
+            All news <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mt-12 grid gap-8 md:grid-cols-3">
+          {posts.map((post) => (
+            <Link
+              key={post.id}
+              to="/news/$slug"
+              params={{ slug: post.slug }}
+              className="group min-w-0"
+            >
+              <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border">
+                {post.cover_image_url ? (
+                  <img
+                    src={post.cover_image_url}
+                    alt={post.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                ) : null}
+              </div>
+              <p className="mt-5 text-xs uppercase tracking-[0.2em] text-primary">
+                {post.category}
+              </p>
+              <h3 className="mt-2 text-xl leading-snug transition-colors group-hover:text-primary">
+                {post.title}
+              </h3>
+              <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{post.excerpt}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="rule-top">
+        <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
+          <div className="min-w-0">
+            <h2 className="eyebrow">Newsletter</h2>
+            <p className="mt-4 text-3xl leading-tight sm:text-4xl">
+              Festival dates, releases, first looks.
+            </p>
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
+              A short dispatch for audiences, programmers and press. No more than once a month.
+            </p>
+          </div>
+          <div className="flex items-center">
+            <NewsletterForm source="homepage" />
+          </div>
+        </div>
+      </section>
+
+      <section className="rule-top">
+        <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
+          <div className="frame rounded-sm border border-border p-8 md:p-16">
+            <div className="grid gap-10 md:grid-cols-[1.6fr_1fr] md:items-end">
+              <div className="min-w-0">
+                <h2 className="eyebrow">Partners &amp; sponsors</h2>
+                <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-5xl">
+                  Back a slate that already travels.
+                </p>
+                <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                  Brand partnership, co-production, festival support and distribution — we work with
+                  partners across Kenya, the UK, Canada and the US.
+                </p>
+              </div>
+              <Link
+                to="/partner"
+                className="inline-flex items-center justify-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Partner with us <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
