@@ -14,7 +14,303 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          inquiry_type: string
+          message: string
+          name: string
+          organisation: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          inquiry_type?: string
+          message: string
+          name: string
+          organisation?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          inquiry_type?: string
+          message?: string
+          name?: string
+          organisation?: string | null
+        }
+        Relationships: []
+      }
+      film_credits: {
+        Row: {
+          bio: string | null
+          character_name: string | null
+          created_at: string
+          credit_type: string
+          film_id: string
+          id: string
+          name: string
+          photo_url: string | null
+          role: string
+          sort_order: number
+        }
+        Insert: {
+          bio?: string | null
+          character_name?: string | null
+          created_at?: string
+          credit_type?: string
+          film_id: string
+          id?: string
+          name: string
+          photo_url?: string | null
+          role: string
+          sort_order?: number
+        }
+        Update: {
+          bio?: string | null
+          character_name?: string | null
+          created_at?: string
+          credit_type?: string
+          film_id?: string
+          id?: string
+          name?: string
+          photo_url?: string | null
+          role?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "film_credits_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      film_gallery: {
+        Row: {
+          caption: string | null
+          created_at: string
+          film_id: string
+          id: string
+          image_url: string
+          sort_order: number
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          film_id: string
+          id?: string
+          image_url: string
+          sort_order?: number
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          film_id?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "film_gallery_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      films: {
+        Row: {
+          country: string | null
+          created_at: string
+          featured: boolean
+          genre: string | null
+          hero_image_url: string | null
+          id: string
+          language: string | null
+          logline: string | null
+          poster_url: string | null
+          published: boolean
+          release_year: number | null
+          runtime_minutes: number | null
+          slug: string
+          sort_order: number
+          status: string
+          synopsis: string | null
+          tagline: string | null
+          title: string
+          trailer_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          featured?: boolean
+          genre?: string | null
+          hero_image_url?: string | null
+          id?: string
+          language?: string | null
+          logline?: string | null
+          poster_url?: string | null
+          published?: boolean
+          release_year?: number | null
+          runtime_minutes?: number | null
+          slug: string
+          sort_order?: number
+          status?: string
+          synopsis?: string | null
+          tagline?: string | null
+          title: string
+          trailer_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          featured?: boolean
+          genre?: string | null
+          hero_image_url?: string | null
+          id?: string
+          language?: string | null
+          logline?: string | null
+          poster_url?: string | null
+          published?: boolean
+          release_year?: number | null
+          runtime_minutes?: number | null
+          slug?: string
+          sort_order?: number
+          status?: string
+          synopsis?: string | null
+          tagline?: string | null
+          title?: string
+          trailer_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
+      posts: {
+        Row: {
+          author: string | null
+          body: string | null
+          category: string | null
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published: boolean
+          published_at: string
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          body?: string | null
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          body?: string | null
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      press_items: {
+        Row: {
+          created_at: string
+          film_id: string | null
+          id: string
+          kind: string
+          link_url: string | null
+          outlet: string | null
+          published: boolean
+          quote: string | null
+          sort_order: number
+          title: string
+          year: number | null
+        }
+        Insert: {
+          created_at?: string
+          film_id?: string | null
+          id?: string
+          kind?: string
+          link_url?: string | null
+          outlet?: string | null
+          published?: boolean
+          quote?: string | null
+          sort_order?: number
+          title: string
+          year?: number | null
+        }
+        Update: {
+          created_at?: string
+          film_id?: string | null
+          id?: string
+          kind?: string
+          link_url?: string | null
+          outlet?: string | null
+          published?: boolean
+          quote?: string | null
+          sort_order?: number
+          title?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "press_items_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
