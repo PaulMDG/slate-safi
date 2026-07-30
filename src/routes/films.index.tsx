@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { listFilms } from "@/lib/content.functions";
 import { FilmCard } from "@/components/site/film-card";
 
-export const Route = createFileRoute("/films")({
+export const Route = createFileRoute("/films/")({
   loader: () => listFilms(),
   head: () => ({
     meta: [
