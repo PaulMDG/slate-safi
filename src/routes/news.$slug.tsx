@@ -13,7 +13,10 @@ export const Route = createFileRoute("/news/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Article unavailable — Slate Safi" }, { name: "robots", content: "noindex" }],
+        meta: [
+          { title: "Article unavailable — Slate Safi" },
+          { name: "robots", content: "noindex" },
+        ],
       };
     }
     const description = (loaderData.excerpt ?? "A note from Slate Safi.").slice(0, 158);
@@ -45,7 +48,7 @@ export const Route = createFileRoute("/news/$slug")({
 });
 
 function PostPage() {
-  const post = Route.useLoaderData();
+  const post: Post = Route.useLoaderData();
 
   return (
     <article className="mx-auto max-w-[880px] px-5 pt-36 md:pt-44">

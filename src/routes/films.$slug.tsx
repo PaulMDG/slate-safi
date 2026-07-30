@@ -11,7 +11,9 @@ export const Route = createFileRoute("/films/$slug")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Film not found — Slate Safi" }, { name: "robots", content: "noindex" }] };
+      return {
+        meta: [{ title: "Film not found — Slate Safi" }, { name: "robots", content: "noindex" }],
+      };
     }
     const { film } = loaderData;
     const description = film.logline ?? `${film.title} — a Slate Safi production.`;
@@ -42,7 +44,7 @@ export const Route = createFileRoute("/films/$slug")({
 });
 
 function FilmDetail() {
-  const { film, credits, gallery } = Route.useLoaderData();
+  const { film, credits, gallery }: FilmDetail = Route.useLoaderData();
   const cast = credits.filter((c) => c.credit_type === "cast");
   const crew = credits.filter((c) => c.credit_type === "crew");
 
@@ -70,7 +72,9 @@ function FilmDetail() {
             {film.title}
           </h1>
           {film.tagline ? (
-            <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">{film.tagline}</p>
+            <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
+              {film.tagline}
+            </p>
           ) : null}
           <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[0.7rem] uppercase tracking-[0.2em] text-muted-foreground">
             <li className="text-primary">{film.status === "released" ? "Released" : "Upcoming"}</li>
@@ -132,7 +136,10 @@ function FilmDetail() {
             {cast.length > 0 && (
               <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {cast.map((person) => (
-                  <div key={person.id} className="frame min-w-0 rounded-sm border border-border p-6">
+                  <div
+                    key={person.id}
+                    className="frame min-w-0 rounded-sm border border-border p-6"
+                  >
                     <p className="text-lg leading-tight font-display font-bold">{person.name}</p>
                     {person.character_name ? (
                       <p className="mt-2 text-sm text-primary">as {person.character_name}</p>
@@ -167,10 +174,7 @@ function FilmDetail() {
             <h2 className="eyebrow">Gallery</h2>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {gallery.map((image) => (
-                <figure
-                  key={image.id}
-                  className="overflow-hidden rounded-sm border border-border"
-                >
+                <figure key={image.id} className="overflow-hidden rounded-sm border border-border">
                   <img
                     src={image.image_url}
                     alt={image.caption ?? `${film.title} still`}

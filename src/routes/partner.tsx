@@ -241,7 +241,10 @@ function Partner() {
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span className="min-w-0">
                   <span className="block text-muted-foreground">Partnerships</span>
-                  <a href="mailto:partners@slatesafi.co.ke" className="break-words hover:text-primary">
+                  <a
+                    href="mailto:partners@slatesafi.co.ke"
+                    className="break-words hover:text-primary"
+                  >
                     partners@slatesafi.co.ke
                   </a>
                 </span>

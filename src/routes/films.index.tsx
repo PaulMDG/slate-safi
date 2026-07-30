@@ -30,7 +30,7 @@ export const Route = createFileRoute("/films/")({
 });
 
 function FilmsIndex() {
-  const films = Route.useLoaderData();
+  const films: FilmSummary[] = Route.useLoaderData();
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 pb-8 pt-36 md:px-10 md:pt-44">

@@ -37,7 +37,7 @@ function formatDate(value: string) {
 }
 
 function NewsIndex() {
-  const posts = Route.useLoaderData();
+  const posts: PostSummary[] = Route.useLoaderData();
   const [lead, ...rest] = posts;
 
   return (
@@ -77,7 +77,12 @@ function NewsIndex() {
 
       <div className="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
         {rest.map((post) => (
-          <Link key={post.id} to="/news/$slug" params={{ slug: post.slug }} className="group min-w-0">
+          <Link
+            key={post.id}
+            to="/news/$slug"
+            params={{ slug: post.slug }}
+            className="group min-w-0"
+          >
             <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border">
               {post.cover_image_url ? (
                 <img

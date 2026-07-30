@@ -45,7 +45,15 @@ function LoadFailure() {
 }
 
 function Home() {
-  const { films, press, posts } = Route.useLoaderData();
+  const {
+    films,
+    press,
+    posts,
+  }: {
+    films: FilmSummary[];
+    press: PressItem[];
+    posts: PostSummary[];
+  } = Route.useLoaderData();
   const hero = films.find((f) => f.featured) ?? films[0];
   const quotes = press.filter((p) => p.kind === "quote");
 
@@ -171,7 +179,9 @@ function Home() {
                   />
                 ) : null}
               </div>
-              <p className="mt-5 text-xs uppercase tracking-[0.2em] text-primary">{post.category}</p>
+              <p className="mt-5 text-xs uppercase tracking-[0.2em] text-primary">
+                {post.category}
+              </p>
               <h3 className="mt-2 text-xl leading-snug transition-colors group-hover:text-primary">
                 {post.title}
               </h3>

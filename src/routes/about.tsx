@@ -54,15 +54,24 @@ const LEADERSHIP = [
 ];
 
 const MARKETS = [
-  { place: "Kenya", note: "Production base, Nairobi. Full in-house crew and equipment relationships." },
-  { place: "Wider Africa", note: "Festival and broadcast partners across East and Southern Africa." },
-  { place: "United Kingdom", note: "London EP desk, post facility partnership and sales representation." },
+  {
+    place: "Kenya",
+    note: "Production base, Nairobi. Full in-house crew and equipment relationships.",
+  },
+  {
+    place: "Wider Africa",
+    note: "Festival and broadcast partners across East and Southern Africa.",
+  },
+  {
+    place: "United Kingdom",
+    note: "London EP desk, post facility partnership and sales representation.",
+  },
   { place: "Canada", note: "Toronto co-production and diaspora distribution partners." },
   { place: "United States", note: "US festival strategy and streaming acquisition conversations." },
 ];
 
 function About() {
-  const press = Route.useLoaderData();
+  const press: PressItem[] = Route.useLoaderData();
   const quotes = press.filter((p) => p.kind === "quote");
   const laurels = press.filter((p) => p.kind === "laurel");
 
@@ -75,8 +84,8 @@ function About() {
         </h1>
         <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
           Slate Safi is an independent film production company in Nairobi. We develop, produce and
-          deliver feature work with majority-Kenyan crews and international finance — films that hold
-          up in a Nairobi cinema and in a festival theatre in London, Toronto or Austin.
+          deliver feature work with majority-Kenyan crews and international finance — films that
+          hold up in a Nairobi cinema and in a festival theatre in London, Toronto or Austin.
         </p>
       </section>
 
@@ -98,8 +107,8 @@ function About() {
             <h2 className="eyebrow">Our story</h2>
             <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
               <p>
-                Slate Safi started in 2019 as three people, one camera package and a stubborn belief:
-                that the reason Kenyan features rarely travelled was not talent, it was
+                Slate Safi started in 2019 as three people, one camera package and a stubborn
+                belief: that the reason Kenyan features rarely travelled was not talent, it was
                 infrastructure — financing, delivery standards and credits that international
                 partners recognise.
               </p>
@@ -146,7 +155,9 @@ function About() {
             {LEADERSHIP.map((person) => (
               <div key={person.name} className="frame min-w-0 rounded-sm border border-border p-6">
                 <h3 className="text-xl leading-tight">{person.name}</h3>
-                <p className="mt-2 text-xs uppercase tracking-[0.18em] text-primary">{person.role}</p>
+                <p className="mt-2 text-xs uppercase tracking-[0.18em] text-primary">
+                  {person.role}
+                </p>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{person.bio}</p>
               </div>
             ))}
@@ -157,7 +168,9 @@ function About() {
       <section className="rule-top">
         <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
           <h2 className="eyebrow">Reach</h2>
-          <p className="mt-4 text-3xl leading-tight sm:text-4xl">Five markets, one production base</p>
+          <p className="mt-4 text-3xl leading-tight sm:text-4xl">
+            Five markets, one production base
+          </p>
           <ul className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
             {MARKETS.map((m) => (
               <li key={m.place} className="min-w-0 border-l border-primary/50 pl-5">
@@ -176,7 +189,10 @@ function About() {
               <h2 className="eyebrow">Selections &amp; awards</h2>
               <ul className="mt-8 space-y-5">
                 {laurels.map((l) => (
-                  <li key={l.id} className="rule-top grid grid-cols-[minmax(0,1fr)_auto] gap-4 pt-4">
+                  <li
+                    key={l.id}
+                    className="rule-top grid grid-cols-[minmax(0,1fr)_auto] gap-4 pt-4"
+                  >
                     <span className="min-w-0">
                       <span className="block font-display text-sm font-bold uppercase tracking-[0.06em]">
                         {l.title}
