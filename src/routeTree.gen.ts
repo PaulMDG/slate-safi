@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as FilmsIndexRouteImport } from './routes/films.index'
 import { Route as FilmsSlugRouteImport } from './routes/films.$slug'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
@@ -18,6 +20,16 @@ import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FilmsIndexRoute = FilmsIndexRouteImport.update({
@@ -43,6 +55,8 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/partner': typeof PartnerRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
@@ -50,6 +64,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/partner': typeof PartnerRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films': typeof FilmsIndexRoute
@@ -58,6 +74,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/partner': typeof PartnerRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
@@ -65,14 +83,38 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/films/$slug' | '/news/$slug' | '/films/' | '/news/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/partner'
+    | '/films/$slug'
+    | '/news/$slug'
+    | '/films/'
+    | '/news/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/films/$slug' | '/news/$slug' | '/films' | '/news'
-  id: '__root__' | '/' | '/films/$slug' | '/news/$slug' | '/films/' | '/news/'
+  to:
+    | '/'
+    | '/about'
+    | '/partner'
+    | '/films/$slug'
+    | '/news/$slug'
+    | '/films'
+    | '/news'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/partner'
+    | '/films/$slug'
+    | '/news/$slug'
+    | '/films/'
+    | '/news/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  PartnerRoute: typeof PartnerRoute
   FilmsSlugRoute: typeof FilmsSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   FilmsIndexRoute: typeof FilmsIndexRoute
@@ -86,6 +128,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/films/': {
@@ -121,6 +177,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  PartnerRoute: PartnerRoute,
   FilmsSlugRoute: FilmsSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   FilmsIndexRoute: FilmsIndexRoute,
