@@ -1,9 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Heart } from "lucide-react";
 import { getFilm } from "@/lib/content.functions";
+import type { FilmDetail } from "@/lib/content.types";
 
 export const Route = createFileRoute("/films/$slug")({
-  loader: async ({ params }) => {
+  loader: async ({ params }): Promise<FilmDetail> => {
     const result = await getFilm({ data: { slug: params.slug } });
     if (!result) throw notFound();
     return result;

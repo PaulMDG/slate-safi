@@ -2,9 +2,10 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { getPost } from "@/lib/content.functions";
 import { NewsletterForm } from "@/components/site/newsletter-form";
+import type { Post } from "@/lib/content.types";
 
 export const Route = createFileRoute("/news/$slug")({
-  loader: async ({ params }) => {
+  loader: async ({ params }): Promise<Post> => {
     const post = await getPost({ data: { slug: params.slug } });
     if (!post) throw notFound();
     return post;

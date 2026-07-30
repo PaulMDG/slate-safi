@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { listFilms } from "@/lib/content.functions";
 import { FilmCard } from "@/components/site/film-card";
+import type { FilmSummary } from "@/lib/content.types";
 
 export const Route = createFileRoute("/films/")({
-  loader: () => listFilms(),
+  loader: (): Promise<FilmSummary[]> => listFilms(),
   head: () => ({
     meta: [
       { title: "Films — Slate Safi" },

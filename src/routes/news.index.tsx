@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { listPosts } from "@/lib/content.functions";
+import type { PostSummary } from "@/lib/content.types";
 
 export const Route = createFileRoute("/news/")({
-  loader: () => listPosts(),
+  loader: (): Promise<PostSummary[]> => listPosts(),
   head: () => ({
     meta: [
       { title: "News & Notes — Slate Safi" },

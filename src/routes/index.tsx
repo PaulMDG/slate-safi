@@ -4,9 +4,14 @@ import { listFilms, listPosts, listPress } from "@/lib/content.functions";
 import { FilmCard } from "@/components/site/film-card";
 import { LaurelStrip } from "@/components/site/laurel-strip";
 import { NewsletterForm } from "@/components/site/newsletter-form";
+import type { FilmSummary, PressItem, PostSummary } from "@/lib/content.types";
 
 export const Route = createFileRoute("/")({
-  loader: async () => {
+  loader: async (): Promise<{
+    films: FilmSummary[];
+    press: PressItem[];
+    posts: PostSummary[];
+  }> => {
     const [films, press, posts] = await Promise.all([listFilms(), listPress(), listPosts()]);
     return { films, press, posts: posts.slice(0, 3) };
   },
