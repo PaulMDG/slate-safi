@@ -224,3 +224,6 @@ function About() {
     </div>
   );
 }
+type __Probe = ReturnType<typeof Route.useLoaderData>;
+const __probe: __Probe = 1 as never;
+export const __x: number = __probe;
