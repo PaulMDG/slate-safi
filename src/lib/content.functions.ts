@@ -1,7 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
-
-const slugInput = z.object({ slug: z.string().min(1).max(120) });
+import { slugInput, emailSchema, contactSchema } from "./content.schemas";
 
 export const listFilms = createServerFn({ method: "GET" }).handler(async () => {
   const { publicSupabase } = await import("./content.server");
@@ -92,11 +90,6 @@ export const getPost = createServerFn({ method: "GET" })
     return post;
   });
 
-const emailSchema = z.object({
-  email: z.string().trim().email().max(255),
-  source: z.string().trim().max(60).optional(),
-});
-
 export const subscribeToNewsletter = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => emailSchema.parse(data))
   .handler(async ({ data }) => {
@@ -109,14 +102,6 @@ export const subscribeToNewsletter = createServerFn({ method: "POST" })
     }
     return { ok: true };
   });
-
-const contactSchema = z.object({
-  name: z.string().trim().min(1).max(120),
-  email: z.string().trim().email().max(255),
-  organisation: z.string().trim().max(160).optional(),
-  inquiry_type: z.enum(["partnership", "distribution", "press", "general"]),
-  message: z.string().trim().min(10).max(4000),
-});
 
 export const submitEnquiry = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => contactSchema.parse(data))
