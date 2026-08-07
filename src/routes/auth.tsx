@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/auth")({
@@ -68,14 +67,6 @@ function AuthPage() {
     }
   }
 
-  async function withGoogle() {
-    try {
-      await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    } catch {
-      toast.error("Google sign-in is unavailable right now.");
-    }
-  }
-
   return (
     <div className="mx-auto flex min-h-[80vh] max-w-md flex-col justify-center px-5 py-32">
       <p className="eyebrow">Studio access</p>
@@ -131,14 +122,6 @@ function AuthPage() {
               {mode === "signin" ? "Sign in" : "Create account"}
             </button>
           </form>
-
-          <button
-            type="button"
-            onClick={withGoogle}
-            className="mt-4 w-full rounded-sm border border-border px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] transition-colors hover:border-primary"
-          >
-            Continue with Google
-          </button>
 
           <button
             type="button"
