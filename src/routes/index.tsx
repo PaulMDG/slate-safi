@@ -5,6 +5,7 @@ import { FilmCard } from "@/components/site/film-card";
 import { LaurelStrip } from "@/components/site/laurel-strip";
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import type { FilmSummary, PressItem, PostSummary } from "@/lib/content.types";
+import { SITE_URL, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   loader: async (): Promise<{
