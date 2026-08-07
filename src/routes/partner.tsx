@@ -7,21 +7,15 @@ import { submitEnquiry } from "@/lib/content.functions";
 import { contactSchema } from "@/lib/content.schemas";
 
 export const Route = createFileRoute("/partner")({
-  head: () => ({
-    meta: [
-      { title: "Partner & Contact — Slate Safi" },
-      {
-        name: "description",
-        content:
-          "Sponsorship, co-production, distribution and press enquiries for Slate Safi, the Nairobi film production company behind Boda Love and Kibera Hustle.",
-      },
-      { property: "og:title", content: "Partner & Contact — Slate Safi" },
-      {
-        property: "og:description",
-        content: "Sponsorship, co-production, distribution and press enquiries for Slate Safi.",
-      },
-    ],
-  }),
+  head: () =>
+    socialMeta({
+      title: "Partner & Contact — Slate Safi",
+      description:
+        "Sponsorship, co-production, distribution and press enquiries for Slate Safi, the Nairobi film production company behind Boda Love and Kibera Hustle.",
+      path: "/partner",
+      image: "/images/slate-safi-crew.jpg",
+    }),
+
   component: Partner,
 });
 
