@@ -9,23 +9,60 @@ export const Route = createFileRoute("/films/$slug")({
     if (!result) throw notFound();
     return result;
   },
-  head: ({ loaderData }) => {
+  head: ({ params, loaderData }) => {
     if (!loaderData) {
       return {
         meta: [{ title: "Film not found — Slate Safi" }, { name: "robots", content: "noindex" }],
       };
     }
-    const { film } = loaderData;
-    const description = film.logline ?? `${film.title} — a Slate Safi production.`;
+    const { film, credits, press } = loaderData;
+    const description = truncate(
+      film.logline ?? film.synopsis ?? `${film.title} — a Slate Safi production.`,
+    );
+    const image = absoluteUrl(film.hero_image_url ?? film.poster_url);
+    const social = socialMeta({
+      title: `${film.title} (${film.release_year ?? "TBA"}) — Slate Safi`,
+      description,
+      path: `/films/${params.slug}`,
+      image,
+      type: "video.movie",
+    });
     return {
-      meta: [
-        { title: `${film.title} — Slate Safi` },
-        { name: "description", content: description.slice(0, 158) },
-        { property: "og:title", content: `${film.title} — Slate Safi` },
-        { property: "og:description", content: description.slice(0, 158) },
+      ...social,
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Movie",
+            name: film.title,
+            description,
+            url: `${SITE_URL}/films/${params.slug}`,
+            ...(image ? { image } : {}),
+            ...(film.genre ? { genre: film.genre } : {}),
+            ...(film.release_year ? { datePublished: String(film.release_year) } : {}),
+            ...(film.runtime_minutes ? { duration: `PT${film.runtime_minutes}M` } : {}),
+            ...(film.country ? { countryOfOrigin: { "@type": "Country", name: film.country } } : {}),
+            ...(film.language ? { inLanguage: film.language } : {}),
+            ...(film.trailer_url
+              ? { trailer: { "@type": "VideoObject", name: `${film.title} trailer`, url: film.trailer_url } }
+              : {}),
+            director: credits
+              .filter((c) => /director/i.test(c.role))
+              .map((c) => ({ "@type": "Person", name: c.name })),
+            actor: credits
+              .filter((c) => c.credit_type === "cast")
+              .map((c) => ({ "@type": "Person", name: c.name })),
+            productionCompany: { "@type": "Organization", name: "Slate Safi" },
+            ...(press.some((p) => p.kind === "award")
+              ? { award: press.filter((p) => p.kind === "award").map((p) => p.title) }
+              : {}),
+          }),
+        },
       ],
     };
   },
+
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">
       <h1 className="text-3xl">We couldn't load this film</h1>
