@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { getPost } from "@/lib/content.functions";
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import type { Post } from "@/lib/content.types";
+import { SITE_URL, absoluteUrl, socialMeta, truncate } from "@/lib/seo";
 
 export const Route = createFileRoute("/news/$slug")({
   loader: async ({ params }): Promise<Post> => {
@@ -10,7 +11,7 @@ export const Route = createFileRoute("/news/$slug")({
     if (!post) throw notFound();
     return post;
   },
-  head: ({ loaderData }) => {
+  head: ({ params, loaderData }) => {
     if (!loaderData) {
       return {
         meta: [
@@ -19,17 +20,49 @@ export const Route = createFileRoute("/news/$slug")({
         ],
       };
     }
-    const description = (loaderData.excerpt ?? "A note from Slate Safi.").slice(0, 158);
+    const description = truncate(loaderData.excerpt ?? "A note from Slate Safi.");
+    const image = absoluteUrl(loaderData.cover_image_url);
+    const url = `${SITE_URL}/news/${params.slug}`;
+    const social = socialMeta({
+      title: `${loaderData.title} — Slate Safi`,
+      description,
+      path: `/news/${params.slug}`,
+      image,
+      type: "article",
+    });
     return {
       meta: [
-        { title: `${loaderData.title} — Slate Safi` },
-        { name: "description", content: description },
-        { property: "og:title", content: loaderData.title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "article" },
+        ...social.meta,
+        { property: "article:published_time", content: loaderData.published_at },
+        ...(loaderData.author ? [{ property: "article:author", content: loaderData.author }] : []),
+        ...(loaderData.category
+          ? [{ property: "article:section", content: loaderData.category }]
+          : []),
+      ],
+      links: social.links,
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            headline: loaderData.title,
+            description,
+            url,
+            mainEntityOfPage: { "@type": "WebPage", "@id": url },
+            datePublished: loaderData.published_at,
+            dateModified: loaderData.updated_at ?? loaderData.published_at,
+            ...(image ? { image: [image] } : {}),
+            ...(loaderData.author
+              ? { author: { "@type": "Person", name: loaderData.author } }
+              : {}),
+            publisher: { "@type": "Organization", name: "Slate Safi" },
+          }),
+        },
       ],
     };
   },
+
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">
       <h1 className="text-3xl">We couldn't load this article</h1>
