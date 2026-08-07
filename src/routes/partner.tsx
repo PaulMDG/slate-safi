@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
 import { submitEnquiry } from "@/lib/content.functions";
 import { contactSchema } from "@/lib/content.schemas";
+import { socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/partner")({
   head: () =>
