@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Heart } from "lucide-react";
 import { getFilm } from "@/lib/content.functions";
 import type { FilmDetail } from "@/lib/content.types";
+import { SITE_URL, absoluteUrl, socialMeta, truncate } from "@/lib/seo";
 
 export const Route = createFileRoute("/films/$slug")({
   loader: async ({ params }): Promise<FilmDetail> => {
