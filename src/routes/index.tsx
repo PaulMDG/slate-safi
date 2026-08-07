@@ -5,6 +5,7 @@ import { FilmCard } from "@/components/site/film-card";
 import { LaurelStrip } from "@/components/site/laurel-strip";
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import type { FilmSummary, PressItem, PostSummary } from "@/lib/content.types";
+import { SITE_URL, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   loader: async (): Promise<{
@@ -15,22 +16,48 @@ export const Route = createFileRoute("/")({
     const [films, press, posts] = await Promise.all([listFilms(), listPress(), listPosts()]);
     return { films, press, posts: posts.slice(0, 3) };
   },
-  head: () => ({
-    meta: [
-      { title: "Slate Safi — Kenyan Film Production Company" },
-      {
-        name: "description",
-        content:
-          "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences.",
-      },
-      { property: "og:title", content: "Slate Safi — Kenyan Film Production Company" },
-      {
-        property: "og:description",
-        content:
-          "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences.",
-      },
-    ],
-  }),
+  head: () => {
+    const social = socialMeta({
+      title: "Slate Safi — Kenyan Film Production Company",
+      description:
+        "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences.",
+      path: "/",
+      image: "/images/boda-love-hero.jpg",
+    });
+    return {
+      ...social,
+      links: [
+        ...social.links,
+        {
+          rel: "alternate",
+          type: "application/rss+xml",
+          title: "Slate Safi — News",
+          href: `${SITE_URL}/rss.xml`,
+        },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Slate Safi",
+            url: SITE_URL,
+            description:
+              "Independent film production company in Nairobi, Kenya, producing features for international audiences.",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Nairobi",
+              addressRegion: "Kilimani",
+              addressCountry: "KE",
+            },
+            email: "partners@slatesafi.co.ke",
+          }),
+        },
+      ],
+    };
+  },
+
   errorComponent: () => <LoadFailure />,
   component: Home,
 });

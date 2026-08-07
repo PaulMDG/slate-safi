@@ -2,25 +2,19 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { listPress } from "@/lib/content.functions";
 import type { PressItem } from "@/lib/content.types";
+import { socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
   loader: (): Promise<PressItem[]> => listPress(),
-  head: () => ({
-    meta: [
-      { title: "About Slate Safi — Nairobi Film Production Company" },
-      {
-        name: "description",
-        content:
-          "Slate Safi is an independent Nairobi film production company building Kenyan stories for audiences in East Africa, the UK, Canada and the US.",
-      },
-      { property: "og:title", content: "About Slate Safi" },
-      {
-        property: "og:description",
-        content:
-          "An independent Nairobi film production company building Kenyan stories for global audiences.",
-      },
-    ],
-  }),
+  head: () =>
+    socialMeta({
+      title: "About Slate Safi — Nairobi Film Production Company",
+      description:
+        "Slate Safi is an independent Nairobi film production company building Kenyan stories for audiences in East Africa, the UK, Canada and the US.",
+      path: "/about",
+      image: "/images/slate-safi-crew.jpg",
+    }),
+
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">
       <h1 className="text-3xl">We couldn't load this page</h1>

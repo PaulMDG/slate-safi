@@ -1,27 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
 import { submitEnquiry } from "@/lib/content.functions";
 import { contactSchema } from "@/lib/content.schemas";
+import { socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/partner")({
-  head: () => ({
-    meta: [
-      { title: "Partner & Contact — Slate Safi" },
-      {
-        name: "description",
-        content:
-          "Sponsorship, co-production, distribution and press enquiries for Slate Safi, the Nairobi film production company behind Boda Love and Kibera Hustle.",
-      },
-      { property: "og:title", content: "Partner & Contact — Slate Safi" },
-      {
-        property: "og:description",
-        content: "Sponsorship, co-production, distribution and press enquiries for Slate Safi.",
-      },
-    ],
-  }),
+  head: () =>
+    socialMeta({
+      title: "Partner & Contact — Slate Safi",
+      description:
+        "Sponsorship, co-production, distribution and press enquiries for Slate Safi, the Nairobi film production company behind Boda Love and Kibera Hustle.",
+      path: "/partner",
+      image: "/images/slate-safi-crew.jpg",
+    }),
+
   component: Partner,
 });
 
@@ -54,6 +49,8 @@ function Partner() {
   const send = useServerFn(submitEnquiry);
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const mountedAt = useRef(Date.now());
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -75,7 +72,9 @@ function Partner() {
     }
     setPending(true);
     try {
-      await send({ data: parsed.data });
+      await send({
+        data: { ...parsed.data, honeypot, elapsed_ms: Date.now() - mountedAt.current },
+      });
       setDone(true);
       setForm({ name: "", email: "", organisation: "", inquiry_type: "partnership", message: "" });
       toast.success("Thank you — we'll be in touch within two working days.");
@@ -85,6 +84,7 @@ function Partner() {
       setPending(false);
     }
   }
+
 
   const fieldClass =
     "w-full rounded-sm border border-input bg-background/60 px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary";
@@ -137,6 +137,19 @@ function Partner() {
               </div>
             ) : (
               <form onSubmit={onSubmit} className="mt-10 space-y-6">
+                {/* Anti-spam honeypot: hidden from users, tempting to bots. */}
+                <div aria-hidden="true" className="hidden">
+                  <label htmlFor="company_website">Company website</label>
+                  <input
+                    id="company_website"
+                    name="company_website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <label className={labelClass} htmlFor="name">

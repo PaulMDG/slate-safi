@@ -1,24 +1,32 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { listPosts } from "@/lib/content.functions";
 import type { PostSummary } from "@/lib/content.types";
+import { SITE_URL, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/news/")({
   loader: (): Promise<PostSummary[]> => listPosts(),
-  head: () => ({
-    meta: [
-      { title: "News & Notes — Slate Safi" },
-      {
-        name: "description",
-        content:
-          "Production updates, festival selections and studio notes from Slate Safi, the Nairobi film production company behind Boda Love.",
-      },
-      { property: "og:title", content: "News & Notes — Slate Safi" },
-      {
-        property: "og:description",
-        content: "Production updates, festival selections and studio notes from Slate Safi.",
-      },
-    ],
-  }),
+  head: () => {
+    const social = socialMeta({
+      title: "News & Notes — Slate Safi",
+      description:
+        "Production updates, festival selections and studio notes from Slate Safi, the Nairobi film production company behind Boda Love.",
+      path: "/news",
+      image: "/images/kibera-hustle-hero.jpg",
+    });
+    return {
+      ...social,
+      links: [
+        ...social.links,
+        {
+          rel: "alternate",
+          type: "application/rss+xml",
+          title: "Slate Safi — News",
+          href: `${SITE_URL}/rss.xml`,
+        },
+      ],
+    };
+  },
+
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">
       <h1 className="text-3xl">We couldn't load the news</h1>

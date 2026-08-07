@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -7,7 +7,9 @@ import { subscribeToNewsletter } from "@/lib/content.functions";
 export function NewsletterForm({ source = "website" }: { source?: string }) {
   const subscribe = useServerFn(subscribeToNewsletter);
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [pending, setPending] = useState(false);
+  const mountedAt = useRef(Date.now());
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -18,7 +20,14 @@ export function NewsletterForm({ source = "website" }: { source?: string }) {
     }
     setPending(true);
     try {
-      await subscribe({ data: { email: value, source } });
+      await subscribe({
+        data: {
+          email: value,
+          source,
+          honeypot,
+          elapsed_ms: Date.now() - mountedAt.current,
+        },
+      });
       setEmail("");
       toast.success("You're on the list. Watch for our next dispatch.");
     } catch {
@@ -33,6 +42,18 @@ export function NewsletterForm({ source = "website" }: { source?: string }) {
       <label htmlFor={`newsletter-${source}`} className="sr-only">
         Email address
       </label>
+      {/* Anti-spam honeypot: hidden from users, tempting to bots. */}
+      <div aria-hidden="true" className="hidden">
+        <label htmlFor={`nl-company-${source}`}>Company</label>
+        <input
+          id={`nl-company-${source}`}
+          name="company_website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+        />
+      </div>
       <input
         id={`newsletter-${source}`}
         type="email"
@@ -55,3 +76,4 @@ export function NewsletterForm({ source = "website" }: { source?: string }) {
     </form>
   );
 }
+
