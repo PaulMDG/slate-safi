@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as PartnerRouteImport } from './routes/partner'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as FilmsIndexRouteImport } from './routes/films.index'
 import { Route as FilmsSlugRouteImport } from './routes/films.$slug'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
@@ -30,6 +31,11 @@ const AboutRoute = AboutRouteImport.update({
 const PartnerRoute = PartnerRouteImport.update({
   id: '/partner',
   path: '/partner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FilmsIndexRoute = FilmsIndexRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/partner': typeof PartnerRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/partner': typeof PartnerRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films': typeof FilmsIndexRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/partner': typeof PartnerRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/partner'
+    | '/sitemap.xml'
     | '/films/$slug'
     | '/news/$slug'
     | '/films/'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/partner'
+    | '/sitemap.xml'
     | '/films/$slug'
     | '/news/$slug'
     | '/films'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/partner'
+    | '/sitemap.xml'
     | '/films/$slug'
     | '/news/$slug'
     | '/films/'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   PartnerRoute: typeof PartnerRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   FilmsSlugRoute: typeof FilmsSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   FilmsIndexRoute: typeof FilmsIndexRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/partner'
       fullPath: '/partner'
       preLoaderRoute: typeof PartnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/films/': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   PartnerRoute: PartnerRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   FilmsSlugRoute: FilmsSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   FilmsIndexRoute: FilmsIndexRoute,
@@ -187,13 +208,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
