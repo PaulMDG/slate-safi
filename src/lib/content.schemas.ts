@@ -2,9 +2,16 @@ import { z } from "zod";
 
 export const slugInput = z.object({ slug: z.string().min(1).max(120) });
 
+/** Invisible anti-spam fields shared by every public form. */
+const spamFields = {
+  honeypot: z.string().max(200).optional(),
+  elapsed_ms: z.number().int().nonnegative().max(86_400_000).optional(),
+};
+
 export const emailSchema = z.object({
   email: z.string().trim().email().max(255),
   source: z.string().trim().max(60).optional(),
+  ...spamFields,
 });
 
 export const contactSchema = z.object({
@@ -13,4 +20,90 @@ export const contactSchema = z.object({
   organisation: z.string().trim().max(160).optional(),
   inquiry_type: z.enum(["partnership", "distribution", "press", "general"]),
   message: z.string().trim().min(10).max(4000),
+  ...spamFields,
+});
+
+export const idInput = z.object({ id: z.string().uuid() });
+
+export const filmSchema = z.object({
+  id: z.string().uuid().optional(),
+  slug: z
+    .string()
+    .trim()
+    .min(1)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens only"),
+  title: z.string().trim().min(1).max(160),
+  tagline: z.string().trim().max(240).optional().nullable(),
+  logline: z.string().trim().max(600).optional().nullable(),
+  synopsis: z.string().trim().max(6000).optional().nullable(),
+  status: z.enum(["released", "post-production", "production", "development", "upcoming"]),
+  release_year: z.number().int().min(1900).max(2100).optional().nullable(),
+  runtime_minutes: z.number().int().min(1).max(600).optional().nullable(),
+  genre: z.string().trim().max(120).optional().nullable(),
+  country: z.string().trim().max(120).optional().nullable(),
+  language: z.string().trim().max(120).optional().nullable(),
+  poster_url: z.string().trim().max(600).optional().nullable(),
+  hero_image_url: z.string().trim().max(600).optional().nullable(),
+  trailer_url: z.string().trim().max(600).optional().nullable(),
+  featured: z.boolean(),
+  sort_order: z.number().int().min(0).max(9999),
+  published: z.boolean(),
+});
+
+export const creditSchema = z.object({
+  id: z.string().uuid().optional(),
+  film_id: z.string().uuid(),
+  name: z.string().trim().min(1).max(160),
+  role: z.string().trim().min(1).max(160),
+  credit_type: z.enum(["cast", "crew"]),
+  character_name: z.string().trim().max(160).optional().nullable(),
+  photo_url: z.string().trim().max(600).optional().nullable(),
+  bio: z.string().trim().max(2000).optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999),
+});
+
+export const gallerySchema = z.object({
+  id: z.string().uuid().optional(),
+  film_id: z.string().uuid(),
+  image_url: z.string().trim().min(1).max(600),
+  caption: z.string().trim().max(300).optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999),
+});
+
+export const postSchema = z.object({
+  id: z.string().uuid().optional(),
+  slug: z
+    .string()
+    .trim()
+    .min(1)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens only"),
+  title: z.string().trim().min(1).max(200),
+  excerpt: z.string().trim().max(400).optional().nullable(),
+  body: z.string().trim().max(40000).optional().nullable(),
+  cover_image_url: z.string().trim().max(600).optional().nullable(),
+  author: z.string().trim().max(160).optional().nullable(),
+  category: z.string().trim().max(80).optional().nullable(),
+  published: z.boolean(),
+  published_at: z.string().trim().min(1).max(40),
+});
+
+export const pressSchema = z.object({
+  id: z.string().uuid().optional(),
+  film_id: z.string().uuid().optional().nullable(),
+  kind: z.enum(["laurel", "quote", "award", "coverage"]),
+  title: z.string().trim().min(1).max(200),
+  outlet: z.string().trim().max(160).optional().nullable(),
+  quote: z.string().trim().max(1000).optional().nullable(),
+  year: z.number().int().min(1900).max(2100).optional().nullable(),
+  link_url: z.string().trim().max(600).optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999),
+  published: z.boolean(),
+});
+
+export const submissionStatusSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(["new", "reviewed", "archived", "spam"]),
+  internal_notes: z.string().trim().max(2000).optional().nullable(),
 });
