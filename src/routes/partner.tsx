@@ -54,6 +54,8 @@ function Partner() {
   const send = useServerFn(submitEnquiry);
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const mountedAt = useRef(Date.now());
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -75,7 +77,9 @@ function Partner() {
     }
     setPending(true);
     try {
-      await send({ data: parsed.data });
+      await send({
+        data: { ...parsed.data, honeypot, elapsed_ms: Date.now() - mountedAt.current },
+      });
       setDone(true);
       setForm({ name: "", email: "", organisation: "", inquiry_type: "partnership", message: "" });
       toast.success("Thank you — we'll be in touch within two working days.");
@@ -85,6 +89,7 @@ function Partner() {
       setPending(false);
     }
   }
+
 
   const fieldClass =
     "w-full rounded-sm border border-input bg-background/60 px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary";
