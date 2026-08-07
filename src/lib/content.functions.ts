@@ -101,10 +101,30 @@ export const subscribeToNewsletter = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => emailSchema.parse(data))
   .handler(async ({ data }) => {
     const { publicSupabase } = await import("./content.server");
+    const { requestMetadata, scoreSubmission, checkRateLimit } = await import("./spam.server");
+
+    const meta = requestMetadata();
+    const verdict = scoreSubmission({
+      honeypot: data.honeypot,
+      elapsed_ms: data.elapsed_ms,
+      text: data.email,
+      email: data.email,
+    });
+    if (verdict.blocked) return { ok: true };
+
+    const allowed = await checkRateLimit("newsletter", meta.ip_address, 5);
+    if (!allowed) throw new Error("Too many attempts. Please try again later.");
+
     const { error } = await publicSupabase()
       .from("newsletter_subscribers")
-      .insert({ email: data.email.toLowerCase(), source: data.source ?? "website" });
-    if (error && !error.message.toLowerCase().includes("duplicate")) {
+      .insert({
+        email: data.email.toLowerCase(),
+        source: data.source ?? "website",
+        spam_score: verdict.spam_score,
+        is_spam: verdict.is_spam,
+        ...meta,
+      });
+    if (error && !/duplicate|unique/i.test(error.message)) {
       throw new Error(error.message);
     }
     return { ok: true };
@@ -114,6 +134,20 @@ export const submitEnquiry = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
     const { publicSupabase } = await import("./content.server");
+    const { requestMetadata, scoreSubmission, checkRateLimit } = await import("./spam.server");
+
+    const meta = requestMetadata();
+    const verdict = scoreSubmission({
+      honeypot: data.honeypot,
+      elapsed_ms: data.elapsed_ms,
+      text: `${data.name} ${data.organisation ?? ""} ${data.message}`,
+      email: data.email,
+    });
+    if (verdict.blocked) return { ok: true };
+
+    const allowed = await checkRateLimit("contact", meta.ip_address, 4);
+    if (!allowed) throw new Error("Too many attempts. Please try again later.");
+
     const { error } = await publicSupabase()
       .from("contact_submissions")
       .insert({
@@ -122,7 +156,12 @@ export const submitEnquiry = createServerFn({ method: "POST" })
         organisation: data.organisation || null,
         inquiry_type: data.inquiry_type,
         message: data.message,
+        spam_score: verdict.spam_score,
+        is_spam: verdict.is_spam,
+        status: verdict.is_spam ? "spam" : "new",
+        ...meta,
       });
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
