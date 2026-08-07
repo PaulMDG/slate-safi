@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
 import { submitEnquiry } from "@/lib/content.functions";
