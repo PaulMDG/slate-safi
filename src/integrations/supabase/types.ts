@@ -16,31 +16,58 @@ export type Database = {
     Tables: {
       contact_submissions: {
         Row: {
+          country: string | null
           created_at: string
           email: string
           id: string
           inquiry_type: string
+          internal_notes: string | null
+          ip_address: string | null
+          is_spam: boolean
           message: string
           name: string
           organisation: string | null
+          referrer: string | null
+          spam_score: number
+          status: string
+          updated_at: string
+          user_agent: string | null
         }
         Insert: {
+          country?: string | null
           created_at?: string
           email: string
           id?: string
           inquiry_type?: string
+          internal_notes?: string | null
+          ip_address?: string | null
+          is_spam?: boolean
           message: string
           name: string
           organisation?: string | null
+          referrer?: string | null
+          spam_score?: number
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
         }
         Update: {
+          country?: string | null
           created_at?: string
           email?: string
           id?: string
           inquiry_type?: string
+          internal_notes?: string | null
+          ip_address?: string | null
+          is_spam?: boolean
           message?: string
           name?: string
           organisation?: string | null
+          referrer?: string | null
+          spam_score?: number
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
         }
         Relationships: []
       }
@@ -195,24 +222,72 @@ export type Database = {
         }
         Relationships: []
       }
+      form_rate_limits: {
+        Row: {
+          bucket_key: string
+          created_at: string
+          form_name: string
+          hits: number
+          id: string
+          window_start: string
+        }
+        Insert: {
+          bucket_key: string
+          created_at?: string
+          form_name: string
+          hits?: number
+          id?: string
+          window_start?: string
+        }
+        Update: {
+          bucket_key?: string
+          created_at?: string
+          form_name?: string
+          hits?: number
+          id?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
+          country: string | null
           created_at: string
           email: string
           id: string
+          ip_address: string | null
+          is_spam: boolean
+          referrer: string | null
           source: string | null
+          spam_score: number
+          unsubscribed: boolean
+          user_agent: string | null
         }
         Insert: {
+          country?: string | null
           created_at?: string
           email: string
           id?: string
+          ip_address?: string | null
+          is_spam?: boolean
+          referrer?: string | null
           source?: string | null
+          spam_score?: number
+          unsubscribed?: boolean
+          user_agent?: string | null
         }
         Update: {
+          country?: string | null
           created_at?: string
           email?: string
           id?: string
+          ip_address?: string | null
+          is_spam?: boolean
+          referrer?: string | null
           source?: string | null
+          spam_score?: number
+          unsubscribed?: boolean
+          user_agent?: string | null
         }
         Relationships: []
       }
@@ -311,15 +386,42 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "editor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -446,6 +548,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "editor"],
+    },
   },
 } as const
