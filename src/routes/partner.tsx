@@ -142,6 +142,19 @@ function Partner() {
               </div>
             ) : (
               <form onSubmit={onSubmit} className="mt-10 space-y-6">
+                {/* Anti-spam honeypot: hidden from users, tempting to bots. */}
+                <div aria-hidden="true" className="hidden">
+                  <label htmlFor="company_website">Company website</label>
+                  <input
+                    id="company_website"
+                    name="company_website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <label className={labelClass} htmlFor="name">
