@@ -386,6 +386,96 @@ export type Database = {
           },
         ]
       }
+      social_accounts: {
+        Row: {
+          connected: boolean
+          created_at: string
+          display_name: string | null
+          handle: string | null
+          id: string
+          notes: string | null
+          platform: string
+          updated_at: string
+        }
+        Insert: {
+          connected?: boolean
+          created_at?: string
+          display_name?: string | null
+          handle?: string | null
+          id?: string
+          notes?: string | null
+          platform: string
+          updated_at?: string
+        }
+        Update: {
+          connected?: boolean
+          created_at?: string
+          display_name?: string | null
+          handle?: string | null
+          id?: string
+          notes?: string | null
+          platform?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      social_posts: {
+        Row: {
+          attempts: number
+          caption: string
+          created_at: string
+          error: string | null
+          external_id: string | null
+          external_url: string | null
+          id: string
+          link_url: string | null
+          media_url: string | null
+          platform: string
+          posted_at: string | null
+          scheduled_for: string | null
+          source_id: string | null
+          source_type: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          caption?: string
+          created_at?: string
+          error?: string | null
+          external_id?: string | null
+          external_url?: string | null
+          id?: string
+          link_url?: string | null
+          media_url?: string | null
+          platform: string
+          posted_at?: string | null
+          scheduled_for?: string | null
+          source_id?: string | null
+          source_type?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          caption?: string
+          created_at?: string
+          error?: string | null
+          external_id?: string | null
+          external_url?: string | null
+          id?: string
+          link_url?: string | null
+          media_url?: string | null
+          platform?: string
+          posted_at?: string | null
+          scheduled_for?: string | null
+          source_id?: string | null
+          source_type?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
