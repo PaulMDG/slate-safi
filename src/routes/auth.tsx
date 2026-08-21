@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/auth")({
+  ssr: false,
   head: () => ({
     ...socialMeta({
       title: "Studio sign in — Slate Safi",
