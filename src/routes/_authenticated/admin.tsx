@@ -21,6 +21,9 @@ import {
   updateSubmissionStatus,
   type AdminSnapshot,
 } from "@/lib/admin.functions";
+import { loadSocialData, type SocialSnapshot } from "@/lib/social.functions";
+import { OverviewPanel } from "@/components/admin/overview-panel";
+import { SocialPanel } from "@/components/admin/social-panel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
