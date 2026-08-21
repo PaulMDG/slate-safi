@@ -258,6 +258,8 @@ function AdminDashboard() {
       )}
 
       <div className="mt-10">
+        {tab === "Overview" && <OverviewPanel data={data!} social={socialQuery.data} />}
+
         {tab === "Films" && (
           <CrudSection
             title="Films"
