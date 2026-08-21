@@ -350,6 +350,13 @@ function AdminDashboard() {
           />
         )}
 
+        {tab === "Social" &&
+          (socialQuery.data ? (
+            <SocialPanel admin={data!} social={socialQuery.data} onDone={refetchAll} />
+          ) : (
+            <p className="text-sm text-muted-foreground">Loading social queue…</p>
+          ))}
+
         {tab === "Submissions" && <Submissions data={data!} onDone={refetch} />}
       </div>
     </div>
