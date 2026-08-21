@@ -120,20 +120,40 @@ const PRESS_FIELDS: readonly FieldSpec[] = [
   { key: "published", label: "Published", type: "boolean" },
 ];
 
-const TABS = ["Films", "Cast & crew", "Gallery", "News", "Press", "Submissions"] as const;
+const TABS = [
+  "Overview",
+  "Films",
+  "Cast & crew",
+  "Gallery",
+  "News",
+  "Press",
+  "Social",
+  "Submissions",
+] as const;
 type Tab = (typeof TABS)[number];
 
 function AdminDashboard() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const load = useServerFn(loadAdminData);
-  const [tab, setTab] = useState<Tab>("Films");
+  const loadSocial = useServerFn(loadSocialData);
+  const [tab, setTab] = useState<Tab>("Overview");
   const [filmId, setFilmId] = useState<string>("");
 
   const { data, isPending, error, refetch } = useQuery<AdminSnapshot>({
     queryKey: ["admin-data"],
     queryFn: () => load(),
   });
+
+  const socialQuery = useQuery<SocialSnapshot>({
+    queryKey: ["admin-social"],
+    queryFn: () => loadSocial(),
+    enabled: !error,
+  });
+
+  async function refetchAll() {
+    await Promise.all([refetch(), socialQuery.refetch()]);
+  }
 
   const films = data?.films ?? [];
   const activeFilmId = filmId || films[0]?.id || "";
