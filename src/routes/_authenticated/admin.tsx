@@ -24,6 +24,7 @@ import {
 import { loadSocialData, type SocialSnapshot } from "@/lib/social.functions";
 import { OverviewPanel } from "@/components/admin/overview-panel";
 import { SocialPanel } from "@/components/admin/social-panel";
+import { SettingsPanel } from "@/components/admin/settings-panel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -132,6 +133,7 @@ const TABS = [
   "Press",
   "Social",
   "Submissions",
+  "Settings",
 ] as const;
 type Tab = (typeof TABS)[number];
 
@@ -358,6 +360,13 @@ function AdminDashboard() {
           ))}
 
         {tab === "Submissions" && <Submissions data={data!} onDone={refetch} />}
+
+        {tab === "Settings" &&
+          (socialQuery.data ? (
+            <SettingsPanel social={socialQuery.data} onDone={refetchAll} />
+          ) : (
+            <p className="text-sm text-muted-foreground">Loading settings…</p>
+          ))}
       </div>
     </div>
   );
