@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { ExternalLink, Loader2, Send, Sparkles, Trash2, Wand2 } from "lucide-react";
+import { ImageField } from "@/components/admin/image-field";
 import type { AdminSnapshot } from "@/lib/admin.functions";
 import {
   deleteSocialPost,
