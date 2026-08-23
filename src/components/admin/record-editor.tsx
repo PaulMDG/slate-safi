@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { ImageField } from "./image-field";
 
 export type FieldSpec = {
   key: string;
   label: string;
-  type: "text" | "textarea" | "number" | "boolean" | "select";
+  type: "text" | "textarea" | "number" | "boolean" | "select" | "image";
   options?: readonly { value: string; label: string }[];
   placeholder?: string;
   full?: boolean;
+  /** Storage folder used when uploading (image fields only). */
+  folder?: string;
 };
 
 export type RecordValues = Record<string, unknown>;
@@ -49,7 +52,16 @@ export function RecordEditor({
                 <label className={labelClass} htmlFor={`f-${field.key}`}>
                   {field.label}
                 </label>
-                {field.type === "textarea" ? (
+                {field.type === "image" ? (
+                  <div className="mt-2">
+                    <ImageField
+                      id={`f-${field.key}`}
+                      value={(raw as string) ?? ""}
+                      folder={field.folder ?? "uploads"}
+                      onChange={(next) => set(field.key, next)}
+                    />
+                  </div>
+                ) : field.type === "textarea" ? (
                   <textarea
                     id={`f-${field.key}`}
                     rows={5}

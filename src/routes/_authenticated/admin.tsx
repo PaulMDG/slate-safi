@@ -59,8 +59,8 @@ const FILM_FIELDS: readonly FieldSpec[] = [
   { key: "genre", label: "Genre", type: "text" },
   { key: "country", label: "Country", type: "text" },
   { key: "language", label: "Language", type: "text" },
-  { key: "poster_url", label: "Poster URL", type: "text", full: true },
-  { key: "hero_image_url", label: "Hero image URL", type: "text", full: true },
+  { key: "poster_url", label: "Poster", type: "image", full: true, folder: "films/posters" },
+  { key: "hero_image_url", label: "Hero image", type: "image", full: true, folder: "films/heroes" },
   { key: "trailer_url", label: "Trailer URL", type: "text", full: true },
   { key: "sort_order", label: "Sort order", type: "number" },
   { key: "featured", label: "Featured on homepage", type: "boolean" },
@@ -80,13 +80,13 @@ const CREDIT_FIELDS: readonly FieldSpec[] = [
     ],
   },
   { key: "character_name", label: "Character", type: "text" },
-  { key: "photo_url", label: "Photo URL", type: "text", full: true },
+  { key: "photo_url", label: "Photo", type: "image", full: true, folder: "credits" },
   { key: "bio", label: "Bio", type: "textarea", full: true },
   { key: "sort_order", label: "Sort order", type: "number" },
 ];
 
 const GALLERY_FIELDS: readonly FieldSpec[] = [
-  { key: "image_url", label: "Image URL", type: "text", full: true },
+  { key: "image_url", label: "Image", type: "image", full: true, folder: "gallery" },
   { key: "caption", label: "Caption", type: "text", full: true },
   { key: "sort_order", label: "Sort order", type: "number" },
 ];
@@ -96,7 +96,7 @@ const POST_FIELDS: readonly FieldSpec[] = [
   { key: "slug", label: "Slug", type: "text" },
   { key: "excerpt", label: "Excerpt", type: "textarea", full: true },
   { key: "body", label: "Body", type: "textarea", full: true },
-  { key: "cover_image_url", label: "Cover image URL", type: "text", full: true },
+  { key: "cover_image_url", label: "Cover image", type: "image", full: true, folder: "news" },
   { key: "author", label: "Author", type: "text" },
   { key: "category", label: "Category", type: "text" },
   { key: "published_at", label: "Published at (ISO)", type: "text" },

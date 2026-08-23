@@ -21,6 +21,7 @@ import { Route as FilmsIndexRouteImport } from './routes/films.index'
 import { Route as FilmsSlugRouteImport } from './routes/films.$slug'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 import { Route as ApiPublicSocialDispatchRouteImport } from './routes/api/public/social/dispatch'
 
 const IndexRoute = IndexRouteImport.update({
@@ -82,6 +83,11 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
   path: '/news/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
+  id: '/api/public/media/$',
+  path: '/api/public/media/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSocialDispatchRoute = ApiPublicSocialDispatchRouteImport.update({
   id: '/api/public/social/dispatch',
   path: '/api/public/social/dispatch',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
 export interface FileRoutesByTo {
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/news/$slug': typeof NewsSlugRoute
   '/films': typeof FilmsIndexRoute
   '/news': typeof NewsIndexRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
 export interface FileRoutesById {
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
 export interface FileRouteTypes {
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/films/'
     | '/news/'
+    | '/api/public/media/$'
     | '/api/public/social/dispatch'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/films'
     | '/news'
+    | '/api/public/media/$'
     | '/api/public/social/dispatch'
   id:
     | '__root__'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/films/'
     | '/news/'
+    | '/api/public/media/$'
     | '/api/public/social/dispatch'
   fileRoutesById: FileRoutesById
 }
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   NewsSlugRoute: typeof NewsSlugRoute
   FilmsIndexRoute: typeof FilmsIndexRoute
   NewsIndexRoute: typeof NewsIndexRoute
+  ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
   ApiPublicSocialDispatchRoute: typeof ApiPublicSocialDispatchRoute
 }
 
@@ -279,6 +292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/media/$': {
+      id: '/api/public/media/$'
+      path: '/api/public/media/$'
+      fullPath: '/api/public/media/$'
+      preLoaderRoute: typeof ApiPublicMediaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/social/dispatch': {
       id: '/api/public/social/dispatch'
       path: '/api/public/social/dispatch'
@@ -312,6 +332,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewsSlugRoute: NewsSlugRoute,
   FilmsIndexRoute: FilmsIndexRoute,
   NewsIndexRoute: NewsIndexRoute,
+  ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
   ApiPublicSocialDispatchRoute: ApiPublicSocialDispatchRoute,
 }
 export const routeTree = rootRouteImport
