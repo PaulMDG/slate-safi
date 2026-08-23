@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { ImageField } from "./image-field";
 
 export type FieldSpec = {
   key: string;
   label: string;
-  type: "text" | "textarea" | "number" | "boolean" | "select";
+  type: "text" | "textarea" | "number" | "boolean" | "select" | "image";
   options?: readonly { value: string; label: string }[];
   placeholder?: string;
   full?: boolean;
+  /** Storage folder used when uploading (image fields only). */
+  folder?: string;
 };
 
 export type RecordValues = Record<string, unknown>;
