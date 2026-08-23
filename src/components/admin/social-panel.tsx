@@ -476,12 +476,14 @@ export function SocialPanel({
                   <label className={labelClass} htmlFor="sp-media">
                     Image URL {draft.platform === "instagram" ? "(required)" : ""}
                   </label>
-                  <input
-                    id="sp-media"
-                    value={draft.media_url}
-                    onChange={(e) => setDraft({ ...draft, media_url: e.target.value })}
-                    className={`mt-2 ${inputClass}`}
-                  />
+                  <div className="mt-2">
+                    <ImageField
+                      id="sp-media"
+                      value={draft.media_url}
+                      folder="social"
+                      onChange={(next) => setDraft({ ...draft, media_url: next })}
+                    />
+                  </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label className={labelClass} htmlFor="sp-link">
