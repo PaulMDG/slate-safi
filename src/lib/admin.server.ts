@@ -1,0 +1,69 @@
+import type { Tables } from "@/integrations/supabase/types";
+
+export type SupabaseLike = {
+  rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
+  from: (table: string) => any;
+};
+
+export type AdminSnapshot = {
+  films: Tables<"films">[];
+  credits: Tables<"film_credits">[];
+  gallery: Tables<"film_gallery">[];
+  posts: Tables<"posts">[];
+  press: Tables<"press_items">[];
+  contact: Tables<"contact_submissions">[];
+  subscribers: Tables<"newsletter_subscribers">[];
+};
+
+export async function isAdmin(sb: SupabaseLike, userId: string) {
+  const { data } = await sb.rpc("has_role", { _user_id: userId, _role: "admin" });
+  return data === true;
+}
+
+export async function assertAdmin(sb: SupabaseLike, userId: string) {
+  if (!(await isAdmin(sb, userId))) throw new Error("Forbidden: admin access required.");
+}
+
+export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapshot> {
+  const [films, credits, gallery, posts, press, contact, subscribers] = await Promise.all([
+    sb.from("films").select("*").order("sort_order", { ascending: true }),
+    sb.from("film_credits").select("*").order("sort_order", { ascending: true }),
+    sb.from("film_gallery").select("*").order("sort_order", { ascending: true }),
+    sb.from("posts").select("*").order("published_at", { ascending: false }),
+    sb.from("press_items").select("*").order("sort_order", { ascending: true }),
+    sb.from("contact_submissions").select("*").order("created_at", { ascending: false }),
+    sb.from("newsletter_subscribers").select("*").order("created_at", { ascending: false }),
+  ]);
+  return {
+    films: films.data ?? [],
+    credits: credits.data ?? [],
+    gallery: gallery.data ?? [],
+    posts: posts.data ?? [],
+    press: press.data ?? [],
+    contact: contact.data ?? [],
+    subscribers: subscribers.data ?? [],
+  };
+}
+
+/** Upserts one row on behalf of a verified admin. */
+export async function adminUpsert(
+  sb: SupabaseLike,
+  userId: string,
+  table: string,
+  row: Record<string, unknown>,
+) {
+  await assertAdmin(sb, userId);
+  const payload = { ...row };
+  if (!payload.id) delete payload.id;
+  const { error } = await sb.from(table).upsert(payload, { onConflict: "id" });
+  if (error) throw new Error((error as { message: string }).message);
+  return { ok: true };
+}
+
+/** Deletes one row on behalf of a verified admin. */
+export async function adminDelete(sb: SupabaseLike, userId: string, table: string, id: string) {
+  await assertAdmin(sb, userId);
+  const { error } = await sb.from(table).delete().eq("id", id);
+  if (error) throw new Error((error as { message: string }).message);
+  return { ok: true };
+}
