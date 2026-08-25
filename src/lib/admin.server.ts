@@ -13,6 +13,7 @@ export type AdminSnapshot = {
   press: Tables<"press_items">[];
   contact: Tables<"contact_submissions">[];
   subscribers: Tables<"newsletter_subscribers">[];
+  homepage: Tables<"homepage_content"> | null;
 };
 
 export async function isAdmin(sb: SupabaseLike, userId: string) {
@@ -32,7 +33,7 @@ export async function assertAdmin(sb: SupabaseLike, userId: string) {
 }
 
 export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapshot> {
-  const [films, credits, gallery, posts, press, contact, subscribers] = await Promise.all([
+  const [films, credits, gallery, posts, press, contact, subscribers, homepage] = await Promise.all([
     sb.from("films").select("*").order("sort_order", { ascending: true }),
     sb.from("film_credits").select("*").order("sort_order", { ascending: true }),
     sb.from("film_gallery").select("*").order("sort_order", { ascending: true }),
@@ -40,6 +41,7 @@ export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapsho
     sb.from("press_items").select("*").order("sort_order", { ascending: true }),
     sb.from("contact_submissions").select("*").order("created_at", { ascending: false }),
     sb.from("newsletter_subscribers").select("*").order("created_at", { ascending: false }),
+    sb.from("homepage_content").select("*").limit(1).maybeSingle(),
   ]);
   return {
     films: films.data ?? [],
@@ -49,6 +51,7 @@ export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapsho
     press: press.data ?? [],
     contact: contact.data ?? [],
     subscribers: subscribers.data ?? [],
+    homepage: homepage.data ?? null,
   };
 }
 
