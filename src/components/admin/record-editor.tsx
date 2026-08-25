@@ -8,6 +8,8 @@ export type FieldSpec = {
   options?: readonly { value: string; label: string }[];
   placeholder?: string;
   full?: boolean;
+  /** Blocks saving when left empty. */
+  required?: boolean;
   /** Storage folder used when uploading (image fields only). */
   folder?: string;
 };
