@@ -32,7 +32,8 @@ async function assertAdmin(context: Ctx) {
 export type SocialSnapshot = {
   accounts: Tables<"social_accounts">[];
   posts: Tables<"social_posts">[];
-  credentials: Record<Platform, boolean>;
+  credentials: Record<string, boolean>;
+  keyStatus: Record<string, boolean>;
   automation: AutomationSettings;
   metrics: Tables<"social_metrics">[];
   events: Tables<"social_events">[];
@@ -44,22 +45,32 @@ export const loadSocialData = createServerFn({ method: "GET" })
     const ctx = context as unknown as Ctx;
     await assertAdmin(ctx);
     const { credentialStatus, loadAutomation } = await import("./social.server");
-    const [accounts, posts, metrics, events, automation] = await Promise.all([
-      ctx.supabase.from("social_accounts").select("*").order("platform", { ascending: true }),
-      ctx.supabase.from("social_posts").select("*").order("created_at", { ascending: false }),
-      ctx.supabase.from("social_metrics").select("*"),
-      ctx.supabase.from("social_events").select("*").order("created_at", { ascending: false }).limit(60),
-      loadAutomation(ctx.supabase as any),
-    ]);
+    const { credentialKeyStatus } = await import("./social.credentials.server");
+    const [accounts, posts, metrics, events, automation, credentials, keyStatus] =
+      await Promise.all([
+        ctx.supabase.from("social_accounts").select("*").order("platform", { ascending: true }),
+        ctx.supabase.from("social_posts").select("*").order("created_at", { ascending: false }),
+        ctx.supabase.from("social_metrics").select("*"),
+        ctx.supabase
+          .from("social_events")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(60),
+        loadAutomation(ctx.supabase as any),
+        credentialStatus(),
+        credentialKeyStatus(),
+      ]);
     return {
       accounts: accounts.data ?? [],
       posts: posts.data ?? [],
-      credentials: credentialStatus(),
+      credentials,
+      keyStatus,
       automation,
       metrics: metrics.data ?? [],
       events: events.data ?? [],
     };
   });
+
 
 export const saveSocialPost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
