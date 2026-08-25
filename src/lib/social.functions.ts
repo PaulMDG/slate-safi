@@ -2,10 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { idInput } from "./content.schemas";
 import {
+  automationSchema,
   generateDraftsSchema,
+  metricsSchema,
+  queueContentSchema,
   socialAccountSchema,
   socialPostSchema,
 } from "./social.schemas";
+import type { AutomationSettings } from "./social.automation";
 import type { Tables } from "@/integrations/supabase/types";
 import type { Platform } from "./social.captions";
 
@@ -29,6 +33,9 @@ export type SocialSnapshot = {
   accounts: Tables<"social_accounts">[];
   posts: Tables<"social_posts">[];
   credentials: Record<Platform, boolean>;
+  automation: AutomationSettings;
+  metrics: Tables<"social_metrics">[];
+  events: Tables<"social_events">[];
 };
 
 export const loadSocialData = createServerFn({ method: "GET" })
@@ -36,15 +43,21 @@ export const loadSocialData = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<SocialSnapshot> => {
     const ctx = context as unknown as Ctx;
     await assertAdmin(ctx);
-    const { credentialStatus } = await import("./social.server");
-    const [accounts, posts] = await Promise.all([
+    const { credentialStatus, loadAutomation } = await import("./social.server");
+    const [accounts, posts, metrics, events, automation] = await Promise.all([
       ctx.supabase.from("social_accounts").select("*").order("platform", { ascending: true }),
       ctx.supabase.from("social_posts").select("*").order("created_at", { ascending: false }),
+      ctx.supabase.from("social_metrics").select("*"),
+      ctx.supabase.from("social_events").select("*").order("created_at", { ascending: false }).limit(60),
+      loadAutomation(ctx.supabase as any),
     ]);
     return {
       accounts: accounts.data ?? [],
       posts: posts.data ?? [],
       credentials: credentialStatus(),
+      automation,
+      metrics: metrics.data ?? [],
+      events: events.data ?? [],
     };
   });
 
@@ -190,4 +203,77 @@ export const runSocialQueue = createServerFn({ method: "POST" })
     await assertAdmin(ctx);
     const { dispatchDuePosts } = await import("./social.server");
     return dispatchDuePosts(10);
+  });
+
+/** Saves the automation rules that drive auto-publishing. */
+export const saveAutomationSettings = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => automationSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const ctx = context as unknown as Ctx;
+    await assertAdmin(ctx);
+    const { error } = await ctx.supabase
+      .from("social_automation")
+      .upsert({ ...data, singleton: true }, { onConflict: "singleton" });
+    if (error) throw new Error((error as { message: string }).message);
+    return { ok: true };
+  });
+
+/** Records engagement numbers for one post so the analytics view stays accurate. */
+export const saveSocialMetrics = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => metricsSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const ctx = context as unknown as Ctx;
+    await assertAdmin(ctx);
+    const { error } = await ctx.supabase
+      .from("social_metrics")
+      .upsert({ ...data, recorded_at: new Date().toISOString() }, { onConflict: "post_id" });
+    if (error) throw new Error((error as { message: string }).message);
+    return { ok: true };
+  });
+
+/** Force-queues a film or article across the automation platforms. */
+export const queueContentNow = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => queueContentSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const ctx = context as unknown as Ctx;
+    await assertAdmin(ctx);
+    const { queueForContent } = await import("./social.server");
+    return queueForContent(ctx.supabase as any, {
+      sourceType: data.source_type,
+      sourceId: data.source_id,
+      force: true,
+    });
+  });
+
+/** Runs the evergreen recycler on demand. */
+export const runEvergreenNow = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const ctx = context as unknown as Ctx;
+    await assertAdmin(ctx);
+    const { runEvergreen } = await import("./social.server");
+    return runEvergreen(ctx.supabase as any, true);
+  });
+
+/** Runs the whole automation tick (evergreen + due queue) with the daily cap applied. */
+export const runAutomationNow = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const ctx = context as unknown as Ctx;
+    await assertAdmin(ctx);
+    const { runAutomationTick } = await import("./social.server");
+    return runAutomationTick(20);
+  });
+
+/** Clears the automation activity log. */
+export const clearSocialEvents = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const ctx = context as unknown as Ctx;
+    await assertAdmin(ctx);
+    await ctx.supabase.from("social_events").delete().not("id", "is", null);
+    return { ok: true };
   });

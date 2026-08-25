@@ -36,8 +36,8 @@ export const saveFilm = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => filmSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const { adminUpsert } = await import("./admin.server");
-    return adminUpsert(context.supabase as any, context.userId, "films", data);
+    const { adminUpsertContent } = await import("./admin.server");
+    return adminUpsertContent(context.supabase as any, context.userId, "films", data);
   });
 
 export const deleteFilm = createServerFn({ method: "POST" })
@@ -84,8 +84,8 @@ export const savePost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => postSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const { adminUpsert } = await import("./admin.server");
-    return adminUpsert(context.supabase as any, context.userId, "posts", data);
+    const { adminUpsertContent } = await import("./admin.server");
+    return adminUpsertContent(context.supabase as any, context.userId, "posts", data);
   });
 
 export const deletePost = createServerFn({ method: "POST" })

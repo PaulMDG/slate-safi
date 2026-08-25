@@ -77,3 +77,41 @@ export async function adminDelete(sb: SupabaseLike, userId: string, table: strin
   if (error) throw new Error((error as { message: string }).message);
   return { ok: true };
 }
+
+/**
+ * Upserts a film or post, then hands it to the social automation so a
+ * newly published item queues itself across the connected channels.
+ */
+export async function adminUpsertContent(
+  sb: SupabaseLike,
+  userId: string,
+  table: "films" | "posts",
+  row: Record<string, unknown>,
+) {
+  await assertAdmin(sb, userId);
+  const payload = { ...row };
+  if (!payload.id) delete payload.id;
+  const { data, error } = await sb
+    .from(table)
+    .upsert(payload, { onConflict: "id" })
+    .select("id,published")
+    .maybeSingle();
+  if (error) throw new Error((error as { message: string }).message);
+
+  let automation: { created: number; skipped?: string; error?: string } = {
+    created: 0,
+    skipped: "unpublished",
+  };
+  if (data?.published) {
+    try {
+      const { queueForContent } = await import("./social.server");
+      automation = (await queueForContent(sb as any, {
+        sourceType: table === "films" ? "film" : "post",
+        sourceId: data.id,
+      })) as { created: number; skipped?: string };
+    } catch (err) {
+      automation = { created: 0, error: err instanceof Error ? err.message : "queue failed" };
+    }
+  }
+  return { ok: true, automation };
+}
