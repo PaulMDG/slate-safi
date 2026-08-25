@@ -26,6 +26,7 @@ import { OverviewPanel } from "@/components/admin/overview-panel";
 import { SocialPanel } from "@/components/admin/social-panel";
 import { AutomationPanel } from "@/components/admin/automation-panel";
 import { AnalyticsPanel } from "@/components/admin/analytics-panel";
+import { AiPanel } from "@/components/admin/ai-panel";
 import { SettingsPanel } from "@/components/admin/settings-panel";
 import { HomepagePanel } from "@/components/admin/homepage-panel";
 
@@ -137,6 +138,7 @@ const TABS = [
   "Press",
   "Social",
   "Automation",
+  "AI studio",
   "Analytics",
   "Submissions",
   "Settings",
@@ -380,6 +382,8 @@ function AdminDashboard() {
           ) : (
             <p className="text-sm text-muted-foreground">Loading analytics…</p>
           ))}
+
+        {tab === "AI studio" && <AiPanel admin={data!} onDone={refetchAll} />}
 
         {tab === "Submissions" && <Submissions data={data!} onDone={refetch} />}
 

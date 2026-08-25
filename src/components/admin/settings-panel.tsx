@@ -1,19 +1,15 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { CheckCircle2, CircleDashed, Loader2, Save } from "lucide-react";
+import { CheckCircle2, CircleDashed, KeyRound, Loader2, Save } from "lucide-react";
 import { saveSocialAccount, type SocialSnapshot } from "@/lib/social.functions";
+import { saveChannelCredentials } from "@/lib/ai.functions";
 import { PLATFORM_LABEL, type Platform } from "@/lib/social.captions";
+import { CHANNELS, REQUIRED_KEYS } from "@/lib/social.channels";
 
 const inputClass =
   "w-full rounded-sm border border-input bg-background/60 px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary";
 const labelClass = "block text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground";
-
-const REQUIRED_KEYS: Record<Platform, string[]> = {
-  x: ["X_ACCESS_TOKEN"],
-  instagram: ["INSTAGRAM_ACCESS_TOKEN", "INSTAGRAM_USER_ID"],
-  linkedin: ["LINKEDIN_ACCESS_TOKEN", "LINKEDIN_AUTHOR_URN"],
-};
 
 type AccountDraft = {
   handle: string;
@@ -21,6 +17,141 @@ type AccountDraft = {
   notes: string;
   connected: boolean;
 };
+
+function CredentialsSection({
+  keyStatus,
+  onDone,
+}: {
+  keyStatus: Record<string, boolean>;
+  onDone: () => unknown;
+}) {
+  const save = useServerFn(saveChannelCredentials);
+  const [values, setValues] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState<string | null>(null);
+
+  async function onSave(platform: string, keys: string[]) {
+    const entries = keys
+      .filter((name) => values[name] !== undefined)
+      .map((name) => ({ key_name: name, value: values[name] ?? "" }));
+    if (!entries.length) {
+      toast.error("Enter a key first.");
+      return;
+    }
+    setBusy(platform);
+    try {
+      await save({ data: { platform, entries } });
+      setValues((prev) => {
+        const next = { ...prev };
+        for (const name of keys) delete next[name];
+        return next;
+      });
+      toast.success("API access saved.");
+      await onDone();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save keys.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  return (
+    <section>
+      <h2 className="eyebrow">API keys &amp; connections</h2>
+      <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
+        Paste the access keys for each platform here. Values are stored server-side and never
+        shown again — leave a field blank to keep the existing key, or clear a saved key with the
+        Clear button. Channels with publishing support go live as soon as their keys are saved.
+      </p>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        {CHANNELS.map((channel) => {
+          const connected = (REQUIRED_KEYS[channel.id] ?? []).every((n) => keyStatus[n]);
+          const dirty = channel.keys.some((k) => values[k.name] !== undefined);
+          return (
+            <div key={channel.id} className="frame rounded-sm border border-border p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 className="flex items-center gap-2 font-display text-lg font-bold">
+                  <KeyRound className="h-4 w-4 text-primary" />
+                  {channel.label}
+                </h3>
+                <span
+                  className={`inline-flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.18em] ${
+                    connected ? "text-emerald-400" : "text-muted-foreground"
+                  }`}
+                >
+                  {connected ? (
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  ) : (
+                    <CircleDashed className="h-3.5 w-3.5" />
+                  )}
+                  {connected ? "Keys saved" : "Not connected"}
+                </span>
+              </div>
+
+              <p className="mt-3 text-xs text-muted-foreground">{channel.docs}</p>
+              {!channel.publishing && (
+                <p className="mt-2 text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
+                  Stored for later — auto-posting adapter not enabled yet
+                </p>
+              )}
+
+              <div className="mt-5 space-y-4">
+                {channel.keys.map((key) => (
+                  <div key={key.name}>
+                    <label className={labelClass} htmlFor={`cred-${key.name}`}>
+                      {key.label} {keyStatus[key.name] ? "• saved" : ""}
+                    </label>
+                    <input
+                      id={`cred-${key.name}`}
+                      type="password"
+                      autoComplete="off"
+                      className={`${inputClass} mt-2`}
+                      placeholder={keyStatus[key.name] ? "••••••••  (leave blank to keep)" : key.hint ?? key.name}
+                      value={values[key.name] ?? ""}
+                      onChange={(e) =>
+                        setValues((prev) => ({ ...prev, [key.name]: e.target.value }))
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  onClick={() => void onSave(channel.id, channel.keys.map((k) => k.name))}
+                  disabled={busy === channel.id || !dirty}
+                  className="inline-flex items-center gap-2 rounded-sm bg-primary px-6 py-3 font-display text-[0.65rem] font-bold uppercase tracking-[0.18em] text-primary-foreground disabled:opacity-50"
+                >
+                  {busy === channel.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4" />
+                  )}
+                  Save keys
+                </button>
+                <button
+                  onClick={() => {
+                    setValues((prev) => {
+                      const next = { ...prev };
+                      for (const k of channel.keys) next[k.name] = "";
+                      return next;
+                    });
+                    void onSave(channel.id, channel.keys.map((k) => k.name));
+                  }}
+                  disabled={busy === channel.id}
+                  className="inline-flex items-center gap-2 rounded-sm border border-border px-6 py-3 font-display text-[0.65rem] font-bold uppercase tracking-[0.18em] text-muted-foreground disabled:opacity-50"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 
 export function SettingsPanel({
   social,
@@ -77,7 +208,10 @@ export function SettingsPanel({
 
   return (
     <div className="space-y-14">
+      <CredentialsSection keyStatus={social.keyStatus ?? {}} onDone={onDone} />
+
       <section>
+
         <h2 className="eyebrow">Channel settings</h2>
         <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
           Record each studio channel now and connect the API access whenever you're ready.

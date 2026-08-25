@@ -10,11 +10,13 @@ export class MissingCredentials extends Error {
   }
 }
 
-function required(platform: Platform, names: string[]): Record<string, string> {
+async function required(platform: Platform, names: string[]): Promise<Record<string, string>> {
+  const { loadCredentialValues } = await import("./social.credentials.server");
+  const values = await loadCredentialValues();
   const out: Record<string, string> = {};
   const missing: string[] = [];
   for (const name of names) {
-    const value = process.env[name];
+    const value = values[name] ?? process.env[name];
     if (!value) missing.push(name);
     else out[name] = value;
   }
@@ -22,17 +24,12 @@ function required(platform: Platform, names: string[]): Record<string, string> {
   return out;
 }
 
-export function credentialStatus(): Record<Platform, boolean> {
-  return {
-    x: Boolean(process.env["X_ACCESS_TOKEN"]),
-    instagram: Boolean(
-      process.env["INSTAGRAM_ACCESS_TOKEN"] && process.env["INSTAGRAM_USER_ID"],
-    ),
-    linkedin: Boolean(
-      process.env["LINKEDIN_ACCESS_TOKEN"] && process.env["LINKEDIN_AUTHOR_URN"],
-    ),
-  };
+/** Per-channel connection flags, including keys saved from the dashboard. */
+export async function credentialStatus(): Promise<Record<string, boolean>> {
+  const { channelStatus } = await import("./social.credentials.server");
+  return channelStatus();
 }
+
 
 async function readError(response: Response) {
   const text = await response.text().catch(() => "");
@@ -40,7 +37,7 @@ async function readError(response: Response) {
 }
 
 async function publishToX(caption: string): Promise<PublishResult> {
-  const env = required("x", ["X_ACCESS_TOKEN"]);
+  const env = await required("x", ["X_ACCESS_TOKEN"]);
   const response = await fetch("https://api.twitter.com/2/tweets", {
     method: "POST",
     headers: {
@@ -56,7 +53,7 @@ async function publishToX(caption: string): Promise<PublishResult> {
 }
 
 async function publishToInstagram(caption: string, mediaUrl: string | null): Promise<PublishResult> {
-  const env = required("instagram", ["INSTAGRAM_ACCESS_TOKEN", "INSTAGRAM_USER_ID"]);
+  const env = await required("instagram", ["INSTAGRAM_ACCESS_TOKEN", "INSTAGRAM_USER_ID"]);
   const image = absoluteUrl(mediaUrl);
   if (!image) throw new Error("Instagram posts need an image. Add a media URL first.");
 
@@ -86,7 +83,7 @@ async function publishToLinkedIn(
   caption: string,
   linkUrl: string | null,
 ): Promise<PublishResult> {
-  const env = required("linkedin", ["LINKEDIN_ACCESS_TOKEN", "LINKEDIN_AUTHOR_URN"]);
+  const env = await required("linkedin", ["LINKEDIN_ACCESS_TOKEN", "LINKEDIN_AUTHOR_URN"]);
   const author = env["LINKEDIN_AUTHOR_URN"];
   const share: Record<string, unknown> = { shareCommentary: { text: caption } };
   if (linkUrl) {
