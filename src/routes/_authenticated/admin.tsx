@@ -24,6 +24,8 @@ import {
 import { loadSocialData, type SocialSnapshot } from "@/lib/social.functions";
 import { OverviewPanel } from "@/components/admin/overview-panel";
 import { SocialPanel } from "@/components/admin/social-panel";
+import { AutomationPanel } from "@/components/admin/automation-panel";
+import { AnalyticsPanel } from "@/components/admin/analytics-panel";
 import { SettingsPanel } from "@/components/admin/settings-panel";
 import { HomepagePanel } from "@/components/admin/homepage-panel";
 
@@ -134,6 +136,8 @@ const TABS = [
   "News",
   "Press",
   "Social",
+  "Automation",
+  "Analytics",
   "Submissions",
   "Settings",
 ] as const;
@@ -361,6 +365,20 @@ function AdminDashboard() {
             <SocialPanel admin={data!} social={socialQuery.data} onDone={refetchAll} />
           ) : (
             <p className="text-sm text-muted-foreground">Loading social queue…</p>
+          ))}
+
+        {tab === "Automation" &&
+          (socialQuery.data ? (
+            <AutomationPanel admin={data!} social={socialQuery.data} onDone={refetchAll} />
+          ) : (
+            <p className="text-sm text-muted-foreground">Loading automation…</p>
+          ))}
+
+        {tab === "Analytics" &&
+          (socialQuery.data ? (
+            <AnalyticsPanel social={socialQuery.data} onDone={refetchAll} />
+          ) : (
+            <p className="text-sm text-muted-foreground">Loading analytics…</p>
           ))}
 
         {tab === "Submissions" && <Submissions data={data!} onDone={refetch} />}
