@@ -208,7 +208,10 @@ export function SettingsPanel({
 
   return (
     <div className="space-y-14">
+      <CredentialsSection keyStatus={social.keyStatus ?? {}} onDone={onDone} />
+
       <section>
+
         <h2 className="eyebrow">Channel settings</h2>
         <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
           Record each studio channel now and connect the API access whenever you're ready.
