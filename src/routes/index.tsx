@@ -186,6 +186,7 @@ function Home() {
         </section>
       )}
 
+      {cms?.show_news !== false && (
       <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
           <div className="min-w-0">
@@ -232,7 +233,9 @@ function Home() {
           ))}
         </div>
       </section>
+      )}
 
+      {cms?.show_newsletter !== false && (
       <section className="rule-top">
         <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
           <div className="min-w-0">
@@ -250,7 +253,9 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
+      {cms?.show_partner !== false && (
       <section className="rule-top">
         <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
           <div className="frame rounded-sm border border-border p-8 md:p-16">
@@ -275,6 +280,7 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
     </>
   );
 }
