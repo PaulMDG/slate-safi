@@ -497,6 +497,139 @@ export type Database = {
         }
         Relationships: []
       }
+      social_automation: {
+        Row: {
+          auto_publish_films: boolean
+          auto_publish_posts: boolean
+          created_at: string
+          daily_cap: number
+          delay_minutes: number
+          evergreen_enabled: boolean
+          evergreen_interval_days: number
+          evergreen_platforms: string[]
+          id: string
+          platforms: string[]
+          singleton: boolean
+          updated_at: string
+          utm_campaign: string
+          utm_medium: string
+          utm_source: string
+        }
+        Insert: {
+          auto_publish_films?: boolean
+          auto_publish_posts?: boolean
+          created_at?: string
+          daily_cap?: number
+          delay_minutes?: number
+          evergreen_enabled?: boolean
+          evergreen_interval_days?: number
+          evergreen_platforms?: string[]
+          id?: string
+          platforms?: string[]
+          singleton?: boolean
+          updated_at?: string
+          utm_campaign?: string
+          utm_medium?: string
+          utm_source?: string
+        }
+        Update: {
+          auto_publish_films?: boolean
+          auto_publish_posts?: boolean
+          created_at?: string
+          daily_cap?: number
+          delay_minutes?: number
+          evergreen_enabled?: boolean
+          evergreen_interval_days?: number
+          evergreen_platforms?: string[]
+          id?: string
+          platforms?: string[]
+          singleton?: boolean
+          updated_at?: string
+          utm_campaign?: string
+          utm_medium?: string
+          utm_source?: string
+        }
+        Relationships: []
+      }
+      social_events: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          message: string | null
+          platform: string | null
+          post_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          message?: string | null
+          platform?: string | null
+          post_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          message?: string | null
+          platform?: string | null
+          post_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_events_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "social_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      social_metrics: {
+        Row: {
+          clicks: number
+          comments: number
+          created_at: string
+          id: string
+          impressions: number
+          likes: number
+          post_id: string
+          recorded_at: string
+          shares: number
+        }
+        Insert: {
+          clicks?: number
+          comments?: number
+          created_at?: string
+          id?: string
+          impressions?: number
+          likes?: number
+          post_id: string
+          recorded_at?: string
+          shares?: number
+        }
+        Update: {
+          clicks?: number
+          comments?: number
+          created_at?: string
+          id?: string
+          impressions?: number
+          likes?: number
+          post_id?: string
+          recorded_at?: string
+          shares?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_metrics_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: true
+            referencedRelation: "social_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       social_posts: {
         Row: {
           attempts: number
