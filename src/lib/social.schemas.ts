@@ -57,3 +57,40 @@ export const queueContentSchema = z.object({
   source_type: z.enum(["film", "post"]),
   source_id: z.string().uuid(),
 });
+
+export const credentialsSchema = z.object({
+  platform: z.string().trim().min(1).max(40),
+  entries: z
+    .array(
+      z.object({
+        key_name: z.string().trim().min(1).max(80),
+        value: z.string().max(4000),
+      }),
+    )
+    .min(1)
+    .max(10),
+});
+
+export const aiKitSchema = z.object({
+  source_type: z.enum(["film", "post", "topic"]),
+  source_id: z.string().uuid().optional().nullable(),
+  topic: z.string().trim().max(200).optional().nullable(),
+  angle: z.string().trim().max(400).optional().nullable(),
+  audience: z.string().trim().max(200).optional().nullable(),
+});
+
+export const aiQueueSchema = z.object({
+  source_type: z.enum(["film", "post"]),
+  source_id: z.string().uuid(),
+  schedule: z.boolean(),
+  items: z
+    .array(
+      z.object({
+        platform: platformSchema,
+        caption: z.string().trim().min(1).max(4000),
+        hashtags: z.array(z.string().trim().max(60)).max(30).optional(),
+      }),
+    )
+    .min(1)
+    .max(3),
+});
