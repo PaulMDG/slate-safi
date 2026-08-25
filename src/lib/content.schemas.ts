@@ -107,3 +107,26 @@ export const submissionStatusSchema = z.object({
   status: z.enum(["new", "reviewed", "archived", "spam"]),
   internal_notes: z.string().trim().max(2000).optional().nullable(),
 });
+
+export const homepageSchema = z.object({
+  id: z.string().uuid().optional(),
+  hero_eyebrow: z.string().trim().max(120).optional().nullable(),
+  hero_title: z.string().trim().max(160).optional().nullable(),
+  hero_logline: z.string().trim().max(600).optional().nullable(),
+  hero_cta_label: z.string().trim().max(80).optional().nullable(),
+  hero_image_url: z.string().trim().max(600).optional().nullable(),
+  slate_eyebrow: z.string().trim().max(120).optional().nullable(),
+  slate_heading: z.string().trim().max(240).optional().nullable(),
+  news_eyebrow: z.string().trim().max(120).optional().nullable(),
+  news_heading: z.string().trim().max(240).optional().nullable(),
+  newsletter_heading: z.string().trim().max(240).optional().nullable(),
+  newsletter_body: z.string().trim().max(600).optional().nullable(),
+  partner_heading: z.string().trim().max(240).optional().nullable(),
+  partner_body: z.string().trim().max(900).optional().nullable(),
+  partner_cta_label: z.string().trim().max(80).optional().nullable(),
+  show_laurels: z.boolean(),
+  show_quotes: z.boolean(),
+  show_news: z.boolean(),
+  show_newsletter: z.boolean(),
+  show_partner: z.boolean(),
+});

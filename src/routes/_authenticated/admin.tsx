@@ -25,6 +25,7 @@ import { loadSocialData, type SocialSnapshot } from "@/lib/social.functions";
 import { OverviewPanel } from "@/components/admin/overview-panel";
 import { SocialPanel } from "@/components/admin/social-panel";
 import { SettingsPanel } from "@/components/admin/settings-panel";
+import { HomepagePanel } from "@/components/admin/homepage-panel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -126,6 +127,7 @@ const PRESS_FIELDS: readonly FieldSpec[] = [
 
 const TABS = [
   "Overview",
+  "Homepage",
   "Films",
   "Cast & crew",
   "Gallery",
@@ -261,6 +263,8 @@ function AdminDashboard() {
 
       <div className="mt-10">
         {tab === "Overview" && <OverviewPanel data={data!} social={socialQuery.data} />}
+
+        {tab === "Homepage" && <HomepagePanel data={data!} onDone={refetch} />}
 
         {tab === "Films" && (
           <CrudSection
