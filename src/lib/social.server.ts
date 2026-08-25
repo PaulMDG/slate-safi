@@ -10,11 +10,13 @@ export class MissingCredentials extends Error {
   }
 }
 
-function required(platform: Platform, names: string[]): Record<string, string> {
+async function required(platform: Platform, names: string[]): Promise<Record<string, string>> {
+  const { loadCredentialValues } = await import("./social.credentials.server");
+  const values = await loadCredentialValues();
   const out: Record<string, string> = {};
   const missing: string[] = [];
   for (const name of names) {
-    const value = process.env[name];
+    const value = values[name] ?? process.env[name];
     if (!value) missing.push(name);
     else out[name] = value;
   }
@@ -22,17 +24,12 @@ function required(platform: Platform, names: string[]): Record<string, string> {
   return out;
 }
 
-export function credentialStatus(): Record<Platform, boolean> {
-  return {
-    x: Boolean(process.env["X_ACCESS_TOKEN"]),
-    instagram: Boolean(
-      process.env["INSTAGRAM_ACCESS_TOKEN"] && process.env["INSTAGRAM_USER_ID"],
-    ),
-    linkedin: Boolean(
-      process.env["LINKEDIN_ACCESS_TOKEN"] && process.env["LINKEDIN_AUTHOR_URN"],
-    ),
-  };
+/** Per-channel connection flags, including keys saved from the dashboard. */
+export async function credentialStatus(): Promise<Record<string, boolean>> {
+  const { channelStatus } = await import("./social.credentials.server");
+  return channelStatus();
 }
+
 
 async function readError(response: Response) {
   const text = await response.text().catch(() => "");
