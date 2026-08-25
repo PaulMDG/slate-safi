@@ -4,6 +4,7 @@ import {
   creditSchema,
   filmSchema,
   gallerySchema,
+  homepageSchema,
   idInput,
   postSchema,
   pressSchema,
@@ -123,4 +124,12 @@ export const updateSubmissionStatus = createServerFn({ method: "POST" })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+export const saveHomepage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => homepageSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminUpsert } = await import("./admin.server");
+    return adminUpsert(context.supabase as any, context.userId, "homepage_content", data);
   });

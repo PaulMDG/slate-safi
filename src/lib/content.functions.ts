@@ -1,6 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { slugInput, emailSchema, contactSchema } from "./content.schemas";
-import type { FilmSummary, FilmDetail, PressItem, PostSummary, Post } from "./content.types";
+import type {
+  FilmSummary,
+  FilmDetail,
+  PressItem,
+  PostSummary,
+  Post,
+  Homepage,
+} from "./content.types";
 
 export const listFilms = createServerFn({ method: "GET" }).handler(
   async (): Promise<FilmSummary[]> => {
@@ -165,3 +172,16 @@ export const submitEnquiry = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+
+export const getHomepage = createServerFn({ method: "GET" }).handler(
+  async (): Promise<Homepage | null> => {
+    const { publicSupabase } = await import("./content.server");
+    const { data, error } = await publicSupabase()
+      .from("homepage_content")
+      .select("*")
+      .limit(1)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return data;
+  },
+);

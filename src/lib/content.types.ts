@@ -43,3 +43,5 @@ export type FilmDetail = {
   gallery: GalleryImage[];
   press: PressItem[];
 };
+
+export type Homepage = Tables<"homepage_content">;
