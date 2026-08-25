@@ -16,8 +16,15 @@ export type AdminSnapshot = {
 };
 
 export async function isAdmin(sb: SupabaseLike, userId: string) {
-  const { data } = await sb.rpc("has_role", { _user_id: userId, _role: "admin" });
-  return data === true;
+  // Role lookup goes through the user_roles table (RLS: users can read their own
+  // roles). The has_role() helper is server-internal and no longer API-callable.
+  const { data } = await sb
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  return Boolean(data);
 }
 
 export async function assertAdmin(sb: SupabaseLike, userId: string) {
