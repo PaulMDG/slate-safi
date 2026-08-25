@@ -187,99 +187,99 @@ function Home() {
       )}
 
       {cms?.show_news !== false && (
-      <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
-          <div className="min-w-0">
-            <h2 className="eyebrow">{cms?.news_eyebrow || "Latest"}</h2>
-            <p className="mt-4 text-3xl leading-tight sm:text-4xl">
-              {cms?.news_heading || "From the studio"}
-            </p>
-          </div>
-          <Link
-            to="/news"
-            className="hidden shrink-0 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-primary sm:inline-flex"
-          >
-            All news <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
-          {posts.map((post) => (
-            <Link
-              key={post.id}
-              to="/news/$slug"
-              params={{ slug: post.slug }}
-              className="group min-w-0"
-            >
-              <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border">
-                {post.cover_image_url ? (
-                  <img
-                    src={post.cover_image_url}
-                    alt={post.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : null}
-              </div>
-              <p className="mt-5 text-xs uppercase tracking-[0.2em] text-primary">
-                {post.category}
+        <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
+            <div className="min-w-0">
+              <h2 className="eyebrow">{cms?.news_eyebrow || "Latest"}</h2>
+              <p className="mt-4 text-3xl leading-tight sm:text-4xl">
+                {cms?.news_heading || "From the studio"}
               </p>
-              <h3 className="mt-2 text-xl leading-snug transition-colors group-hover:text-primary">
-                {post.title}
-              </h3>
-              <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{post.excerpt}</p>
+            </div>
+            <Link
+              to="/news"
+              className="hidden shrink-0 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-primary sm:inline-flex"
+            >
+              All news <ArrowRight className="h-4 w-4" />
             </Link>
-          ))}
-        </div>
-      </section>
+          </div>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
+            {posts.map((post) => (
+              <Link
+                key={post.id}
+                to="/news/$slug"
+                params={{ slug: post.slug }}
+                className="group min-w-0"
+              >
+                <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border">
+                  {post.cover_image_url ? (
+                    <img
+                      src={post.cover_image_url}
+                      alt={post.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : null}
+                </div>
+                <p className="mt-5 text-xs uppercase tracking-[0.2em] text-primary">
+                  {post.category}
+                </p>
+                <h3 className="mt-2 text-xl leading-snug transition-colors group-hover:text-primary">
+                  {post.title}
+                </h3>
+                <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{post.excerpt}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
       )}
 
       {cms?.show_newsletter !== false && (
-      <section className="rule-top">
-        <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
-          <div className="min-w-0">
-            <h2 className="eyebrow">Newsletter</h2>
-            <p className="mt-4 text-3xl leading-tight sm:text-4xl">
-              {cms?.newsletter_heading || "Festival dates, releases, first looks."}
-            </p>
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
-              {cms?.newsletter_body ||
-                "A short dispatch for audiences, programmers and press. No more than once a month."}
-            </p>
+        <section className="rule-top">
+          <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
+            <div className="min-w-0">
+              <h2 className="eyebrow">Newsletter</h2>
+              <p className="mt-4 text-3xl leading-tight sm:text-4xl">
+                {cms?.newsletter_heading || "Festival dates, releases, first looks."}
+              </p>
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
+                {cms?.newsletter_body ||
+                  "A short dispatch for audiences, programmers and press. No more than once a month."}
+              </p>
+            </div>
+            <div className="flex items-center">
+              <NewsletterForm source="homepage" />
+            </div>
           </div>
-          <div className="flex items-center">
-            <NewsletterForm source="homepage" />
-          </div>
-        </div>
-      </section>
+        </section>
       )}
 
       {cms?.show_partner !== false && (
-      <section className="rule-top">
-        <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
-          <div className="frame rounded-sm border border-border p-8 md:p-16">
-            <div className="grid gap-10 md:grid-cols-[1.6fr_1fr] md:items-end">
-              <div className="min-w-0">
-                <h2 className="eyebrow">Partners &amp; sponsors</h2>
-                <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-5xl">
-                  {cms?.partner_heading || "Back a slate that already travels."}
-                </p>
-                <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  {cms?.partner_body ||
-                    "Brand partnership, co-production, festival support and distribution — we work with partners across Kenya, the UK, Canada and the US."}
-                </p>
+        <section className="rule-top">
+          <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
+            <div className="frame rounded-sm border border-border p-8 md:p-16">
+              <div className="grid gap-10 md:grid-cols-[1.6fr_1fr] md:items-end">
+                <div className="min-w-0">
+                  <h2 className="eyebrow">Partners &amp; sponsors</h2>
+                  <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-5xl">
+                    {cms?.partner_heading || "Back a slate that already travels."}
+                  </p>
+                  <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                    {cms?.partner_body ||
+                      "Brand partnership, co-production, festival support and distribution — we work with partners across Kenya, the UK, Canada and the US."}
+                  </p>
+                </div>
+                <Link
+                  to="/partner"
+                  className="inline-flex items-center justify-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  {cms?.partner_cta_label || "Partner with us"} <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
-              <Link
-                to="/partner"
-                className="inline-flex items-center justify-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                {cms?.partner_cta_label || "Partner with us"} <ArrowRight className="h-4 w-4" />
-              </Link>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
     </>
   );

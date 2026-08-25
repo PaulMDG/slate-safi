@@ -44,16 +44,17 @@ const HOMEPAGE_FIELDS: readonly FieldSpec[] = [
   { key: "show_partner", label: "Show partner block", type: "boolean" },
 ];
 
-export function HomepagePanel({
-  data,
-  onDone,
-}: {
-  data: AdminSnapshot;
-  onDone: () => unknown;
-}) {
+export function HomepagePanel({ data, onDone }: { data: AdminSnapshot; onDone: () => unknown }) {
   const save = useServerFn(saveHomepage);
   const [draft, setDraft] = useState<RecordValues>(
-    () => (data.homepage as RecordValues | null) ?? { show_laurels: true, show_quotes: true, show_news: true, show_newsletter: true, show_partner: true },
+    () =>
+      (data.homepage as RecordValues | null) ?? {
+        show_laurels: true,
+        show_quotes: true,
+        show_news: true,
+        show_newsletter: true,
+        show_partner: true,
+      },
   );
   const [pending, setPending] = useState(false);
 
