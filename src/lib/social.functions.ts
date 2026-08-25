@@ -16,11 +16,13 @@ type SupabaseLike = {
 type Ctx = { supabase: SupabaseLike; userId: string };
 
 async function assertAdmin(context: Ctx) {
-  const { data, error } = await context.supabase.rpc("has_role", {
-    _user_id: context.userId,
-    _role: "admin",
-  });
-  if (error || data !== true) throw new Error("Forbidden: admin access required.");
+  const { data, error } = await context.supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", context.userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (error || !data) throw new Error("Forbidden: admin access required.");
 }
 
 export type SocialSnapshot = {
