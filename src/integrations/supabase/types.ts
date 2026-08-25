@@ -551,6 +551,36 @@ export type Database = {
         }
         Relationships: []
       }
+      social_credentials: {
+        Row: {
+          created_at: string
+          id: string
+          key_name: string
+          platform: string
+          updated_at: string
+          updated_by: string | null
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_name: string
+          platform: string
+          updated_at?: string
+          updated_by?: string | null
+          value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_name?: string
+          platform?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
       social_events: {
         Row: {
           created_at: string
