@@ -172,3 +172,221 @@ export async function dispatchDuePosts(limit = 10) {
 
   return { processed: results.length, results };
 }
+
+/* ------------------------------------------------------------------ *
+ * Automation: auto-queue on publish, evergreen recycling, event log
+ * ------------------------------------------------------------------ */
+
+type Sb = { from: (table: string) => any };
+
+export async function loadAutomation(sb: Sb) {
+  const { DEFAULT_AUTOMATION } = await import("./social.automation");
+  const { data } = await sb.from("social_automation").select("*").limit(1).maybeSingle();
+  return { ...DEFAULT_AUTOMATION, ...(data ?? {}) };
+}
+
+export async function logSocialEvent(
+  sb: Sb,
+  event: { kind: string; platform?: string | null; post_id?: string | null; message?: string | null },
+) {
+  await sb.from("social_events").insert({
+    kind: event.kind,
+    platform: event.platform ?? null,
+    post_id: event.post_id ?? null,
+    message: event.message ?? null,
+  });
+}
+
+/**
+ * Builds and queues platform-tailored posts for one film or news article.
+ * Called automatically whenever an admin publishes content.
+ */
+export async function queueForContent(
+  sb: Sb,
+  input: { sourceType: "film" | "post"; sourceId: string; force?: boolean },
+) {
+  const { captionForFilm, captionForPost, mediaForFilm, mediaForPost } = await import(
+    "./social.captions"
+  );
+  const { taggedLink, validPlatforms } = await import("./social.automation");
+  const { SITE_URL } = await import("./seo");
+
+  const settings = await loadAutomation(sb);
+  const isFilm = input.sourceType === "film";
+  const enabled = isFilm ? settings.auto_publish_films : settings.auto_publish_posts;
+  if (!enabled && !input.force) return { created: 0, skipped: "automation-off" as const };
+
+  const platforms = validPlatforms(settings.platforms);
+  if (!platforms.length) return { created: 0, skipped: "no-platforms" as const };
+
+  const { data: row } = await sb
+    .from(isFilm ? "films" : "posts")
+    .select("*")
+    .eq("id", input.sourceId)
+    .maybeSingle();
+  if (!row) return { created: 0, skipped: "missing" as const };
+  if (!row.published && !input.force) return { created: 0, skipped: "unpublished" as const };
+
+  // Never re-queue content that already has posts unless explicitly forced.
+  const { data: existing } = await sb
+    .from("social_posts")
+    .select("id")
+    .eq("source_type", input.sourceType)
+    .eq("source_id", input.sourceId);
+  if (!input.force && (existing ?? []).length) {
+    return { created: 0, skipped: "already-queued" as const };
+  }
+
+  const scheduledFor = new Date(
+    Date.now() + Math.max(0, settings.delay_minutes) * 60_000,
+  ).toISOString();
+  const media = isFilm ? mediaForFilm(row) : mediaForPost(row);
+  const baseLink = `${SITE_URL}/${isFilm ? "films" : "news"}/${row.slug}`;
+
+  const rows = platforms.map((platform) => ({
+    platform,
+    status: "scheduled",
+    caption: isFilm ? captionForFilm(row, platform) : captionForPost(row, platform),
+    media_url: media,
+    link_url: taggedLink(baseLink, platform, settings),
+    source_type: input.sourceType,
+    source_id: input.sourceId,
+    scheduled_for: scheduledFor,
+    posted_at: null,
+    external_id: null,
+    external_url: null,
+    error: null,
+    attempts: 0,
+  }));
+
+  const { error } = await sb
+    .from("social_posts")
+    .upsert(rows, { onConflict: "platform,source_type,source_id" });
+  if (error) throw new Error((error as { message: string }).message);
+
+  await logSocialEvent(sb, {
+    kind: "queued",
+    message: `Auto-queued ${rows.length} post(s) for ${isFilm ? "film" : "news"} “${row.title}”.`,
+  });
+  return { created: rows.length };
+}
+
+/** Re-promotes older published content on a rolling schedule. */
+export async function runEvergreen(sb: Sb, force = false) {
+  const { validPlatforms, taggedLink } = await import("./social.automation");
+  const { captionForFilm, captionForPost, mediaForFilm, mediaForPost } = await import(
+    "./social.captions"
+  );
+  const { SITE_URL } = await import("./seo");
+
+  const settings = await loadAutomation(sb);
+  if (!settings.evergreen_enabled && !force) return { created: 0, skipped: "evergreen-off" as const };
+  const platforms = validPlatforms(settings.evergreen_platforms);
+  if (!platforms.length) return { created: 0, skipped: "no-platforms" as const };
+
+  const cutoff = new Date(
+    Date.now() - Math.max(1, settings.evergreen_interval_days) * 86_400_000,
+  ).toISOString();
+
+  const [films, posts] = await Promise.all([
+    sb.from("films").select("*").eq("published", true),
+    sb.from("posts").select("*").eq("published", true).lte("published_at", cutoff),
+  ]);
+
+  const candidates: { kind: "film" | "post"; row: any }[] = [
+    ...(films.data ?? []).map((row: any) => ({ kind: "film" as const, row })),
+    ...(posts.data ?? []).map((row: any) => ({ kind: "post" as const, row })),
+  ];
+  if (!candidates.length) return { created: 0, skipped: "no-content" as const };
+
+  // Pick the item whose last post is oldest (or never posted).
+  const { data: recent } = await sb
+    .from("social_posts")
+    .select("source_type,source_id,created_at")
+    .order("created_at", { ascending: false })
+    .limit(200);
+  const lastSeen = new Map<string, number>();
+  for (const r of recent ?? []) {
+    const key = `${r.source_type}:${r.source_id}`;
+    if (!lastSeen.has(key)) lastSeen.set(key, new Date(r.created_at).getTime());
+  }
+
+  const scored = candidates
+    .map((c) => ({ ...c, last: lastSeen.get(`${c.kind}:${c.row.id}`) ?? 0 }))
+    .sort((a, b) => a.last - b.last);
+  const pick = scored[0]!;
+  const intervalMs = Math.max(1, settings.evergreen_interval_days) * 86_400_000;
+  if (!force && pick.last > Date.now() - intervalMs) {
+    return { created: 0, skipped: "too-soon" as const };
+  }
+
+  const isFilm = pick.kind === "film";
+  const baseLink = `${SITE_URL}/${isFilm ? "films" : "news"}/${pick.row.slug}`;
+  const media = isFilm ? mediaForFilm(pick.row) : mediaForPost(pick.row);
+  const rows = platforms.map((platform) => ({
+    platform,
+    status: "scheduled",
+    caption: isFilm ? captionForFilm(pick.row, platform) : captionForPost(pick.row, platform),
+    media_url: media,
+    link_url: taggedLink(baseLink, platform, { ...settings, utm_campaign: `${settings.utm_campaign}-evergreen` }),
+    source_type: pick.kind,
+    source_id: pick.row.id,
+    scheduled_for: new Date().toISOString(),
+    posted_at: null,
+    external_id: null,
+    external_url: null,
+    error: null,
+    attempts: 0,
+  }));
+
+  const { error } = await sb
+    .from("social_posts")
+    .upsert(rows, { onConflict: "platform,source_type,source_id" });
+  if (error) throw new Error((error as { message: string }).message);
+
+  await logSocialEvent(sb, {
+    kind: "evergreen",
+    message: `Recycled “${pick.row.title}” to ${rows.length} channel(s).`,
+  });
+  return { created: rows.length, title: pick.row.title as string };
+}
+
+/** Full automation tick: evergreen top-up, then send everything that is due. */
+export async function runAutomationTick(limit = 20) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const sb = supabaseAdmin as unknown as Sb;
+  const settings = await loadAutomation(sb);
+
+  const since = new Date(Date.now() - 86_400_000).toISOString();
+  const { data: recentPosted } = await sb
+    .from("social_posts")
+    .select("id")
+    .eq("status", "posted")
+    .gte("posted_at", since);
+  const usedToday = (recentPosted ?? []).length;
+  const remaining = Math.max(0, settings.daily_cap - usedToday);
+
+  let evergreen: Awaited<ReturnType<typeof runEvergreen>> | null = null;
+  if (settings.evergreen_enabled && remaining > 0) {
+    evergreen = await runEvergreen(sb);
+  }
+
+  if (remaining <= 0) {
+    await logSocialEvent(sb, {
+      kind: "capped",
+      message: `Daily cap of ${settings.daily_cap} posts reached — holding the queue.`,
+    });
+    return { processed: 0, results: [], capped: true, evergreen };
+  }
+
+  const dispatched = await dispatchDuePosts(Math.min(limit, remaining));
+  for (const r of dispatched.results) {
+    await logSocialEvent(sb, {
+      kind: r.ok ? "published" : "failed",
+      platform: r.platform,
+      post_id: r.id,
+      message: r.error ?? null,
+    });
+  }
+  return { ...dispatched, capped: false, evergreen };
+}
