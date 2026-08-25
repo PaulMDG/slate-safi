@@ -400,6 +400,13 @@ function CrudSection({
 
   async function onSave() {
     if (!draft) return;
+    const missing = fields.find(
+      (f) => f.required && String(draft[f.key] ?? "").trim() === "",
+    );
+    if (missing) {
+      toast.error(`${missing.label} is required.`);
+      return;
+    }
     setPending(true);
     try {
       const payload: RecordValues = {};
