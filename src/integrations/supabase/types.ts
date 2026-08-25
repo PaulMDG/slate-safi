@@ -249,6 +249,84 @@ export type Database = {
         }
         Relationships: []
       }
+      homepage_content: {
+        Row: {
+          created_at: string
+          hero_cta_label: string | null
+          hero_eyebrow: string | null
+          hero_image_url: string | null
+          hero_logline: string | null
+          hero_title: string | null
+          id: string
+          news_eyebrow: string | null
+          news_heading: string | null
+          newsletter_body: string | null
+          newsletter_heading: string | null
+          partner_body: string | null
+          partner_cta_label: string | null
+          partner_heading: string | null
+          show_laurels: boolean
+          show_news: boolean
+          show_newsletter: boolean
+          show_partner: boolean
+          show_quotes: boolean
+          singleton: boolean
+          slate_eyebrow: string | null
+          slate_heading: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          hero_cta_label?: string | null
+          hero_eyebrow?: string | null
+          hero_image_url?: string | null
+          hero_logline?: string | null
+          hero_title?: string | null
+          id?: string
+          news_eyebrow?: string | null
+          news_heading?: string | null
+          newsletter_body?: string | null
+          newsletter_heading?: string | null
+          partner_body?: string | null
+          partner_cta_label?: string | null
+          partner_heading?: string | null
+          show_laurels?: boolean
+          show_news?: boolean
+          show_newsletter?: boolean
+          show_partner?: boolean
+          show_quotes?: boolean
+          singleton?: boolean
+          slate_eyebrow?: string | null
+          slate_heading?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          hero_cta_label?: string | null
+          hero_eyebrow?: string | null
+          hero_image_url?: string | null
+          hero_logline?: string | null
+          hero_title?: string | null
+          id?: string
+          news_eyebrow?: string | null
+          news_heading?: string | null
+          newsletter_body?: string | null
+          newsletter_heading?: string | null
+          partner_body?: string | null
+          partner_cta_label?: string | null
+          partner_heading?: string | null
+          show_laurels?: boolean
+          show_news?: boolean
+          show_newsletter?: boolean
+          show_partner?: boolean
+          show_quotes?: boolean
+          singleton?: boolean
+          slate_eyebrow?: string | null
+          slate_heading?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           country: string | null
