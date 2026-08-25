@@ -98,14 +98,17 @@ export async function adminUpsertContent(
     .maybeSingle();
   if (error) throw new Error((error as { message: string }).message);
 
-  let automation: unknown = { created: 0, skipped: "unpublished" };
+  let automation: { created: number; skipped?: string; error?: string } = {
+    created: 0,
+    skipped: "unpublished",
+  };
   if (data?.published) {
     try {
       const { queueForContent } = await import("./social.server");
-      automation = await queueForContent(sb as any, {
+      automation = (await queueForContent(sb as any, {
         sourceType: table === "films" ? "film" : "post",
         sourceId: data.id,
-      });
+      })) as { created: number; skipped?: string };
     } catch (err) {
       automation = { created: 0, error: err instanceof Error ? err.message : "queue failed" };
     }
