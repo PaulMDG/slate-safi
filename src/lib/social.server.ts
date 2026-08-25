@@ -37,7 +37,7 @@ async function readError(response: Response) {
 }
 
 async function publishToX(caption: string): Promise<PublishResult> {
-  const env = required("x", ["X_ACCESS_TOKEN"]);
+  const env = await required("x", ["X_ACCESS_TOKEN"]);
   const response = await fetch("https://api.twitter.com/2/tweets", {
     method: "POST",
     headers: {
@@ -53,7 +53,7 @@ async function publishToX(caption: string): Promise<PublishResult> {
 }
 
 async function publishToInstagram(caption: string, mediaUrl: string | null): Promise<PublishResult> {
-  const env = required("instagram", ["INSTAGRAM_ACCESS_TOKEN", "INSTAGRAM_USER_ID"]);
+  const env = await required("instagram", ["INSTAGRAM_ACCESS_TOKEN", "INSTAGRAM_USER_ID"]);
   const image = absoluteUrl(mediaUrl);
   if (!image) throw new Error("Instagram posts need an image. Add a media URL first.");
 
@@ -83,7 +83,7 @@ async function publishToLinkedIn(
   caption: string,
   linkUrl: string | null,
 ): Promise<PublishResult> {
-  const env = required("linkedin", ["LINKEDIN_ACCESS_TOKEN", "LINKEDIN_AUTHOR_URN"]);
+  const env = await required("linkedin", ["LINKEDIN_ACCESS_TOKEN", "LINKEDIN_AUTHOR_URN"]);
   const author = env["LINKEDIN_AUTHOR_URN"];
   const share: Record<string, unknown> = { shareCommentary: { text: caption } };
   if (linkUrl) {
