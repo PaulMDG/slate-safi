@@ -21,9 +21,9 @@ export const Route = createFileRoute("/api/public/social/dispatch")({
           return new Response("Unauthorized", { status: 401 });
         }
 
-        const { dispatchDuePosts } = await import("@/lib/social.server");
+        const { runAutomationTick } = await import("@/lib/social.server");
         try {
-          const result = await dispatchDuePosts(20);
+          const result = await runAutomationTick(20);
           return Response.json(result);
         } catch (error) {
           console.error("[social dispatch]", error);
