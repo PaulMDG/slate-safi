@@ -1,10 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Play } from "lucide-react";
-import { getHomepage, listFilms, listPosts, listPress } from "@/lib/content.functions";
+import {
+  getHomepage,
+  listFilms,
+  listHomepageSlides,
+  listPosts,
+  listPress,
+} from "@/lib/content.functions";
 import { FilmCard } from "@/components/site/film-card";
 import { LaurelStrip } from "@/components/site/laurel-strip";
 import { NewsletterForm } from "@/components/site/newsletter-form";
-import type { FilmSummary, PressItem, PostSummary, Homepage } from "@/lib/content.types";
+import { HeroSlideshow, type HeroSlideView } from "@/components/site/hero-slideshow";
+import type {
+  FilmSummary,
+  PressItem,
+  PostSummary,
+  Homepage,
+  HomepageSlide,
+} from "@/lib/content.types";
 import { SITE_URL, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
@@ -13,15 +26,18 @@ export const Route = createFileRoute("/")({
     press: PressItem[];
     posts: PostSummary[];
     homepage: Homepage | null;
+    slides: HomepageSlide[];
   }> => {
-    const [films, press, posts, homepage] = await Promise.all([
+    const [films, press, posts, homepage, slides] = await Promise.all([
       listFilms(),
       listPress(),
       listPosts(),
       getHomepage(),
+      listHomepageSlides(),
     ]);
-    return { films, press, posts: posts.slice(0, 3), homepage };
+    return { films, press, posts: posts.slice(0, 3), homepage, slides };
   },
+
   head: () => {
     const social = socialMeta({
       title: "Slate Safi — Kenyan Film Production Company",
