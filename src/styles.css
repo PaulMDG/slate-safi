@@ -166,3 +166,16 @@
 @utility rule-top {
   border-top: 1px solid var(--color-border);
 }
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(-1.2%, -1%, 0);
+  }
+}
+
+@utility animate-hero-zoom {
+  animation: hero-zoom 12s ease-out forwards;
+}
