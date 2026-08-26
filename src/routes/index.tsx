@@ -301,7 +301,7 @@ function Home() {
         <section className="rule-top">
           <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
             <div className="min-w-0">
-              <h2 className="eyebrow">Newsletter</h2>
+              <h2 className="eyebrow">{cms?.newsletter_eyebrow || "Newsletter"}</h2>
               <p className="mt-4 text-3xl leading-tight sm:text-4xl">
                 {cms?.newsletter_heading || "Festival dates, releases, first looks."}
               </p>
@@ -323,7 +323,7 @@ function Home() {
             <div className="frame rounded-sm border border-border p-8 md:p-16">
               <div className="grid gap-10 md:grid-cols-[1.6fr_1fr] md:items-end">
                 <div className="min-w-0">
-                  <h2 className="eyebrow">Partners &amp; sponsors</h2>
+                  <h2 className="eyebrow">{cms?.partner_eyebrow || "Partners & sponsors"}</h2>
                   <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-5xl">
                     {cms?.partner_heading || "Back a slate that already travels."}
                   </p>
