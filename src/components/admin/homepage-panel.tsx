@@ -61,6 +61,8 @@ export function HomepagePanel({ data, onDone }: { data: AdminSnapshot; onDone: (
   const [draft, setDraft] = useState<RecordValues>(
     () =>
       (data.homepage as RecordValues | null) ?? {
+        show_slideshow: true,
+        slideshow_interval_ms: 6500,
         show_laurels: true,
         show_quotes: true,
         show_news: true,
@@ -76,10 +78,12 @@ export function HomepagePanel({ data, onDone }: { data: AdminSnapshot; onDone: (
       const payload: RecordValues = {};
       for (const field of HOMEPAGE_FIELDS) {
         const raw = draft[field.key];
-        payload[field.key] =
-          field.type === "boolean" ? Boolean(raw) : ((raw as string) ?? "") === "" ? null : raw;
+        if (field.type === "boolean") payload[field.key] = Boolean(raw);
+        else if (field.type === "number") payload[field.key] = Number(raw) || 6500;
+        else payload[field.key] = ((raw as string) ?? "") === "" ? null : raw;
       }
       if (draft.id) payload["id"] = draft.id;
+
       await save({ data: payload as never });
       toast.success("Homepage updated.");
       await onDone();
