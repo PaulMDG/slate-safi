@@ -8,6 +8,7 @@ import {
   idInput,
   postSchema,
   pressSchema,
+  slideSchema,
   submissionStatusSchema,
 } from "./content.schemas";
 import type { AdminSnapshot } from "./admin.server";
@@ -132,4 +133,20 @@ export const saveHomepage = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { adminUpsert } = await import("./admin.server");
     return adminUpsert(context.supabase as any, context.userId, "homepage_content", data);
+  });
+
+export const saveHomepageSlide = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => slideSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminUpsert } = await import("./admin.server");
+    return adminUpsert(context.supabase as any, context.userId, "homepage_slides", data);
+  });
+
+export const deleteHomepageSlide = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idInput.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminDelete } = await import("./admin.server");
+    return adminDelete(context.supabase as any, context.userId, "homepage_slides", data.id);
   });

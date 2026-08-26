@@ -11,11 +11,13 @@ import {
   deleteFilm,
   deleteGalleryImage,
   deletePost,
+  deleteHomepageSlide,
   deletePressItem,
   loadAdminData,
   saveCredit,
   saveFilm,
   saveGalleryImage,
+  saveHomepageSlide,
   savePost,
   savePressItem,
   updateSubmissionStatus,
@@ -124,6 +126,29 @@ const PRESS_FIELDS: readonly FieldSpec[] = [
   { key: "quote", label: "Quote", type: "textarea", full: true },
   { key: "year", label: "Year", type: "number" },
   { key: "link_url", label: "Link URL", type: "text", full: true },
+  { key: "sort_order", label: "Sort order", type: "number" },
+  { key: "published", label: "Published", type: "boolean" },
+];
+
+const SLIDE_FIELDS: readonly FieldSpec[] = [
+  {
+    key: "image_url",
+    label: "Slide image",
+    type: "image",
+    full: true,
+    folder: "homepage",
+    required: true,
+  },
+  { key: "eyebrow", label: "Eyebrow", type: "text" },
+  { key: "title", label: "Headline", type: "text" },
+  { key: "logline", label: "Logline", type: "textarea", full: true },
+  { key: "cta_label", label: "Button label", type: "text" },
+  {
+    key: "cta_url",
+    label: "Button link",
+    type: "text",
+    placeholder: "https://youtu.be/... or /films/boda-love",
+  },
   { key: "sort_order", label: "Sort order", type: "number" },
   { key: "published", label: "Published", type: "boolean" },
 ];
@@ -270,7 +295,29 @@ function AdminDashboard() {
       <div className="mt-10">
         {tab === "Overview" && <OverviewPanel data={data!} social={socialQuery.data} />}
 
-        {tab === "Homepage" && <HomepagePanel data={data!} onDone={refetch} />}
+        {tab === "Homepage" && (
+          <div className="space-y-16">
+            <HomepagePanel data={data!} onDone={refetch} />
+            <div className="rule-top pt-12">
+              <CrudSection
+                title="Hero slideshow"
+                fields={SLIDE_FIELDS}
+                rows={data?.slides ?? []}
+                label={(r) =>
+                  `${(r.title as string) || "Untitled slide"}${r.published ? "" : " (hidden)"}`
+                }
+                blank={{
+                  image_url: "",
+                  published: true,
+                  sort_order: (data?.slides ?? []).length,
+                }}
+                save={saveHomepageSlide}
+                remove={deleteHomepageSlide}
+                onDone={refetch}
+              />
+            </div>
+          </div>
+        )}
 
         {tab === "Films" && (
           <CrudSection

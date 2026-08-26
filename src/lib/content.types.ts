@@ -45,3 +45,5 @@ export type FilmDetail = {
 };
 
 export type Homepage = Tables<"homepage_content">;
+
+export type HomepageSlide = Tables<"homepage_slides">;

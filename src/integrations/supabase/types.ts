@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.15"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -253,76 +253,136 @@ export type Database = {
         Row: {
           created_at: string
           hero_cta_label: string | null
+          hero_cta_url: string | null
           hero_eyebrow: string | null
           hero_image_url: string | null
           hero_logline: string | null
+          hero_status_label: string | null
           hero_title: string | null
           id: string
           news_eyebrow: string | null
           news_heading: string | null
           newsletter_body: string | null
+          newsletter_eyebrow: string | null
           newsletter_heading: string | null
           partner_body: string | null
           partner_cta_label: string | null
+          partner_eyebrow: string | null
           partner_heading: string | null
           show_laurels: boolean
           show_news: boolean
           show_newsletter: boolean
           show_partner: boolean
           show_quotes: boolean
+          show_slideshow: boolean
           singleton: boolean
           slate_eyebrow: string | null
           slate_heading: string | null
+          slideshow_interval_ms: number
           updated_at: string
         }
         Insert: {
           created_at?: string
           hero_cta_label?: string | null
+          hero_cta_url?: string | null
           hero_eyebrow?: string | null
           hero_image_url?: string | null
           hero_logline?: string | null
+          hero_status_label?: string | null
           hero_title?: string | null
           id?: string
           news_eyebrow?: string | null
           news_heading?: string | null
           newsletter_body?: string | null
+          newsletter_eyebrow?: string | null
           newsletter_heading?: string | null
           partner_body?: string | null
           partner_cta_label?: string | null
+          partner_eyebrow?: string | null
           partner_heading?: string | null
           show_laurels?: boolean
           show_news?: boolean
           show_newsletter?: boolean
           show_partner?: boolean
           show_quotes?: boolean
+          show_slideshow?: boolean
           singleton?: boolean
           slate_eyebrow?: string | null
           slate_heading?: string | null
+          slideshow_interval_ms?: number
           updated_at?: string
         }
         Update: {
           created_at?: string
           hero_cta_label?: string | null
+          hero_cta_url?: string | null
           hero_eyebrow?: string | null
           hero_image_url?: string | null
           hero_logline?: string | null
+          hero_status_label?: string | null
           hero_title?: string | null
           id?: string
           news_eyebrow?: string | null
           news_heading?: string | null
           newsletter_body?: string | null
+          newsletter_eyebrow?: string | null
           newsletter_heading?: string | null
           partner_body?: string | null
           partner_cta_label?: string | null
+          partner_eyebrow?: string | null
           partner_heading?: string | null
           show_laurels?: boolean
           show_news?: boolean
           show_newsletter?: boolean
           show_partner?: boolean
           show_quotes?: boolean
+          show_slideshow?: boolean
           singleton?: boolean
           slate_eyebrow?: string | null
           slate_heading?: string | null
+          slideshow_interval_ms?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homepage_slides: {
+        Row: {
+          created_at: string
+          cta_label: string | null
+          cta_url: string | null
+          eyebrow: string | null
+          id: string
+          image_url: string
+          logline: string | null
+          published: boolean
+          sort_order: number
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          eyebrow?: string | null
+          id?: string
+          image_url: string
+          logline?: string | null
+          published?: boolean
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          eyebrow?: string | null
+          id?: string
+          image_url?: string
+          logline?: string | null
+          published?: boolean
+          sort_order?: number
+          title?: string | null
           updated_at?: string
         }
         Relationships: []

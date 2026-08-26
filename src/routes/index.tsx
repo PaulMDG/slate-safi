@@ -1,10 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Play } from "lucide-react";
-import { getHomepage, listFilms, listPosts, listPress } from "@/lib/content.functions";
+import {
+  getHomepage,
+  listFilms,
+  listHomepageSlides,
+  listPosts,
+  listPress,
+} from "@/lib/content.functions";
 import { FilmCard } from "@/components/site/film-card";
 import { LaurelStrip } from "@/components/site/laurel-strip";
 import { NewsletterForm } from "@/components/site/newsletter-form";
-import type { FilmSummary, PressItem, PostSummary, Homepage } from "@/lib/content.types";
+import { HeroSlideshow, type HeroSlideView } from "@/components/site/hero-slideshow";
+import type {
+  FilmSummary,
+  PressItem,
+  PostSummary,
+  Homepage,
+  HomepageSlide,
+} from "@/lib/content.types";
 import { SITE_URL, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
@@ -13,15 +26,18 @@ export const Route = createFileRoute("/")({
     press: PressItem[];
     posts: PostSummary[];
     homepage: Homepage | null;
+    slides: HomepageSlide[];
   }> => {
-    const [films, press, posts, homepage] = await Promise.all([
+    const [films, press, posts, homepage, slides] = await Promise.all([
       listFilms(),
       listPress(),
       listPosts(),
       getHomepage(),
+      listHomepageSlides(),
     ]);
-    return { films, press, posts: posts.slice(0, 3), homepage };
+    return { films, press, posts: posts.slice(0, 3), homepage, slides };
   },
+
   head: () => {
     const social = socialMeta({
       title: "Slate Safi — Kenyan Film Production Company",
@@ -83,11 +99,13 @@ function Home() {
     press,
     posts,
     homepage,
+    slides,
   }: {
     films: FilmSummary[];
     press: PressItem[];
     posts: PostSummary[];
     homepage: Homepage | null;
+    slides: HomepageSlide[];
   } = Route.useLoaderData();
   const hero = films.find((f) => f.featured) ?? films[0];
   const quotes = press.filter((p) => p.kind === "quote");
@@ -95,46 +113,90 @@ function Home() {
   const heroImage = cms?.hero_image_url || hero?.hero_image_url;
   const heroTitle = cms?.hero_title || hero?.title || "Slate Safi";
   const heroLogline = cms?.hero_logline || hero?.logline;
+  const heroStatus =
+    cms?.hero_status_label || (hero?.status === "released" ? "Now showing" : "In production");
+  const heroEyebrow = `${heroStatus} · ${cms?.hero_eyebrow || "Slate Safi"}`;
+  const heroCtaLabel = cms?.hero_cta_label || "Watch the trailer";
+  const heroCtaUrl = cms?.hero_cta_url || (hero ? `/films/${hero.slug}` : "");
+
+  // Curated slides win; otherwise the published films become the slideshow.
+  const heroSlides: HeroSlideView[] =
+    slides.length > 0
+      ? slides.map((s) => ({
+          id: s.id,
+          image_url: s.image_url,
+          eyebrow: s.eyebrow ?? heroEyebrow,
+          title: s.title ?? heroTitle,
+          logline: s.logline,
+          cta_label: s.cta_label ?? heroCtaLabel,
+          cta_url: s.cta_url ?? heroCtaUrl,
+        }))
+      : films
+          .filter((f) => f.hero_image_url || f.poster_url)
+          .map((f) => ({
+            id: f.id,
+            image_url: (f.hero_image_url ?? f.poster_url) as string,
+            eyebrow: `${f.status === "released" ? "Now showing" : "In production"} · Slate Safi`,
+            title: f.title,
+            logline: f.logline ?? f.tagline,
+            cta_label: heroCtaLabel,
+            cta_url: `/films/${f.slug}`,
+          }));
+
+  const useSlideshow = cms?.show_slideshow !== false && heroSlides.length > 0;
 
   return (
     <>
-      <section className="relative min-h-[92svh] w-full overflow-hidden">
-        {heroImage ? (
-          <img
-            src={heroImage}
-            alt={`${heroTitle} — key still`}
-            fetchPriority="high"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        ) : null}
-        <div className="absolute inset-0 veil" />
+      {useSlideshow ? (
+        <HeroSlideshow slides={heroSlides} intervalMs={cms?.slideshow_interval_ms ?? 6500} />
+      ) : (
+        <section className="relative min-h-[92svh] w-full overflow-hidden">
+          {heroImage ? (
+            <img
+              src={heroImage}
+              alt={`${heroTitle} — key still`}
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : null}
+          <div className="absolute inset-0 veil" />
 
-        <div className="relative mx-auto flex min-h-[92svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
-          <p className="eyebrow">
-            {hero?.status === "released" ? "Now showing" : "In production"} ·{" "}
-            {cms?.hero_eyebrow || "Slate Safi"}
-          </p>
-          <h1 className="mt-5 max-w-4xl text-6xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">
-            {heroTitle}
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {heroLogline}
-          </p>
-          <div className="mt-10">
-            {hero ? (
-              <Link
-                to="/films/$slug"
-                params={{ slug: hero.slug }}
-                className="inline-flex items-center gap-3 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                <Play className="h-4 w-4 fill-current" />
-                {cms?.hero_cta_label || "Watch the trailer"}
-              </Link>
-            ) : null}
+          <div className="relative mx-auto flex min-h-[92svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
+            <p className="eyebrow">{heroEyebrow}</p>
+            <h1 className="mt-5 max-w-4xl text-6xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">
+              {heroTitle}
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              {heroLogline}
+            </p>
+            <div className="mt-10">
+              {heroCtaUrl ? (
+                /^https?:\/\//i.test(heroCtaUrl) ? (
+                  <a
+                    href={heroCtaUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-3 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    <Play className="h-4 w-4 fill-current" />
+                    {heroCtaLabel}
+                  </a>
+                ) : (
+                  <Link
+                    to={heroCtaUrl}
+                    className="inline-flex items-center gap-3 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    <Play className="h-4 w-4 fill-current" />
+                    {heroCtaLabel}
+                  </Link>
+                )
+              ) : null}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
 
       {cms?.show_laurels !== false && <LaurelStrip items={press} />}
 
@@ -239,7 +301,7 @@ function Home() {
         <section className="rule-top">
           <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
             <div className="min-w-0">
-              <h2 className="eyebrow">Newsletter</h2>
+              <h2 className="eyebrow">{cms?.newsletter_eyebrow || "Newsletter"}</h2>
               <p className="mt-4 text-3xl leading-tight sm:text-4xl">
                 {cms?.newsletter_heading || "Festival dates, releases, first looks."}
               </p>
@@ -261,7 +323,7 @@ function Home() {
             <div className="frame rounded-sm border border-border p-8 md:p-16">
               <div className="grid gap-10 md:grid-cols-[1.6fr_1fr] md:items-end">
                 <div className="min-w-0">
-                  <h2 className="eyebrow">Partners &amp; sponsors</h2>
+                  <h2 className="eyebrow">{cms?.partner_eyebrow || "Partners & sponsors"}</h2>
                   <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-5xl">
                     {cms?.partner_heading || "Back a slate that already travels."}
                   </p>
