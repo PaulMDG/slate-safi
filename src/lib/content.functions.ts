@@ -7,6 +7,7 @@ import type {
   PostSummary,
   Post,
   Homepage,
+  HomepageSlide,
 } from "./content.types";
 
 export const listFilms = createServerFn({ method: "GET" }).handler(
@@ -183,5 +184,18 @@ export const getHomepage = createServerFn({ method: "GET" }).handler(
       .maybeSingle();
     if (error) throw new Error(error.message);
     return data;
+  },
+);
+
+export const listHomepageSlides = createServerFn({ method: "GET" }).handler(
+  async (): Promise<HomepageSlide[]> => {
+    const { publicSupabase } = await import("./content.server");
+    const { data, error } = await publicSupabase()
+      .from("homepage_slides")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
   },
 );
