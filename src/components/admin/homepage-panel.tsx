@@ -8,7 +8,14 @@ import type { AdminSnapshot } from "@/lib/admin.functions";
 
 const HOMEPAGE_FIELDS: readonly FieldSpec[] = [
   { key: "hero_eyebrow", label: "Hero eyebrow", type: "text" },
+  { key: "hero_status_label", label: "Hero status label (e.g. Now showing)", type: "text" },
   { key: "hero_cta_label", label: "Hero button label", type: "text" },
+  {
+    key: "hero_cta_url",
+    label: "Hero button link (blank = featured film page)",
+    type: "text",
+    placeholder: "https://youtu.be/... or /films/boda-love",
+  },
   {
     key: "hero_title",
     label: "Hero headline (blank = featured film title)",
@@ -23,26 +30,31 @@ const HOMEPAGE_FIELDS: readonly FieldSpec[] = [
   },
   {
     key: "hero_image_url",
-    label: "Hero image (blank = featured film hero)",
+    label: "Hero image (used when the slideshow is off or empty)",
     type: "image",
     full: true,
     folder: "homepage",
   },
+  { key: "show_slideshow", label: "Use hero slideshow", type: "boolean" },
+  { key: "slideshow_interval_ms", label: "Slide duration (ms)", type: "number" },
   { key: "slate_eyebrow", label: "Slate eyebrow", type: "text" },
   { key: "slate_heading", label: "Slate heading", type: "text" },
   { key: "news_eyebrow", label: "News eyebrow", type: "text" },
   { key: "news_heading", label: "News heading", type: "text" },
-  { key: "newsletter_heading", label: "Newsletter heading", type: "text", full: true },
+  { key: "newsletter_eyebrow", label: "Newsletter eyebrow", type: "text" },
+  { key: "newsletter_heading", label: "Newsletter heading", type: "text" },
   { key: "newsletter_body", label: "Newsletter body", type: "textarea", full: true },
+  { key: "partner_eyebrow", label: "Partner eyebrow", type: "text" },
+  { key: "partner_cta_label", label: "Partner button label", type: "text" },
   { key: "partner_heading", label: "Partner heading", type: "text", full: true },
   { key: "partner_body", label: "Partner body", type: "textarea", full: true },
-  { key: "partner_cta_label", label: "Partner button label", type: "text" },
   { key: "show_laurels", label: "Show laurels strip", type: "boolean" },
   { key: "show_quotes", label: "Show press quotes", type: "boolean" },
   { key: "show_news", label: "Show latest news", type: "boolean" },
   { key: "show_newsletter", label: "Show newsletter block", type: "boolean" },
   { key: "show_partner", label: "Show partner block", type: "boolean" },
 ];
+
 
 export function HomepagePanel({ data, onDone }: { data: AdminSnapshot; onDone: () => unknown }) {
   const save = useServerFn(saveHomepage);
