@@ -4,7 +4,7 @@ import { ImageField } from "./image-field";
 export type FieldSpec = {
   key: string;
   label: string;
-  type: "text" | "textarea" | "number" | "boolean" | "select" | "image";
+  type: "text" | "textarea" | "number" | "boolean" | "select" | "image" | "datetime";
   options?: readonly { value: string; label: string }[];
   placeholder?: string;
   full?: boolean;
@@ -85,6 +85,19 @@ export function RecordEditor({
                       </option>
                     ))}
                   </select>
+                ) : field.type === "datetime" ? (
+                  <input
+                    id={`f-${field.key}`}
+                    type="datetime-local"
+                    value={toLocalInput(raw as string | null)}
+                    onChange={(e) =>
+                      set(
+                        field.key,
+                        e.target.value ? new Date(e.target.value).toISOString() : null,
+                      )
+                    }
+                    className={`mt-2 ${inputClass}`}
+                  />
                 ) : (
                   <input
                     id={`f-${field.key}`}
@@ -111,6 +124,15 @@ export function RecordEditor({
       })}
     </div>
   );
+}
+
+/** ISO timestamp -> value a datetime-local input accepts, in the browser's zone. */
+function toLocalInput(value: string | null | undefined) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
 export function useDraft(initial: RecordValues | null) {
