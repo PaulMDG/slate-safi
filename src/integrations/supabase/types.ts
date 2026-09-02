@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      cinemas: {
+        Row: {
+          booking_note: string | null
+          chain: string | null
+          city: string | null
+          created_at: string
+          id: string
+          name: string
+          published: boolean
+          sort_order: number
+          ticketing_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          booking_note?: string | null
+          chain?: string | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          published?: boolean
+          sort_order?: number
+          ticketing_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          booking_note?: string | null
+          chain?: string | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          published?: boolean
+          sort_order?: number
+          ticketing_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           country: string | null
@@ -517,6 +556,75 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "press_items_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      screenings: {
+        Row: {
+          cinema_id: string
+          city: string | null
+          created_at: string
+          ends_at: string | null
+          film_id: string
+          id: string
+          kind: string
+          note: string | null
+          published: boolean
+          screen_label: string | null
+          sold_out: boolean
+          sort_order: number
+          starts_at: string
+          ticket_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          cinema_id: string
+          city?: string | null
+          created_at?: string
+          ends_at?: string | null
+          film_id: string
+          id?: string
+          kind?: string
+          note?: string | null
+          published?: boolean
+          screen_label?: string | null
+          sold_out?: boolean
+          sort_order?: number
+          starts_at: string
+          ticket_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cinema_id?: string
+          city?: string | null
+          created_at?: string
+          ends_at?: string | null
+          film_id?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          published?: boolean
+          screen_label?: string | null
+          sold_out?: boolean
+          sort_order?: number
+          starts_at?: string
+          ticket_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "screenings_cinema_id_fkey"
+            columns: ["cinema_id"]
+            isOneToOne: false
+            referencedRelation: "cinemas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "screenings_film_id_fkey"
             columns: ["film_id"]
             isOneToOne: false
             referencedRelation: "films"

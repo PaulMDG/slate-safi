@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
+  cinemaSchema,
   creditSchema,
   filmSchema,
   gallerySchema,
@@ -8,6 +9,7 @@ import {
   idInput,
   postSchema,
   pressSchema,
+  screeningSchema,
   slideSchema,
   submissionStatusSchema,
 } from "./content.schemas";
@@ -149,4 +151,36 @@ export const deleteHomepageSlide = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { adminDelete } = await import("./admin.server");
     return adminDelete(context.supabase as any, context.userId, "homepage_slides", data.id);
+  });
+
+export const saveCinema = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => cinemaSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminUpsert } = await import("./admin.server");
+    return adminUpsert(context.supabase as any, context.userId, "cinemas", data);
+  });
+
+export const deleteCinema = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idInput.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminDelete } = await import("./admin.server");
+    return adminDelete(context.supabase as any, context.userId, "cinemas", data.id);
+  });
+
+export const saveScreening = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => screeningSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminUpsert } = await import("./admin.server");
+    return adminUpsert(context.supabase as any, context.userId, "screenings", data);
+  });
+
+export const deleteScreening = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idInput.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminDelete } = await import("./admin.server");
+    return adminDelete(context.supabase as any, context.userId, "screenings", data.id);
   });

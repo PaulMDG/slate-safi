@@ -149,3 +149,30 @@ export const slideSchema = z.object({
   published: z.boolean(),
 });
 
+
+export const cinemaSchema = z.object({
+  id: z.string().uuid().optional(),
+  name: z.string().trim().min(1).max(160),
+  chain: z.string().trim().max(160).optional().nullable(),
+  city: z.string().trim().max(120).optional().nullable(),
+  ticketing_url: z.string().trim().max(600).optional().nullable(),
+  booking_note: z.string().trim().max(400).optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999),
+  published: z.boolean(),
+});
+
+export const screeningSchema = z.object({
+  id: z.string().uuid().optional(),
+  film_id: z.string().uuid(),
+  cinema_id: z.string().uuid(),
+  kind: z.enum(["premiere", "screening", "festival", "special"]),
+  starts_at: z.string().trim().min(1).max(40),
+  ends_at: z.string().trim().max(40).optional().nullable(),
+  screen_label: z.string().trim().max(120).optional().nullable(),
+  city: z.string().trim().max(120).optional().nullable(),
+  ticket_url: z.string().trim().max(600).optional().nullable(),
+  note: z.string().trim().max(400).optional().nullable(),
+  sold_out: z.boolean(),
+  sort_order: z.number().int().min(0).max(9999),
+  published: z.boolean(),
+});

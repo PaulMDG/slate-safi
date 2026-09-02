@@ -15,6 +15,8 @@ export type AdminSnapshot = {
   subscribers: Tables<"newsletter_subscribers">[];
   homepage: Tables<"homepage_content"> | null;
   slides: Tables<"homepage_slides">[];
+  cinemas: Tables<"cinemas">[];
+  screenings: Tables<"screenings">[];
 };
 
 export async function isAdmin(sb: SupabaseLike, userId: string) {
@@ -34,7 +36,7 @@ export async function assertAdmin(sb: SupabaseLike, userId: string) {
 }
 
 export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapshot> {
-  const [films, credits, gallery, posts, press, contact, subscribers, homepage, slides] =
+  const [films, credits, gallery, posts, press, contact, subscribers, homepage, slides, cinemas, screenings] =
     await Promise.all([
     sb.from("films").select("*").order("sort_order", { ascending: true }),
     sb.from("film_credits").select("*").order("sort_order", { ascending: true }),
@@ -45,6 +47,8 @@ export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapsho
     sb.from("newsletter_subscribers").select("*").order("created_at", { ascending: false }),
     sb.from("homepage_content").select("*").limit(1).maybeSingle(),
       sb.from("homepage_slides").select("*").order("sort_order", { ascending: true }),
+      sb.from("cinemas").select("*").order("sort_order", { ascending: true }),
+      sb.from("screenings").select("*").order("starts_at", { ascending: true }),
     ]);
   return {
     films: films.data ?? [],
@@ -56,6 +60,8 @@ export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapsho
     subscribers: subscribers.data ?? [],
     homepage: homepage.data ?? null,
     slides: slides.data ?? [],
+    cinemas: cinemas.data ?? [],
+    screenings: screenings.data ?? [],
   };
 }
 

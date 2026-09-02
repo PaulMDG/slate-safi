@@ -7,13 +7,17 @@ import { Loader2, Plus, Save, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { RecordEditor, type FieldSpec, type RecordValues } from "@/components/admin/record-editor";
 import {
+  deleteCinema,
   deleteCredit,
   deleteFilm,
   deleteGalleryImage,
   deletePost,
   deleteHomepageSlide,
   deletePressItem,
+  deleteScreening,
   loadAdminData,
+  saveCinema,
+  saveScreening,
   saveCredit,
   saveFilm,
   saveGalleryImage,
@@ -153,6 +157,22 @@ const SLIDE_FIELDS: readonly FieldSpec[] = [
   { key: "published", label: "Published", type: "boolean" },
 ];
 
+const CINEMA_FIELDS: readonly FieldSpec[] = [
+  { key: "name", label: "Cinema name", type: "text", required: true },
+  { key: "chain", label: "Chain", type: "text" },
+  { key: "city", label: "City", type: "text" },
+  {
+    key: "ticketing_url",
+    label: "Default ticketing URL",
+    type: "text",
+    full: true,
+    placeholder: "https://www.angacinemas.com",
+  },
+  { key: "booking_note", label: "Booking note", type: "textarea", full: true },
+  { key: "sort_order", label: "Sort order", type: "number" },
+  { key: "published", label: "Visible on site", type: "boolean" },
+];
+
 const TABS = [
   "Overview",
   "Homepage",
@@ -160,6 +180,8 @@ const TABS = [
   "Cast & crew",
   "Gallery",
   "News",
+  "Screenings",
+  "Cinemas",
   "Press",
   "Social",
   "Automation",
@@ -200,6 +222,56 @@ function AdminDashboard() {
     () => (data?.credits ?? []).filter((c) => c.film_id === activeFilmId),
     [data, activeFilmId],
   );
+  const cinemas = data?.cinemas ?? [];
+  const screenings = data?.screenings ?? [];
+
+  const SCREENING_FIELDS = useMemo<readonly FieldSpec[]>(
+    () => [
+      {
+        key: "film_id",
+        label: "Film",
+        type: "select",
+        options: films.map((f) => ({ value: f.id, label: f.title })),
+      },
+      {
+        key: "cinema_id",
+        label: "Cinema",
+        type: "select",
+        options: cinemas.map((c) => ({
+          value: c.id,
+          label: c.chain ? `${c.name} — ${c.chain}` : c.name,
+        })),
+      },
+      {
+        key: "kind",
+        label: "Type",
+        type: "select",
+        options: [
+          { value: "premiere", label: "Premiere" },
+          { value: "screening", label: "Screening" },
+          { value: "festival", label: "Festival" },
+          { value: "special", label: "Special event" },
+        ],
+      },
+      { key: "starts_at", label: "Starts", type: "datetime", required: true },
+      { key: "ends_at", label: "Run ends (optional)", type: "datetime" },
+      { key: "screen_label", label: "Screen / hall", type: "text" },
+      { key: "city", label: "City override", type: "text" },
+      {
+        key: "ticket_url",
+        label: "Ticket link for this date",
+        type: "text",
+        full: true,
+        placeholder: "Leave blank to use the cinema's default ticketing URL",
+      },
+      { key: "note", label: "Note (Q&A, guest, etc.)", type: "textarea", full: true },
+      { key: "sold_out", label: "Sold out", type: "boolean" },
+      { key: "published", label: "Visible on site", type: "boolean" },
+      { key: "sort_order", label: "Sort order", type: "number" },
+    ],
+    [films, cinemas],
+  );
+
   const gallery = useMemo(
     () => (data?.gallery ?? []).filter((g) => g.film_id === activeFilmId),
     [data, activeFilmId],
@@ -387,6 +459,57 @@ function AdminDashboard() {
             }}
             save={savePost}
             remove={deletePost}
+            onDone={refetch}
+          />
+        )}
+
+        {tab === "Screenings" && (
+          <CrudSection
+            title="Screenings & premieres"
+            fields={SCREENING_FIELDS}
+            rows={screenings}
+            label={(r) => {
+              const film = films.find((f) => f.id === r.film_id)?.title ?? "Film";
+              const cinema = cinemas.find((c) => c.id === r.cinema_id)?.name ?? "Cinema";
+              const when = r.starts_at
+                ? new Date(r.starts_at as string).toLocaleString("en-KE", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })
+                : "No date";
+              return `${film} · ${cinema} · ${when}${r.published ? "" : " (hidden)"}`;
+            }}
+            blank={{
+              film_id: films[0]?.id ?? "",
+              cinema_id: cinemas[0]?.id ?? "",
+              kind: "screening",
+              starts_at: "",
+              sold_out: false,
+              published: true,
+              sort_order: screenings.length,
+            }}
+            save={saveScreening}
+            remove={deleteScreening}
+            onDone={refetch}
+          />
+        )}
+
+        {tab === "Cinemas" && (
+          <CrudSection
+            title="Cinemas & ticketing"
+            fields={CINEMA_FIELDS}
+            rows={cinemas}
+            label={(r) =>
+              `${r.name as string}${r.city ? ` — ${r.city as string}` : ""}${r.published ? "" : " (hidden)"}`
+            }
+            blank={{
+              name: "",
+              city: "Nairobi",
+              published: true,
+              sort_order: cinemas.length,
+            }}
+            save={saveCinema}
+            remove={deleteCinema}
             onDone={refetch}
           />
         )}

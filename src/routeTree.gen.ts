@@ -15,6 +15,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as ScreeningsRouteImport } from './routes/screenings'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as FilmsIndexRouteImport } from './routes/films.index'
@@ -51,6 +52,11 @@ const PartnerRoute = PartnerRouteImport.update({
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
   id: '/rss.xml',
   path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScreeningsRoute = ScreeningsRouteImport.update({
+  id: '/screenings',
+  path: '/screenings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/partner'
     | '/rss.xml'
+    | '/screenings'
     | '/sitemap.xml'
     | '/admin'
     | '/films/$slug'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/partner'
     | '/rss.xml'
+    | '/screenings'
     | '/sitemap.xml'
     | '/admin'
     | '/films/$slug'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/partner'
     | '/rss.xml'
+    | '/screenings'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/films/$slug'
@@ -197,6 +209,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   PartnerRoute: typeof PartnerRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
+  ScreeningsRoute: typeof ScreeningsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   FilmsSlugRoute: typeof FilmsSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/rss.xml'
       fullPath: '/rss.xml'
       preLoaderRoute: typeof RssDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/screenings': {
+      id: '/screenings'
+      path: '/screenings'
+      fullPath: '/screenings'
+      preLoaderRoute: typeof ScreeningsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -327,6 +347,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   PartnerRoute: PartnerRoute,
   RssDotxmlRoute: RssDotxmlRoute,
+  ScreeningsRoute: ScreeningsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   FilmsSlugRoute: FilmsSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
