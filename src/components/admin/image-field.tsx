@@ -51,7 +51,8 @@ export function ImageField({
       toast.error(error.message);
       return;
     }
-    onChange(`/api/public/media/${path}`);
+    const { data: pub } = supabase.storage.from("media").getPublicUrl(path);
+    onChange(pub.publicUrl);
     toast.success("Image uploaded.");
   }
 
