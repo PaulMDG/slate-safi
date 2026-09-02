@@ -98,10 +98,10 @@
 
   --gradient-veil: linear-gradient(
     to top,
-    oklch(0.145 0.006 60) 4%,
-    oklch(0.145 0.006 60 / 82%) 34%,
-    oklch(0.145 0.006 60 / 30%) 72%,
-    oklch(0.145 0.006 60 / 55%) 100%
+    oklch(0.145 0.006 60 / 92%) 4%,
+    oklch(0.145 0.006 60 / 60%) 34%,
+    oklch(0.145 0.006 60 / 15%) 72%,
+    oklch(0.145 0.006 60 / 30%) 100%
   );
   --gradient-frame: linear-gradient(
     160deg,
