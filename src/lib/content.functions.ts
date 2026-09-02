@@ -8,6 +8,7 @@ import type {
   Post,
   Homepage,
   HomepageSlide,
+  ScreeningListing,
 } from "./content.types";
 
 export const listFilms = createServerFn({ method: "GET" }).handler(
@@ -197,5 +198,20 @@ export const listHomepageSlides = createServerFn({ method: "GET" }).handler(
       .order("sort_order", { ascending: true });
     if (error) throw new Error(error.message);
     return data ?? [];
+  },
+);
+
+export const listScreenings = createServerFn({ method: "GET" }).handler(
+  async (): Promise<ScreeningListing[]> => {
+    const { publicSupabase } = await import("./content.server");
+    const { data, error } = await publicSupabase()
+      .from("screenings")
+      .select(
+        "*, film:films(id, slug, title, poster_url, hero_image_url), cinema:cinemas(id, name, chain, city, ticketing_url, booking_note)",
+      )
+      .eq("published", true)
+      .order("starts_at", { ascending: true });
+    if (error) throw new Error(error.message);
+    return (data ?? []) as unknown as ScreeningListing[];
   },
 );

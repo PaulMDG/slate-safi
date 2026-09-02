@@ -47,3 +47,11 @@ export type FilmDetail = {
 export type Homepage = Tables<"homepage_content">;
 
 export type HomepageSlide = Tables<"homepage_slides">;
+
+export type Cinema = Tables<"cinemas">;
+export type Screening = Tables<"screenings">;
+
+export type ScreeningListing = Screening & {
+  film: Pick<Film, "id" | "slug" | "title" | "poster_url" | "hero_image_url"> | null;
+  cinema: Pick<Cinema, "id" | "name" | "chain" | "city" | "ticketing_url" | "booking_note"> | null;
+};
