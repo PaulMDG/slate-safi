@@ -198,8 +198,6 @@ function Home() {
       )}
 
 
-      {cms?.show_laurels !== false && <LaurelStrip items={press} />}
-
       <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
           <div className="min-w-0">
@@ -232,6 +230,8 @@ function Home() {
           ))}
         </div>
       </section>
+
+      {cms?.show_laurels !== false && <LaurelStrip items={press} />}
 
       {cms?.show_quotes !== false && quotes.length > 0 && (
         <section className="rule-top border-b border-border">
