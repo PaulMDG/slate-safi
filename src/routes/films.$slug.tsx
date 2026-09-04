@@ -153,7 +153,7 @@ function FilmDetail() {
           <h2 className="eyebrow">Trailer</h2>
           <div className="mt-6 aspect-video w-full overflow-hidden rounded-sm border border-border bg-surface">
             <iframe
-              src={film.trailer_url}
+              src={toEmbedUrl(film.trailer_url)}
               title={`${film.title} official trailer`}
               loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
