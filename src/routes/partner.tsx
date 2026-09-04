@@ -14,7 +14,6 @@ export const Route = createFileRoute("/partner")({
       description:
         "Sponsorship, co-production, distribution and press enquiries for Slate Safi, the Nairobi film production company behind Boda Love and Kibera Hustle.",
       path: "/partner",
-      image: "/images/slate-safi-crew.jpg",
     }),
 
   component: Partner,
