@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Youtube, Mail } from "lucide-react";
+import { Instagram, Youtube, Mail, Facebook, Music2 } from "lucide-react";
 
 export function SiteFooter() {
   return (
@@ -54,8 +54,10 @@ export function SiteFooter() {
             </ul>
             <div className="mt-6 flex gap-3">
               {[
-                { href: "https://instagram.com", label: "Instagram", Icon: Instagram },
-                { href: "https://youtube.com", label: "YouTube", Icon: Youtube },
+                { href: "https://www.instagram.com/slatesafi/", label: "Instagram", Icon: Instagram },
+                { href: "https://www.youtube.com/@slatesafi", label: "YouTube", Icon: Youtube },
+                { href: "https://www.facebook.com/profile.php?id=61592753796585", label: "Facebook", Icon: Facebook },
+                { href: "https://www.tiktok.com/@slate.safi", label: "TikTok", Icon: Music2 },
                 { href: "mailto:hello@slatesafi.co.ke", label: "Email", Icon: Mail },
               ].map(({ href, label, Icon }) => (
                 <a
