@@ -219,20 +219,38 @@ function AwardsPage() {
       </p>
 
       <section className="rule-top mt-20 pt-12">
-        <h2 className="eyebrow">Sleeping Warrior</h2>
-        <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
-          Internationally recognised documentary — 2021
-        </p>
-        <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Sleeping Warrior is a feature-length documentary following Africa's first female lacrosse
-          team and their journey from Kenya to the 2019 World Lacrosse Championships in Canada.
-        </p>
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Released in 2021, the documentary went on to receive recognition from film festivals around
-          the world. Contemporary reporting from May 2021 records awards already received in Toronto,
-          Chicago and Houston, with the Cannes World Film Festival recognition announced on 24 May
-          2021.
-        </p>
+        <div className="grid items-start gap-10 md:grid-cols-[1.6fr_1fr]">
+          <div className="min-w-0">
+            <h2 className="eyebrow">Sleeping Warrior</h2>
+            <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
+              Internationally recognised documentary — 2021
+            </p>
+            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Sleeping Warrior is a feature-length documentary following Africa's first female
+              lacrosse team and their journey from Kenya to the 2019 World Lacrosse Championships in
+              Canada.
+            </p>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Released in 2021, the documentary went on to receive recognition from film festivals
+              around the world. Contemporary reporting from May 2021 records awards already received
+              in Toronto, Chicago and Houston, with the Cannes World Film Festival recognition
+              announced on 24 May 2021.
+            </p>
+          </div>
+          <Link
+            to="/films/$slug"
+            params={{ slug: "sleeping-warrior" }}
+            className="block overflow-hidden rounded-sm border border-border"
+          >
+            <img
+              src={POSTERS["sleeping-warrior"]}
+              alt="Sleeping Warrior poster"
+              loading="lazy"
+              decoding="async"
+              className="aspect-[2/3] w-full object-cover"
+            />
+          </Link>
+        </div>
         <HonourList items={SLEEPING_WARRIOR} />
         <Link
           to="/films/$slug"
