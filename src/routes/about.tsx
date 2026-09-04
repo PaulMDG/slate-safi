@@ -120,23 +120,27 @@ function About() {
         </div>
       </section>
 
-      <section className="rule-top">
-        <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
-          <h2 className="eyebrow">Cast &amp; crew leadership</h2>
-          <p className="mt-4 text-3xl leading-tight sm:text-4xl">The people behind the slate</p>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {LEADERSHIP.map((person) => (
-              <div key={person.name} className="frame min-w-0 rounded-sm border border-border p-6">
-                <h3 className="text-xl leading-tight">{person.name}</h3>
-                <p className="mt-2 text-xs uppercase tracking-[0.18em] text-primary">
-                  {person.role}
-                </p>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{person.bio}</p>
-              </div>
-            ))}
+      {crew.length > 0 && (
+        <section className="rule-top">
+          <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
+            <h2 className="eyebrow">Crew</h2>
+            <p className="mt-4 text-3xl leading-tight sm:text-4xl">
+              The team behind Kibera Hustle
+            </p>
+            <div className="mt-12 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+              {crew.map((person) => (
+                <div key={person.id} className="min-w-0 border-l border-primary/50 pl-5">
+                  <p className="font-display text-lg font-bold leading-tight">{person.name}</p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.18em] text-primary">
+                    {person.role}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
 
       <section className="rule-top">
         <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
