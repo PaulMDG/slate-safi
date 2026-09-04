@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AwardsRouteImport } from './routes/awards'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as ScreeningsRouteImport } from './routes/screenings'
@@ -42,6 +43,11 @@ const AboutRoute = AboutRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AwardsRoute = AwardsRouteImport.update({
+  id: '/awards',
+  path: '/awards',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnerRoute = PartnerRouteImport.update({
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/awards': typeof AwardsRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/awards': typeof AwardsRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/awards': typeof AwardsRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/awards'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/awards'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/auth'
+    | '/awards'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
@@ -207,6 +219,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  AwardsRoute: typeof AwardsRoute
   PartnerRoute: typeof PartnerRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   ScreeningsRoute: typeof ScreeningsRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/awards': {
+      id: '/awards'
+      path: '/awards'
+      fullPath: '/awards'
+      preLoaderRoute: typeof AwardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partner': {
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  AwardsRoute: AwardsRoute,
   PartnerRoute: PartnerRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   ScreeningsRoute: ScreeningsRoute,
