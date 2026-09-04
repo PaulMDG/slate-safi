@@ -42,13 +42,13 @@ export function SiteFooter() {
             <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
               <li>Kilimani, Nairobi, Kenya</li>
               <li>
-                <a href="mailto:hello@slatesafi.co.ke" className="transition-colors hover:text-primary">
-                  hello@slatesafi.co.ke
+                <a href="mailto:slatesafiweb@gmail.com" className="transition-colors hover:text-primary">
+                  slatesafiweb@gmail.com
                 </a>
               </li>
               <li>
-                <a href="tel:+254700000000" className="transition-colors hover:text-primary">
-                  +254 700 000 000
+                <a href="tel:+254758752424" className="transition-colors hover:text-primary">
+                  +254 758 752424
                 </a>
               </li>
             </ul>
@@ -58,7 +58,7 @@ export function SiteFooter() {
                 { href: "https://www.youtube.com/@slatesafi", label: "YouTube", Icon: Youtube },
                 { href: "https://www.facebook.com/profile.php?id=61592753796585", label: "Facebook", Icon: Facebook },
                 { href: "https://www.tiktok.com/@slate.safi", label: "TikTok", Icon: Music2 },
-                { href: "mailto:hello@slatesafi.co.ke", label: "Email", Icon: Mail },
+                { href: "mailto:slatesafiweb@gmail.com", label: "Email", Icon: Mail },
               ].map(({ href, label, Icon }) => (
                 <a
                   key={label}

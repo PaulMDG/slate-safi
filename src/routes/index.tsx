@@ -73,7 +73,7 @@ export const Route = createFileRoute("/")({
               addressRegion: "Kilimani",
               addressCountry: "KE",
             },
-            email: "partners@slatesafi.co.ke",
+            email: "slatesafiweb@gmail.com",
           }),
         },
       ],
