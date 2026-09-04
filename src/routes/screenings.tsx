@@ -121,9 +121,26 @@ function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
   const ticketUrl = s.ticket_url || s.cinema?.ticketing_url || null;
   const city = s.city || s.cinema?.city;
 
+  const poster = s.film?.poster_url ?? s.film?.hero_image_url ?? null;
+
   return (
-    <li className="grid gap-6 rounded-sm border border-border p-6 transition-colors hover:border-primary/50 md:grid-cols-[1fr_auto] md:items-center">
-      <div>
+    <li className="grid gap-6 rounded-sm border border-border p-6 transition-colors hover:border-primary/50 md:grid-cols-[auto_1fr_auto] md:items-stretch">
+      {poster ? (
+        <Link
+          to="/films/$slug"
+          params={{ slug: s.film!.slug }}
+          className="hidden overflow-hidden rounded-sm border border-border md:block"
+        >
+          <img
+            src={poster}
+            alt={`${s.film?.title ?? "Film"} poster`}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-[110px] object-cover"
+          />
+        </Link>
+      ) : null}
+      <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-3 text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
           <span className="rounded-sm bg-primary/15 px-2 py-1 text-primary">
             {KIND_LABEL[s.kind] ?? s.kind}
