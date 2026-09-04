@@ -12,7 +12,7 @@ export const Route = createFileRoute("/films/")({
       description:
         "The Slate Safi slate: Boda Love (released) and Kibera Hustle (in post-production). Kenyan features made for international audiences.",
       path: "/films",
-      image: "/images/boda-love-hero.jpg",
+      image: "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/heroes/1787781256896-hq720.jpg",
     }),
 
   errorComponent: () => (

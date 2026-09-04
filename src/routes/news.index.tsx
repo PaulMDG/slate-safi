@@ -11,7 +11,7 @@ export const Route = createFileRoute("/news/")({
       description:
         "Production updates, festival selections and studio notes from Slate Safi, the Nairobi film production company behind Boda Love.",
       path: "/news",
-      image: "/images/kibera-hustle-hero.jpg",
+      image: "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/heroes/1787821966566-flyer-2-by-3.png",
     });
     return {
       ...social,

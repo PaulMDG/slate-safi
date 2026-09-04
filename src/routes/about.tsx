@@ -12,7 +12,6 @@ export const Route = createFileRoute("/about")({
       description:
         "Slate Safi is an independent Nairobi film production company building Kenyan stories for audiences in East Africa, the UK, Canada and the US.",
       path: "/about",
-      image: "/images/slate-safi-crew.jpg",
     }),
 
   errorComponent: () => (
