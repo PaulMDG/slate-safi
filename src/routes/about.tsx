@@ -82,17 +82,6 @@ function About() {
         </p>
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-24">
-        <img
-          src="/images/slate-safi-crew.jpg"
-          alt="The Slate Safi crew filming on location in Nairobi at night"
-          loading="lazy"
-          decoding="async"
-          width={1920}
-          height={1088}
-          className="aspect-[21/9] w-full rounded-sm border border-border object-cover"
-        />
-      </section>
 
       <section className="rule-top">
         <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-16 md:grid-cols-2 md:px-10 md:py-24">
