@@ -54,9 +54,10 @@ const MARKETS = [
 ];
 
 function About() {
-  const press: PressItem[] = Route.useLoaderData();
+  const { press, crew } = Route.useLoaderData();
   const quotes = press.filter((p) => p.kind === "quote");
   const laurels = press.filter((p) => p.kind === "laurel");
+
 
   return (
     <div>
