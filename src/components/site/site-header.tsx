@@ -6,6 +6,7 @@ const NAV = [
   { to: "/", label: "Home" },
   { to: "/films", label: "Films" },
   { to: "/screenings", label: "Screenings" },
+  { to: "/awards", label: "Awards" },
   { to: "/about", label: "About" },
   { to: "/news", label: "News" },
   { to: "/partner", label: "Partner & Contact" },
