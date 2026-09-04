@@ -15,6 +15,13 @@ export const Route = createFileRoute("/awards")({
   component: AwardsPage,
 });
 
+const POSTERS: Record<string, string> = {
+  "sleeping-warrior":
+    "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/posters/1787786983419-sleeping-warrior.jpg",
+  "boda-love":
+    "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/posters/1787780264244-boda-love.jpg",
+};
+
 type Honour = {
   year: string;
   title: string;
