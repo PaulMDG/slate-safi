@@ -96,7 +96,7 @@ function AuthPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`mt-3 ${fieldClass}`}
-                placeholder="you@slatesafi.co.ke"
+                placeholder="slatesafiweb@gmail.com"
               />
             </div>
             <div>

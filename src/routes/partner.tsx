@@ -254,10 +254,10 @@ function Partner() {
                 <span className="min-w-0">
                   <span className="block text-muted-foreground">Partnerships</span>
                   <a
-                    href="mailto:partners@slatesafi.co.ke"
+                    href="mailto:slatesafiweb@gmail.com"
                     className="break-words hover:text-primary"
                   >
-                    partners@slatesafi.co.ke
+                    slatesafiweb@gmail.com
                   </a>
                 </span>
               </li>
@@ -265,8 +265,8 @@ function Partner() {
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span className="min-w-0">
                   <span className="block text-muted-foreground">Press &amp; festivals</span>
-                  <a href="mailto:press@slatesafi.co.ke" className="break-words hover:text-primary">
-                    press@slatesafi.co.ke
+                  <a href="mailto:slatesafiweb@gmail.com" className="break-words hover:text-primary">
+                    slatesafiweb@gmail.com
                   </a>
                 </span>
               </li>
@@ -274,8 +274,8 @@ function Partner() {
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span className="min-w-0">
                   <span className="block text-muted-foreground">Office</span>
-                  <a href="tel:+254700000000" className="hover:text-primary">
-                    +254 700 000 000
+                  <a href="tel:+254758752424" className="hover:text-primary">
+                    +254 758 752424
                   </a>
                 </span>
               </li>
