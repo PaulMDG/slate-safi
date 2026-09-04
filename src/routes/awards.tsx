@@ -226,8 +226,8 @@ function AwardsPage() {
       </p>
 
       <section className="rule-top mt-20 pt-12">
-        <div className="grid items-start gap-10 md:grid-cols-[1.6fr_1fr]">
-          <div className="min-w-0">
+        <div className="grid items-center gap-10 md:grid-cols-[1.7fr_auto]">
+          <div className="min-w-0 py-2">
             <h2 className="eyebrow">Sleeping Warrior</h2>
             <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
               Internationally recognised documentary — 2021
@@ -247,7 +247,7 @@ function AwardsPage() {
           <Link
             to="/films/$slug"
             params={{ slug: "sleeping-warrior" }}
-            className="block overflow-hidden rounded-sm border border-border"
+            className="block w-full max-w-[220px] justify-self-start overflow-hidden rounded-sm border border-border md:justify-self-end"
           >
             <img
               src={POSTERS["sleeping-warrior"]}
@@ -269,8 +269,8 @@ function AwardsPage() {
       </section>
 
       <section className="rule-top mt-20 pt-12">
-        <div className="grid items-start gap-10 md:grid-cols-[1.6fr_1fr]">
-          <div className="min-w-0">
+        <div className="grid items-center gap-10 md:grid-cols-[1.7fr_auto]">
+          <div className="min-w-0 py-2">
             <h2 className="eyebrow">Boda Love</h2>
             <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
               Award-winning Kenyan romantic comedy — 2024–2025
@@ -284,7 +284,7 @@ function AwardsPage() {
           <Link
             to="/films/$slug"
             params={{ slug: "boda-love" }}
-            className="block overflow-hidden rounded-sm border border-border"
+            className="block w-full max-w-[220px] justify-self-start overflow-hidden rounded-sm border border-border md:justify-self-end"
           >
             <img
               src={POSTERS["boda-love"]}
