@@ -81,6 +81,30 @@ export const Route = createFileRoute("/films/$slug")({
   component: FilmDetail,
 });
 
+function toEmbedUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    let id = "";
+    if (host === "youtu.be") id = u.pathname.slice(1);
+    else if (host.endsWith("youtube.com")) {
+      if (u.pathname === "/watch") id = u.searchParams.get("v") ?? "";
+      else if (u.pathname.startsWith("/embed/")) id = u.pathname.split("/")[2] ?? "";
+      else if (u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2] ?? "";
+    } else if (host.endsWith("vimeo.com") && !u.pathname.startsWith("/video/")) {
+      return `https://player.vimeo.com/video/${u.pathname.split("/").filter(Boolean)[0] ?? ""}`;
+    }
+    if (id) {
+      const t = u.searchParams.get("t");
+      const start = t ? `?start=${parseInt(t, 10) || 0}` : "";
+      return `https://www.youtube-nocookie.com/embed/${id}${start}`;
+    }
+    return url;
+  } catch {
+    return url;
+  }
+}
+
 function FilmDetail() {
   const { film, credits, gallery }: FilmDetail = Route.useLoaderData();
   const cast = credits.filter((c) => c.credit_type === "cast");
@@ -129,7 +153,7 @@ function FilmDetail() {
           <h2 className="eyebrow">Trailer</h2>
           <div className="mt-6 aspect-video w-full overflow-hidden rounded-sm border border-border bg-surface">
             <iframe
-              src={film.trailer_url}
+              src={toEmbedUrl(film.trailer_url)}
               title={`${film.title} official trailer`}
               loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
