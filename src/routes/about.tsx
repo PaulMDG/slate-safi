@@ -1,11 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { listPress } from "@/lib/content.functions";
-import type { PressItem } from "@/lib/content.types";
+import { listPress, getFilm } from "@/lib/content.functions";
+import type { PressItem, FilmCredit } from "@/lib/content.types";
 import { socialMeta } from "@/lib/seo";
 
+type AboutData = { press: PressItem[]; crew: FilmCredit[] };
+
 export const Route = createFileRoute("/about")({
-  loader: (): Promise<PressItem[]> => listPress(),
+  loader: async (): Promise<AboutData> => {
+    const [press, detail] = await Promise.all([
+      listPress(),
+      getFilm({ data: { slug: "kibera-hustle" } }),
+    ]);
+    return {
+      press,
+      crew: (detail?.credits ?? []).filter((c) => c.credit_type === "crew"),
+    };
+  },
   head: () =>
     socialMeta({
       title: "About Slate Safi — Nairobi Film Production Company",
@@ -23,28 +34,7 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
-const LEADERSHIP = [
-  {
-    name: "Wanjiru Mbatia",
-    role: "Founder & Director",
-    bio: "Directed Boda Love and Kibera Hustle. Berlinale Talents alumna, formerly a documentary editor across East Africa.",
-  },
-  {
-    name: "Samuel Ochieng",
-    role: "Producer & Managing Partner",
-    bio: "Twelve years producing scripted and branded work in Nairobi. Leads co-production and distribution relationships.",
-  },
-  {
-    name: "Lena Kariuki",
-    role: "Director of Photography",
-    bio: "Shoots both features. Known for available-light Nairobi night work and anamorphic street coverage.",
-  },
-  {
-    name: "Priya Shah",
-    role: "Executive Producer, International",
-    bio: "Based between London and Toronto. Handles financing, sales agents and festival strategy outside Africa.",
-  },
-];
+
 
 const MARKETS = [
   {
