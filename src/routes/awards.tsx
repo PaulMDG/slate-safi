@@ -262,15 +262,32 @@ function AwardsPage() {
       </section>
 
       <section className="rule-top mt-20 pt-12">
-        <h2 className="eyebrow">Boda Love</h2>
-        <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
-          Award-winning Kenyan romantic comedy — 2024–2025
-        </p>
-        <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Boda Love is a Kenyan romantic comedy filmed entirely in Nairobi and released theatrically
-          in 2024. The film went on to receive major recognition at the Africa Movie Academy Awards,
-          Mombasa International Film Festival, and Kitale Film Week.
-        </p>
+        <div className="grid items-start gap-10 md:grid-cols-[1.6fr_1fr]">
+          <div className="min-w-0">
+            <h2 className="eyebrow">Boda Love</h2>
+            <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
+              Award-winning Kenyan romantic comedy — 2024–2025
+            </p>
+            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Boda Love is a Kenyan romantic comedy filmed entirely in Nairobi and released
+              theatrically in 2024. The film went on to receive major recognition at the Africa Movie
+              Academy Awards, Mombasa International Film Festival, and Kitale Film Week.
+            </p>
+          </div>
+          <Link
+            to="/films/$slug"
+            params={{ slug: "boda-love" }}
+            className="block overflow-hidden rounded-sm border border-border"
+          >
+            <img
+              src={POSTERS["boda-love"]}
+              alt="Boda Love poster"
+              loading="lazy"
+              decoding="async"
+              className="aspect-[2/3] w-full object-cover"
+            />
+          </Link>
+        </div>
         <HonourList items={BODA_LOVE} />
         <Link
           to="/films/$slug"
