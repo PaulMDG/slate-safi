@@ -314,11 +314,21 @@ export type Database = {
           show_partner: boolean
           show_quotes: boolean
           show_slideshow: boolean
+          show_spotify: boolean
           singleton: boolean
           slate_eyebrow: string | null
           slate_heading: string | null
           slideshow_interval_ms: number
+          spotify_body: string | null
+          spotify_heading: string | null
+          spotify_url: string | null
           updated_at: string
+          video_optin_body: string | null
+          video_optin_enabled: boolean
+          video_optin_heading: string | null
+          videos_body: string | null
+          videos_eyebrow: string | null
+          videos_heading: string | null
         }
         Insert: {
           created_at?: string
@@ -345,11 +355,21 @@ export type Database = {
           show_partner?: boolean
           show_quotes?: boolean
           show_slideshow?: boolean
+          show_spotify?: boolean
           singleton?: boolean
           slate_eyebrow?: string | null
           slate_heading?: string | null
           slideshow_interval_ms?: number
+          spotify_body?: string | null
+          spotify_heading?: string | null
+          spotify_url?: string | null
           updated_at?: string
+          video_optin_body?: string | null
+          video_optin_enabled?: boolean
+          video_optin_heading?: string | null
+          videos_body?: string | null
+          videos_eyebrow?: string | null
+          videos_heading?: string | null
         }
         Update: {
           created_at?: string
@@ -376,11 +396,21 @@ export type Database = {
           show_partner?: boolean
           show_quotes?: boolean
           show_slideshow?: boolean
+          show_spotify?: boolean
           singleton?: boolean
           slate_eyebrow?: string | null
           slate_heading?: string | null
           slideshow_interval_ms?: number
+          spotify_body?: string | null
+          spotify_heading?: string | null
+          spotify_url?: string | null
           updated_at?: string
+          video_optin_body?: string | null
+          video_optin_enabled?: boolean
+          video_optin_heading?: string | null
+          videos_body?: string | null
+          videos_eyebrow?: string | null
+          videos_heading?: string | null
         }
         Relationships: []
       }
@@ -905,6 +935,115 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      video_leads: {
+        Row: {
+          contact: string
+          contact_type: string
+          country: string | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          is_spam: boolean
+          name: string
+          referrer: string | null
+          source: string | null
+          spam_score: number
+          user_agent: string | null
+          video_id: string | null
+        }
+        Insert: {
+          contact: string
+          contact_type?: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          is_spam?: boolean
+          name: string
+          referrer?: string | null
+          source?: string | null
+          spam_score?: number
+          user_agent?: string | null
+          video_id?: string | null
+        }
+        Update: {
+          contact?: string
+          contact_type?: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          is_spam?: boolean
+          name?: string
+          referrer?: string | null
+          source?: string | null
+          spam_score?: number
+          user_agent?: string | null
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_leads_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      videos: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          featured: boolean
+          film_id: string | null
+          id: string
+          poster_url: string | null
+          published: boolean
+          sort_order: number
+          source: string
+          title: string
+          video_url: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean
+          film_id?: string | null
+          id?: string
+          poster_url?: string | null
+          published?: boolean
+          sort_order?: number
+          source?: string
+          title: string
+          video_url: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean
+          film_id?: string | null
+          id?: string
+          poster_url?: string | null
+          published?: boolean
+          sort_order?: number
+          source?: string
+          title?: string
+          video_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
