@@ -135,6 +135,16 @@ export const homepageSchema = z.object({
   show_news: z.boolean(),
   show_newsletter: z.boolean(),
   show_partner: z.boolean(),
+  spotify_url: z.string().trim().max(600).optional().nullable(),
+  spotify_heading: z.string().trim().max(240).optional().nullable(),
+  spotify_body: z.string().trim().max(900).optional().nullable(),
+  show_spotify: z.boolean(),
+  videos_eyebrow: z.string().trim().max(120).optional().nullable(),
+  videos_heading: z.string().trim().max(240).optional().nullable(),
+  videos_body: z.string().trim().max(900).optional().nullable(),
+  video_optin_enabled: z.boolean(),
+  video_optin_heading: z.string().trim().max(240).optional().nullable(),
+  video_optin_body: z.string().trim().max(900).optional().nullable(),
 });
 
 export const slideSchema = z.object({
