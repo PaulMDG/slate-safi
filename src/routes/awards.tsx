@@ -38,15 +38,15 @@ const SLEEPING_WARRIOR: Honour[] = [
   },
   {
     year: "2021",
-    title: "Best Documentary Feature",
+    title: "Best Documentary",
     outlet: "Chicago Indie Film Awards",
-    body: "The film was awarded Best Documentary Feature at the Chicago Indie Film Awards. The festival's April 2021 winners announcement lists Sleeping Warrior, directed by Janet Wells and Mwaura Timothy, as the winner.",
+    body: "The film won Best Documentary at the Chicago Indie Film Awards in 2021, directed by Janet Wells and Mwaura Timothy.",
   },
   {
     year: "2021",
-    title: "Best Documentary Film Cinematography",
+    title: "Best Cinematography",
     outlet: "European Cinematography Awards",
-    body: "Cinematographer Timothy Mwaura received the Best Documentary Film Cinematography award for Sleeping Warrior. The European Cinematography Awards' 2021 winners listing identifies Sleeping Warrior and Mwaura Timothy as the winner.",
+    body: "Cinematographer Timothy Mwaura received the Best Cinematography award for Sleeping Warrior at the 2021 European Cinematography Awards.",
   },
   {
     year: "2021",
@@ -119,14 +119,14 @@ const GLANCE: { film: string; slug: string; year: string; award: string; org: st
     film: "Sleeping Warrior",
     slug: "sleeping-warrior",
     year: "2021",
-    award: "Best Documentary Feature",
+    award: "Best Documentary",
     org: "Chicago Indie Film Awards",
   },
   {
     film: "Sleeping Warrior",
     slug: "sleeping-warrior",
     year: "2021",
-    award: "Best Documentary Film Cinematography",
+    award: "Best Cinematography",
     org: "European Cinematography Awards",
   },
   {

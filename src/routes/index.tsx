@@ -8,7 +8,6 @@ import {
   listPress,
 } from "@/lib/content.functions";
 import { FilmCard } from "@/components/site/film-card";
-import { LaurelStrip } from "@/components/site/laurel-strip";
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import { HeroSlideshow, type HeroSlideView } from "@/components/site/hero-slideshow";
 import type {
@@ -231,7 +230,6 @@ function Home() {
         </div>
       </section>
 
-      {cms?.show_laurels !== false && <LaurelStrip items={press} />}
 
       {cms?.show_quotes !== false && quotes.length > 0 && (
         <section className="rule-top border-b border-border">
