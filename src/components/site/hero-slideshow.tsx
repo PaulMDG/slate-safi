@@ -97,8 +97,6 @@ export function HeroSlideshow({
               i === index ? "animate-hero-zoom" : ""
             } motion-reduce:animate-none`}
           />
-          <div className="absolute inset-0 veil" />
-          <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_15%_100%,color-mix(in_oklab,var(--color-background)_85%,transparent),transparent_60%)]" />
         </div>
       ))}
 
