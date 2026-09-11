@@ -55,3 +55,5 @@ export type ScreeningListing = Screening & {
   film: Pick<Film, "id" | "slug" | "title" | "poster_url" | "hero_image_url"> | null;
   cinema: Pick<Cinema, "id" | "name" | "chain" | "city" | "ticketing_url" | "booking_note"> | null;
 };
+
+export type Video = Tables<"videos">;

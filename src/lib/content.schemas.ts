@@ -135,6 +135,16 @@ export const homepageSchema = z.object({
   show_news: z.boolean(),
   show_newsletter: z.boolean(),
   show_partner: z.boolean(),
+  spotify_url: z.string().trim().max(600).optional().nullable(),
+  spotify_heading: z.string().trim().max(240).optional().nullable(),
+  spotify_body: z.string().trim().max(900).optional().nullable(),
+  show_spotify: z.boolean(),
+  videos_eyebrow: z.string().trim().max(120).optional().nullable(),
+  videos_heading: z.string().trim().max(240).optional().nullable(),
+  videos_body: z.string().trim().max(900).optional().nullable(),
+  video_optin_enabled: z.boolean(),
+  video_optin_heading: z.string().trim().max(240).optional().nullable(),
+  video_optin_body: z.string().trim().max(900).optional().nullable(),
 });
 
 export const slideSchema = z.object({
@@ -175,4 +185,27 @@ export const screeningSchema = z.object({
   sold_out: z.boolean(),
   sort_order: z.number().int().min(0).max(9999),
   published: z.boolean(),
+});
+
+export const videoSchema = z.object({
+  id: z.string().uuid().optional(),
+  title: z.string().trim().min(1).max(200),
+  description: z.string().trim().max(2000).optional().nullable(),
+  source: z.enum(["link", "upload"]),
+  video_url: z.string().trim().min(1).max(600),
+  poster_url: z.string().trim().max(600).optional().nullable(),
+  film_id: z.string().uuid().optional().nullable(),
+  category: z.string().trim().max(80).optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999),
+  featured: z.boolean(),
+  published: z.boolean(),
+});
+
+export const videoLeadSchema = z.object({
+  name: z.string().trim().min(1).max(120),
+  contact: z.string().trim().min(5).max(255),
+  contact_type: z.enum(["email", "whatsapp"]),
+  video_id: z.string().uuid().optional().nullable(),
+  source: z.string().trim().max(60).optional(),
+  ...spamFields,
 });

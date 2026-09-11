@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { ImageField } from "./image-field";
+import { VideoField } from "./video-field";
 
 export type FieldSpec = {
   key: string;
   label: string;
-  type: "text" | "textarea" | "number" | "boolean" | "select" | "image" | "datetime";
+  type: "text" | "textarea" | "number" | "boolean" | "select" | "image" | "video" | "datetime";
   options?: readonly { value: string; label: string }[];
   placeholder?: string;
   full?: boolean;
@@ -13,6 +14,7 @@ export type FieldSpec = {
   /** Storage folder used when uploading (image fields only). */
   folder?: string;
 };
+
 
 export type RecordValues = Record<string, unknown>;
 
@@ -63,7 +65,17 @@ export function RecordEditor({
                       onChange={(next) => set(field.key, next)}
                     />
                   </div>
+                ) : field.type === "video" ? (
+                  <div className="mt-2">
+                    <VideoField
+                      id={`f-${field.key}`}
+                      value={(raw as string) ?? ""}
+                      folder={field.folder ?? "videos"}
+                      onChange={(next) => set(field.key, next)}
+                    />
+                  </div>
                 ) : field.type === "textarea" ? (
+
                   <textarea
                     id={`f-${field.key}`}
                     rows={5}

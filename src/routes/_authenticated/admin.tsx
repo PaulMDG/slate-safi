@@ -15,6 +15,7 @@ import {
   deleteHomepageSlide,
   deletePressItem,
   deleteScreening,
+  deleteVideo,
   loadAdminData,
   saveCinema,
   saveScreening,
@@ -24,6 +25,7 @@ import {
   saveHomepageSlide,
   savePost,
   savePressItem,
+  saveVideo,
   updateSubmissionStatus,
   type AdminSnapshot,
 } from "@/lib/admin.functions";
@@ -173,6 +175,33 @@ const CINEMA_FIELDS: readonly FieldSpec[] = [
   { key: "published", label: "Visible on site", type: "boolean" },
 ];
 
+const VIDEO_FIELDS: readonly FieldSpec[] = [
+  { key: "title", label: "Title", type: "text", required: true, full: true },
+  {
+    key: "video_url",
+    label: "Video (upload a file or paste a YouTube/Vimeo link)",
+    type: "video",
+    full: true,
+    folder: "videos",
+    required: true,
+  },
+  {
+    key: "source",
+    label: "Source",
+    type: "select",
+    options: [
+      { value: "link", label: "External link (YouTube/Vimeo)" },
+      { value: "upload", label: "Uploaded file" },
+    ],
+  },
+  { key: "category", label: "Category (e.g. Trailer, Behind the scenes)", type: "text" },
+  { key: "poster_url", label: "Thumbnail image", type: "image", full: true, folder: "videos" },
+  { key: "description", label: "Description", type: "textarea", full: true },
+  { key: "sort_order", label: "Sort order", type: "number" },
+  { key: "featured", label: "Featured (plays first)", type: "boolean" },
+  { key: "published", label: "Published", type: "boolean" },
+];
+
 const TABS = [
   "Overview",
   "Homepage",
@@ -182,6 +211,7 @@ const TABS = [
   "News",
   "Screenings",
   "Cinemas",
+  "Videos",
   "Press",
   "Social",
   "Automation",
@@ -554,6 +584,58 @@ function AdminDashboard() {
           ))}
 
         {tab === "AI studio" && <AiPanel admin={data!} onDone={refetchAll} />}
+
+        {tab === "Videos" && (
+          <div className="space-y-16">
+            <CrudSection
+              title="Videos & trailers"
+              fields={VIDEO_FIELDS}
+              rows={data?.videos ?? []}
+              label={(r) =>
+                `${r.title as string}${r.featured ? " · featured" : ""}${r.published ? "" : " (hidden)"}`
+              }
+              blank={{
+                title: "",
+                video_url: "",
+                source: "link",
+                sort_order: (data?.videos ?? []).length,
+                featured: false,
+                published: true,
+              }}
+              save={saveVideo}
+              remove={deleteVideo}
+              onDone={refetch}
+            />
+
+            <div>
+              <h2 className="eyebrow">Video sign-ups</h2>
+              <p className="mt-4 text-sm text-muted-foreground">
+                Names and contacts left through the optional pop-up on the videos page.
+              </p>
+              <div className="frame mt-8 divide-y divide-border rounded-sm border border-border">
+                {(data?.videoLeads ?? []).length === 0 ? (
+                  <p className="p-6 text-sm text-muted-foreground">No sign-ups yet.</p>
+                ) : (
+                  (data?.videoLeads ?? []).map((lead) => (
+                    <div key={lead.id} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 p-5">
+                      <p className="font-display text-sm font-bold uppercase tracking-[0.12em]">
+                        {lead.name}
+                      </p>
+                      <p className="text-sm text-primary">{lead.contact}</p>
+                      <p className="text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
+                        {lead.contact_type} ·{" "}
+                        {new Date(lead.created_at).toLocaleDateString("en-KE", {
+                          dateStyle: "medium",
+                        })}
+                        {lead.is_spam ? " · flagged" : ""}
+                      </p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {tab === "Submissions" && <Submissions data={data!} onDone={refetch} />}
 

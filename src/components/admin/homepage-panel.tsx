@@ -53,6 +53,22 @@ const HOMEPAGE_FIELDS: readonly FieldSpec[] = [
   { key: "show_news", label: "Show latest news", type: "boolean" },
   { key: "show_newsletter", label: "Show newsletter block", type: "boolean" },
   { key: "show_partner", label: "Show partner block", type: "boolean" },
+  { key: "videos_eyebrow", label: "Videos page eyebrow", type: "text" },
+  { key: "videos_heading", label: "Videos page heading", type: "text" },
+  { key: "videos_body", label: "Videos page intro", type: "textarea", full: true },
+  {
+    key: "spotify_url",
+    label: "Spotify playlist or profile link",
+    type: "text",
+    full: true,
+    placeholder: "https://open.spotify.com/playlist/...",
+  },
+  { key: "spotify_heading", label: "Spotify section heading", type: "text" },
+  { key: "spotify_body", label: "Spotify section intro", type: "textarea", full: true },
+  { key: "show_spotify", label: "Show Spotify section", type: "boolean" },
+  { key: "video_optin_heading", label: "Video pop-up heading", type: "text" },
+  { key: "video_optin_body", label: "Video pop-up intro", type: "textarea", full: true },
+  { key: "video_optin_enabled", label: "Show video pop-up", type: "boolean" },
 ];
 
 
@@ -68,6 +84,8 @@ export function HomepagePanel({ data, onDone }: { data: AdminSnapshot; onDone: (
         show_news: true,
         show_newsletter: true,
         show_partner: true,
+        show_spotify: true,
+        video_optin_enabled: true,
       },
   );
   const [pending, setPending] = useState(false);
