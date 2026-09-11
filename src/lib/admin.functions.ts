@@ -12,6 +12,7 @@ import {
   screeningSchema,
   slideSchema,
   submissionStatusSchema,
+  videoSchema,
 } from "./content.schemas";
 import type { AdminSnapshot } from "./admin.server";
 
@@ -183,4 +184,20 @@ export const deleteScreening = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { adminDelete } = await import("./admin.server");
     return adminDelete(context.supabase as any, context.userId, "screenings", data.id);
+  });
+
+export const saveVideo = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => videoSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminUpsert } = await import("./admin.server");
+    return adminUpsert(context.supabase as any, context.userId, "videos", data);
+  });
+
+export const deleteVideo = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idInput.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminDelete } = await import("./admin.server");
+    return adminDelete(context.supabase as any, context.userId, "videos", data.id);
   });

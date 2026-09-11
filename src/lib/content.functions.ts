@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { slugInput, emailSchema, contactSchema } from "./content.schemas";
+import { slugInput, emailSchema, contactSchema, videoLeadSchema } from "./content.schemas";
 import type {
   FilmSummary,
   FilmDetail,
@@ -9,6 +9,7 @@ import type {
   Homepage,
   HomepageSlide,
   ScreeningListing,
+  Video,
 } from "./content.types";
 
 export const listFilms = createServerFn({ method: "GET" }).handler(
@@ -215,3 +216,48 @@ export const listScreenings = createServerFn({ method: "GET" }).handler(
     return (data ?? []) as unknown as ScreeningListing[];
   },
 );
+
+export const listVideos = createServerFn({ method: "GET" }).handler(async (): Promise<Video[]> => {
+  const { publicSupabase } = await import("./content.server");
+  const { data, error } = await publicSupabase()
+    .from("videos")
+    .select("*")
+    .eq("published", true)
+    .order("sort_order", { ascending: true });
+  if (error) throw new Error(error.message);
+  return data ?? [];
+});
+
+export const submitVideoLead = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => videoLeadSchema.parse(data))
+  .handler(async ({ data }) => {
+    const { publicSupabase } = await import("./content.server");
+    const { requestMetadata, scoreSubmission, checkRateLimit } = await import("./spam.server");
+
+    const meta = requestMetadata();
+    const verdict = scoreSubmission({
+      honeypot: data.honeypot,
+      elapsed_ms: data.elapsed_ms,
+      text: `${data.name} ${data.contact}`,
+      email: data.contact_type === "email" ? data.contact : undefined,
+    });
+    if (verdict.blocked) return { ok: true };
+
+    const allowed = await checkRateLimit("video_optin", meta.ip_address, 6);
+    if (!allowed) throw new Error("Too many attempts. Please try again later.");
+
+    const { error } = await publicSupabase()
+      .from("video_leads")
+      .insert({
+        name: data.name,
+        contact: data.contact_type === "email" ? data.contact.toLowerCase() : data.contact,
+        contact_type: data.contact_type,
+        video_id: data.video_id ?? null,
+        source: data.source ?? "videos",
+        spam_score: verdict.spam_score,
+        is_spam: verdict.is_spam,
+        ...meta,
+      });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
