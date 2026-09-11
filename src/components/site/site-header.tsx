@@ -33,7 +33,9 @@ export function SiteHeader() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled || open ? "bg-background/92 border-b border-border backdrop-blur-xl" : "bg-transparent"
+        scrolled || open
+          ? "bg-background/92 border-b border-border backdrop-blur-xl"
+          : "bg-background/45 backdrop-blur-md"
       }`}
     >
       <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 md:px-10">

@@ -160,7 +160,7 @@ function Home() {
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : null}
-          <div className="absolute inset-0 veil" />
+          
 
           <div className="relative mx-auto flex min-h-[92svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
             <p className="eyebrow">{heroEyebrow}</p>
