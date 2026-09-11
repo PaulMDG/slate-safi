@@ -65,7 +65,17 @@ export function RecordEditor({
                       onChange={(next) => set(field.key, next)}
                     />
                   </div>
+                ) : field.type === "video" ? (
+                  <div className="mt-2">
+                    <VideoField
+                      id={`f-${field.key}`}
+                      value={(raw as string) ?? ""}
+                      folder={field.folder ?? "videos"}
+                      onChange={(next) => set(field.key, next)}
+                    />
+                  </div>
                 ) : field.type === "textarea" ? (
+
                   <textarea
                     id={`f-${field.key}`}
                     rows={5}
