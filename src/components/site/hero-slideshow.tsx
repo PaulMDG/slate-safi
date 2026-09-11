@@ -113,7 +113,7 @@ export function HeroSlideshow({
           >
             {slide.eyebrow ? <p className="eyebrow">{slide.eyebrow}</p> : null}
             {slide.title ? (
-              <h1 className="mt-5 max-w-4xl text-6xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">
+              <h1 className="mt-5 max-w-4xl text-6xl leading-[0.88] [text-shadow:0_2px_12px_rgba(0,0,0,0.55),0_4px_36px_rgba(0,0,0,0.45)] sm:text-7xl lg:text-[7.5rem]">
                 {slide.title}
               </h1>
             ) : null}
