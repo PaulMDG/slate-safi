@@ -15,7 +15,7 @@ export default defineTool({
     const { data, error } = await supabase
       .from("screenings")
       .select(
-        "id, starts_at, label, note, ticket_url, film:films(slug, title), cinema:cinemas(name, chain, city, ticketing_url)",
+        "id, starts_at, ends_at, kind, city, screen_label, note, sold_out, ticket_url, film:films(slug, title), cinema:cinemas(name, chain, city, ticketing_url)",
       )
       .eq("published", true)
       .order("starts_at", { ascending: true });
