@@ -14,16 +14,19 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AwardsRouteImport } from './routes/awards'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as ScreeningsRouteImport } from './routes/screenings'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as VideosRouteImport } from './routes/videos'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as FilmsIndexRouteImport } from './routes/films.index'
 import { Route as FilmsSlugRouteImport } from './routes/films.$slug'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 import { Route as ApiPublicSocialDispatchRouteImport } from './routes/api/public/social/dispatch'
 
@@ -51,6 +54,11 @@ const AwardsRoute = AwardsRouteImport.update({
   path: '/awards',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PartnerRoute = PartnerRouteImport.update({
   id: '/partner',
   path: '/partner',
@@ -76,6 +84,12 @@ const VideosRoute = VideosRouteImport.update({
   path: '/videos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -101,6 +115,11 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
   path: '/news/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
   path: '/api/public/media/$',
@@ -117,16 +136,19 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/awards': typeof AwardsRoute
+  '/mcp': typeof McpRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
@@ -135,16 +157,19 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/awards': typeof AwardsRoute
+  '/mcp': typeof McpRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films': typeof FilmsIndexRoute
   '/news': typeof NewsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
@@ -155,16 +180,19 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/awards': typeof AwardsRoute
+  '/mcp': typeof McpRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/films/': typeof FilmsIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
@@ -175,16 +203,19 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/awards'
+    | '/mcp'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
     | '/sitemap.xml'
     | '/videos'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/films/$slug'
     | '/news/$slug'
     | '/films/'
     | '/news/'
+    | '/.lovable/oauth/consent'
     | '/api/public/media/$'
     | '/api/public/social/dispatch'
   fileRoutesByTo: FileRoutesByTo
@@ -193,16 +224,19 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/awards'
+    | '/mcp'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
     | '/sitemap.xml'
     | '/videos'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/films/$slug'
     | '/news/$slug'
     | '/films'
     | '/news'
+    | '/.lovable/oauth/consent'
     | '/api/public/media/$'
     | '/api/public/social/dispatch'
   id:
@@ -212,16 +246,19 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/awards'
+    | '/mcp'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
     | '/sitemap.xml'
     | '/videos'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
     | '/films/$slug'
     | '/news/$slug'
     | '/films/'
     | '/news/'
+    | '/.lovable/oauth/consent'
     | '/api/public/media/$'
     | '/api/public/social/dispatch'
   fileRoutesById: FileRoutesById
@@ -232,15 +269,18 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   AwardsRoute: typeof AwardsRoute
+  McpRoute: typeof McpRoute
   PartnerRoute: typeof PartnerRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   ScreeningsRoute: typeof ScreeningsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   FilmsSlugRoute: typeof FilmsSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   FilmsIndexRoute: typeof FilmsIndexRoute
   NewsIndexRoute: typeof NewsIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
   ApiPublicSocialDispatchRoute: typeof ApiPublicSocialDispatchRoute
 }
@@ -282,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AwardsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/partner': {
       id: '/partner'
       path: '/partner'
@@ -315,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -352,6 +406,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/media/$': {
       id: '/api/public/media/$'
       path: '/api/public/media/$'
@@ -386,15 +447,19 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   AwardsRoute: AwardsRoute,
+  McpRoute: McpRoute,
   PartnerRoute: PartnerRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   ScreeningsRoute: ScreeningsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideosRoute: VideosRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   FilmsSlugRoute: FilmsSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   FilmsIndexRoute: FilmsIndexRoute,
   NewsIndexRoute: NewsIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
   ApiPublicSocialDispatchRoute: ApiPublicSocialDispatchRoute,
 }

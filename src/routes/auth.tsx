@@ -5,8 +5,14 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { socialMeta } from "@/lib/seo";
 
+function safeNext(value: unknown): string | undefined {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) return undefined;
+  return value;
+}
+
 export const Route = createFileRoute("/auth")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s.next) }),
   head: () => ({
     ...socialMeta({
       title: "Studio sign in — Slate Safi",
