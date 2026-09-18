@@ -61,7 +61,11 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email: email.trim(),
           password,
-          options: { emailRedirectTo: window.location.origin },
+          options: {
+            emailRedirectTo: next
+              ? new URL(next, window.location.origin).toString()
+              : window.location.origin,
+          },
         });
         if (error) throw error;
         setCheckEmail(true);
