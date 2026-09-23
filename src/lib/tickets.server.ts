@@ -322,6 +322,7 @@ export type TicketStatus = {
   name: string;
   email: string;
   quantity: number;
+  ticket_type_name: string | null;
   total_kes: number;
   is_free: boolean;
   mpesa_receipt: string | null;
@@ -343,7 +344,7 @@ export async function ticketStatus(reference: string): Promise<TicketStatus | nu
   const { data } = await sb
     .from("tickets")
     .select(
-      "reference, status, name, email, quantity, total_kes, is_free, mpesa_receipt, payment_error, email_sent_at, qr_token, screening:screenings(starts_at, screen_label, city, ticket_terms, film:films(title, slug, poster_url), cinema:cinemas(name, city))",
+      "reference, status, name, email, quantity, ticket_type_name, total_kes, is_free, mpesa_receipt, payment_error, email_sent_at, qr_token, screening:screenings(starts_at, screen_label, city, ticket_terms, film:films(title, slug, poster_url), cinema:cinemas(name, city))",
     )
     .eq("reference", reference.toUpperCase())
     .maybeSingle();
