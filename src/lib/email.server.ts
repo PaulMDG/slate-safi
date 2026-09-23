@@ -29,8 +29,8 @@ export async function emailConfigured() {
 
 async function fromAddress() {
   try {
-    const { loadPaymentValue } = await import("./payments.credentials.server");
-    const saved = await loadPaymentValue("TICKET_EMAIL_FROM");
+    const { loadPaymentValues } = await import("./payments.credentials.server");
+    const saved = (await loadPaymentValues())["TICKET_EMAIL_FROM"];
     if (saved) return saved;
   } catch {
     // fall through to the default

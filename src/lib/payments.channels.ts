@@ -35,23 +35,6 @@ export const MPESA_REQUIRED_KEYS = [
   "MPESA_PASSKEY",
 ];
 
-export const EMAIL_CHANNEL = {
-  id: "ticket_email",
-  label: "Ticket email delivery",
-  docs:
-    "Tickets are emailed from your own sending address. Paste an email API key and the from address you want tickets to come from.",
-  keys: [
-    { name: "TICKET_EMAIL_API_KEY", label: "Email API key" },
-    {
-      name: "TICKET_EMAIL_FROM",
-      label: "From address",
-      hint: "Slate Safi <tickets@slatesafi.app>",
-    },
-  ] satisfies PaymentKeySpec[],
-};
+export const PAYMENT_CHANNELS = [MPESA_CHANNEL];
 
-export const EMAIL_KEYS = EMAIL_CHANNEL.keys.map((k) => k.name);
-
-export const PAYMENT_CHANNELS = [MPESA_CHANNEL, EMAIL_CHANNEL];
-
-export const ALL_PAYMENT_KEYS = [...MPESA_KEYS, ...EMAIL_KEYS];
+export const ALL_PAYMENT_KEYS = [...MPESA_KEYS, "TICKET_EMAIL_FROM"];
