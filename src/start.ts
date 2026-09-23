@@ -3,7 +3,10 @@ import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/r
 import { renderErrorPage } from "./lib/error-page";
 import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
 
-const errorMiddleware = createMiddleware().server(async ({ next }) => {
+const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
+  // Managed email routes authenticate themselves (signed webhooks / API key) and
+  // must never be wrapped in app-level redirects or error pages.
+  if (new URL(request.url).pathname.startsWith("/lovable/")) return next();
   try {
     return await next();
   } catch (error) {
