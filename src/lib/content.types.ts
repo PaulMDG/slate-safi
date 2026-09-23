@@ -50,10 +50,12 @@ export type HomepageSlide = Tables<"homepage_slides">;
 
 export type Cinema = Tables<"cinemas">;
 export type Screening = Tables<"screenings">;
+export type TicketType = Tables<"ticket_types">;
 
 export type ScreeningListing = Screening & {
   film: Pick<Film, "id" | "slug" | "title" | "poster_url" | "hero_image_url"> | null;
   cinema: Pick<Cinema, "id" | "name" | "chain" | "city" | "ticketing_url" | "booking_note"> | null;
+  ticket_types: TicketType[];
 };
 
 export type Video = Tables<"videos">;
