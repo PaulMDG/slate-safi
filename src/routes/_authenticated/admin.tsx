@@ -546,7 +546,52 @@ function AdminDashboard() {
           />
         )}
 
-        {tab === "Tickets" && <TicketsPanel data={data!} />}
+        {tab === "Tickets" && (
+          <div className="space-y-16">
+            <CrudSection
+              title="Ticket types & prices"
+              fields={TICKET_TYPE_FIELDS}
+              rows={ticketTypes}
+              label={(r) => {
+                const scope = r.screening_id
+                  ? (() => {
+                      const s = screenings.find((row) => row.id === r.screening_id);
+                      const film = films.find((f) => f.id === s?.film_id)?.title ?? "Film";
+                      return `${film} · ${
+                        s ? new Date(s.starts_at).toLocaleDateString("en-KE", { dateStyle: "medium" }) : "date"
+                      }`;
+                    })()
+                  : [
+                      r.film_id ? films.find((f) => f.id === r.film_id)?.title : null,
+                      r.cinema_id ? cinemas.find((c) => c.id === r.cinema_id)?.name : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ") || "All screenings";
+                return `${r.name as string} · KES ${Number(r.price_kes ?? 0).toLocaleString("en-KE")} — ${scope}${
+                  r.published ? "" : " (hidden)"
+                }`;
+              }}
+              blank={{
+                name: "",
+                price_kes: 0,
+                capacity: null,
+                screening_id: null,
+                film_id: null,
+                cinema_id: null,
+                published: true,
+                sort_order: ticketTypes.length,
+              }}
+              save={saveTicketType}
+              remove={deleteTicketType}
+              onDone={refetch}
+            />
+            <div className="rule-top pt-12">
+              <TicketsPanel data={data!} />
+            </div>
+          </div>
+        )}
+
+
 
 
         {tab === "Cinemas" && (
