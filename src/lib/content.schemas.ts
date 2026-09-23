@@ -185,6 +185,10 @@ export const screeningSchema = z.object({
   sold_out: z.boolean(),
   sort_order: z.number().int().min(0).max(9999),
   published: z.boolean(),
+  tickets_enabled: z.boolean().optional(),
+  price_kes: z.number().min(0).max(1_000_000).optional().nullable(),
+  capacity: z.number().int().min(0).max(100_000).optional().nullable(),
+  ticket_terms: z.string().trim().max(1000).optional().nullable(),
 });
 
 export const videoSchema = z.object({
