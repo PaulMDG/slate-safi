@@ -117,12 +117,22 @@ export async function deliverTicket(reference: string) {
   </div>`;
 
   try {
-    await sendEmail({
+    const result = await sendEmail({
       to: ticket.email,
       subject: `Your ticket for ${film} — ${ticket.reference}`,
       html,
       text: `Your ticket code is ${ticket.reference}. ${film}, ${formatWhen(ticket.screening?.starts_at ?? new Date().toISOString())}. View it at ${link}`,
+      label: "ticket-confirmation",
+      idempotencyKey: `ticket-${ticket.reference}-${ticket.status}`,
     });
+    if (!result.ok) {
+      const reason =
+        result.reason === "recipient_suppressed"
+          ? "This address has unsubscribed or previously bounced, so the ticket could not be delivered."
+          : `Email not sent (${result.reason}).`;
+      await sb.from("tickets").update({ email_error: reason }).eq("id", ticket.id);
+      return { ok: false as const, error: reason };
+    }
     await sb
       .from("tickets")
       .update({ email_sent_at: new Date().toISOString(), email_error: null })
