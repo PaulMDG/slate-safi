@@ -205,15 +205,23 @@ export const listHomepageSlides = createServerFn({ method: "GET" }).handler(
 export const listScreenings = createServerFn({ method: "GET" }).handler(
   async (): Promise<ScreeningListing[]> => {
     const { publicSupabase } = await import("./content.server");
-    const { data, error } = await publicSupabase()
-      .from("screenings")
-      .select(
-        "*, film:films(id, slug, title, poster_url, hero_image_url), cinema:cinemas(id, name, chain, city, ticketing_url, booking_note)",
-      )
-      .eq("published", true)
-      .order("starts_at", { ascending: true });
+    const { typesForScreening } = await import("./ticket-types");
+    const supabase = publicSupabase();
+    const [{ data, error }, { data: types }] = await Promise.all([
+      supabase
+        .from("screenings")
+        .select(
+          "*, film:films(id, slug, title, poster_url, hero_image_url), cinema:cinemas(id, name, chain, city, ticketing_url, booking_note)",
+        )
+        .eq("published", true)
+        .order("starts_at", { ascending: true }),
+      supabase.from("ticket_types").select("*").eq("published", true),
+    ]);
     if (error) throw new Error(error.message);
-    return (data ?? []) as unknown as ScreeningListing[];
+    return ((data ?? []) as unknown as ScreeningListing[]).map((row) => ({
+      ...row,
+      ticket_types: typesForScreening(types ?? [], row),
+    }));
   },
 );
 

@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const bookingSchema = z.object({
   screening_id: z.string().uuid(),
+  ticket_type_id: z.string().uuid().optional().nullable(),
   name: z.string().trim().min(1).max(120),
   email: z.string().trim().email().max(255),
   phone: z.string().trim().max(24).optional().nullable(),
