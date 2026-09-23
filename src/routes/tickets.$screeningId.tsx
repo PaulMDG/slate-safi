@@ -187,6 +187,37 @@ function BookingPage() {
           ) : (
             <>
               <div className="mt-6 space-y-5">
+                {types.length > 1 && (
+                  <div>
+                    <label className={labelClass} htmlFor="t-type">
+                      Ticket type
+                    </label>
+                    <select
+                      id="t-type"
+                      className={`${inputClass} mt-2`}
+                      value={selected.id ?? ""}
+                      onChange={(e) => {
+                        setTypeId(e.target.value || null);
+                        setQuantity(1);
+                      }}
+                    >
+                      {types.map((t) => (
+                        <option
+                          key={t.id ?? "standard"}
+                          value={t.id ?? ""}
+                          disabled={t.remaining === 0}
+                          className="bg-background"
+                        >
+                          {t.name} —{" "}
+                          {Number(t.price_kes) > 0
+                            ? `KES ${Number(t.price_kes).toLocaleString("en-KE")}`
+                            : "Free"}
+                          {t.remaining === 0 ? " (sold out)" : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <div>
                   <label className={labelClass} htmlFor="t-name">
                     Full name
