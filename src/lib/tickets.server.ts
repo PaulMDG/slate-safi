@@ -226,7 +226,21 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     );
   }
 
-  const unit = Number(offer.price_kes ?? 0);
+  const chosen = input.ticket_type_id
+    ? offer.types.find((t) => t.id === input.ticket_type_id)
+    : offer.types.length === 1
+      ? offer.types[0]
+      : undefined;
+  if (!chosen) throw new Error("Choose a ticket type for this screening.");
+  if (chosen.remaining !== null && chosen.remaining < input.quantity) {
+    throw new Error(
+      chosen.remaining === 0
+        ? `${chosen.name} is sold out.`
+        : `Only ${chosen.remaining} ${chosen.name} ticket${chosen.remaining === 1 ? "" : "s"} left.`,
+    );
+  }
+
+  const unit = Number(chosen.price_kes ?? 0);
   const total = unit * input.quantity;
   const free = total <= 0;
   const reference = `SS${code(6)}`;
@@ -243,6 +257,8 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     .insert({
       reference,
       screening_id: input.screening_id,
+      ticket_type_id: chosen.id,
+      ticket_type_name: chosen.name,
       name: input.name,
       email: input.email.toLowerCase(),
       phone: input.phone || null,
