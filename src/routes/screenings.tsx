@@ -182,7 +182,7 @@ function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
       </div>
 
       <div className="md:text-right">
-        {s.tickets_enabled && !s.sold_out ? (
+        {(s.tickets_enabled || types.length > 0) && !s.sold_out ? (
           <div className="flex flex-col items-start gap-2 md:items-end">
             <Link
               to="/tickets/$screeningId"
