@@ -166,7 +166,7 @@ export async function deliverTicket(reference: string) {
       <p style="margin:0 0 8px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#bdb8b0">Your ticket code</p>
       <p style="margin:0;font-size:30px;letter-spacing:.14em;font-weight:bold">${ticket.reference}</p>
       <p style="margin:14px 0 0;color:#bdb8b0;font-size:14px">
-        ${ticket.quantity} ${ticket.quantity > 1 ? "tickets" : "ticket"} · ${paid ? money(Number(ticket.total_kes)) : "Free entry"}
+        ${ticket.ticket_type_name ? `${ticket.ticket_type_name} · ` : ""}${ticket.quantity} ${ticket.quantity > 1 ? "tickets" : "ticket"} · ${paid ? money(Number(ticket.total_kes)) : "Free entry"}
         ${ticket.mpesa_receipt ? `<br/>M-Pesa receipt: ${ticket.mpesa_receipt}` : ""}
       </p>
     </div>
