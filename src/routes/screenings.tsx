@@ -179,7 +179,23 @@ function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
       </div>
 
       <div className="md:text-right">
-        {ticketUrl && !s.sold_out ? (
+        {s.tickets_enabled && !s.sold_out ? (
+          <div className="flex flex-col items-start gap-2 md:items-end">
+            <Link
+              to="/tickets/$screeningId"
+              params={{ screeningId: s.id }}
+              className="inline-flex items-center gap-2 rounded-sm bg-primary px-6 py-3 font-display text-[0.65rem] font-bold uppercase tracking-[0.18em] text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              <Ticket className="h-3.5 w-3.5" />
+              {Number(s.price_kes) > 0 ? "Buy tickets" : "Register free"}
+            </Link>
+            <span className="text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
+              {Number(s.price_kes) > 0
+                ? `KES ${Number(s.price_kes).toLocaleString("en-KE")} · M-Pesa`
+                : "Free entry · ticket by email"}
+            </span>
+          </div>
+        ) : ticketUrl && !s.sold_out ? (
           <a
             href={ticketUrl}
             target="_blank"
