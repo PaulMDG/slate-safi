@@ -26,8 +26,11 @@ import { Route as FilmsIndexRouteImport } from './routes/films.index'
 import { Route as FilmsSlugRouteImport } from './routes/films.$slug'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as TicketReferenceRouteImport } from './routes/ticket.$reference'
+import { Route as TicketsScreeningIdRouteImport } from './routes/tickets.$screeningId'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
+import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa/callback'
 import { Route as ApiPublicSocialDispatchRouteImport } from './routes/api/public/social/dispatch'
 
 const IndexRoute = IndexRouteImport.update({
@@ -115,6 +118,16 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
   path: '/news/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TicketReferenceRoute = TicketReferenceRouteImport.update({
+  id: '/ticket/$reference',
+  path: '/ticket/$reference',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TicketsScreeningIdRoute = TicketsScreeningIdRouteImport.update({
+  id: '/tickets/$screeningId',
+  path: '/tickets/$screeningId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   id: '/.lovable/oauth/consent',
   path: '/.lovable/oauth/consent',
@@ -123,6 +136,11 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
   path: '/api/public/media/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
+  id: '/api/public/mpesa/callback',
+  path: '/api/public/mpesa/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicSocialDispatchRoute = ApiPublicSocialDispatchRouteImport.update({
@@ -146,10 +164,13 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/ticket/$reference': typeof TicketReferenceRoute
+  '/tickets/$screeningId': typeof TicketsScreeningIdRoute
   '/films/': typeof FilmsIndexRoute
   '/news/': typeof NewsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
 export interface FileRoutesByTo {
@@ -167,10 +188,13 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/ticket/$reference': typeof TicketReferenceRoute
+  '/tickets/$screeningId': typeof TicketsScreeningIdRoute
   '/films': typeof FilmsIndexRoute
   '/news': typeof NewsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
 export interface FileRoutesById {
@@ -190,10 +214,13 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/films/$slug': typeof FilmsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/ticket/$reference': typeof TicketReferenceRoute
+  '/tickets/$screeningId': typeof TicketsScreeningIdRoute
   '/films/': typeof FilmsIndexRoute
   '/news/': typeof NewsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
   '/api/public/social/dispatch': typeof ApiPublicSocialDispatchRoute
 }
 export interface FileRouteTypes {
@@ -213,10 +240,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/films/$slug'
     | '/news/$slug'
+    | '/ticket/$reference'
+    | '/tickets/$screeningId'
     | '/films/'
     | '/news/'
     | '/.lovable/oauth/consent'
     | '/api/public/media/$'
+    | '/api/public/mpesa/callback'
     | '/api/public/social/dispatch'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -234,10 +264,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/films/$slug'
     | '/news/$slug'
+    | '/ticket/$reference'
+    | '/tickets/$screeningId'
     | '/films'
     | '/news'
     | '/.lovable/oauth/consent'
     | '/api/public/media/$'
+    | '/api/public/mpesa/callback'
     | '/api/public/social/dispatch'
   id:
     | '__root__'
@@ -256,10 +289,13 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/films/$slug'
     | '/news/$slug'
+    | '/ticket/$reference'
+    | '/tickets/$screeningId'
     | '/films/'
     | '/news/'
     | '/.lovable/oauth/consent'
     | '/api/public/media/$'
+    | '/api/public/mpesa/callback'
     | '/api/public/social/dispatch'
   fileRoutesById: FileRoutesById
 }
@@ -278,10 +314,13 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   FilmsSlugRoute: typeof FilmsSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
+  TicketReferenceRoute: typeof TicketReferenceRoute
+  TicketsScreeningIdRoute: typeof TicketsScreeningIdRoute
   FilmsIndexRoute: typeof FilmsIndexRoute
   NewsIndexRoute: typeof NewsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
+  ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   ApiPublicSocialDispatchRoute: typeof ApiPublicSocialDispatchRoute
 }
 
@@ -406,6 +445,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ticket/$reference': {
+      id: '/ticket/$reference'
+      path: '/ticket/$reference'
+      fullPath: '/ticket/$reference'
+      preLoaderRoute: typeof TicketReferenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tickets/$screeningId': {
+      id: '/tickets/$screeningId'
+      path: '/tickets/$screeningId'
+      fullPath: '/tickets/$screeningId'
+      preLoaderRoute: typeof TicketsScreeningIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.lovable/oauth/consent': {
       id: '/.lovable/oauth/consent'
       path: '/.lovable/oauth/consent'
@@ -418,6 +471,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/media/$'
       fullPath: '/api/public/media/$'
       preLoaderRoute: typeof ApiPublicMediaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/mpesa/callback': {
+      id: '/api/public/mpesa/callback'
+      path: '/api/public/mpesa/callback'
+      fullPath: '/api/public/mpesa/callback'
+      preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/social/dispatch': {
@@ -457,10 +517,13 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   FilmsSlugRoute: FilmsSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
+  TicketReferenceRoute: TicketReferenceRoute,
+  TicketsScreeningIdRoute: TicketsScreeningIdRoute,
   FilmsIndexRoute: FilmsIndexRoute,
   NewsIndexRoute: NewsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
+  ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   ApiPublicSocialDispatchRoute: ApiPublicSocialDispatchRoute,
 }
 export const routeTree = rootRouteImport

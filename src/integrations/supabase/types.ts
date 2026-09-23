@@ -456,6 +456,36 @@ export type Database = {
         }
         Relationships: []
       }
+      mpesa_callbacks: {
+        Row: {
+          checkout_request_id: string | null
+          created_at: string
+          id: string
+          merchant_request_id: string | null
+          payload: Json
+          result_code: number | null
+          result_desc: string | null
+        }
+        Insert: {
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          merchant_request_id?: string | null
+          payload: Json
+          result_code?: number | null
+          result_desc?: string | null
+        }
+        Update: {
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          merchant_request_id?: string | null
+          payload?: Json
+          result_code?: number | null
+          result_desc?: string | null
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           country: string | null
@@ -595,6 +625,7 @@ export type Database = {
       }
       screenings: {
         Row: {
+          capacity: number | null
           cinema_id: string
           city: string | null
           created_at: string
@@ -603,15 +634,19 @@ export type Database = {
           id: string
           kind: string
           note: string | null
+          price_kes: number
           published: boolean
           screen_label: string | null
           sold_out: boolean
           sort_order: number
           starts_at: string
+          ticket_terms: string | null
           ticket_url: string | null
+          tickets_enabled: boolean
           updated_at: string
         }
         Insert: {
+          capacity?: number | null
           cinema_id: string
           city?: string | null
           created_at?: string
@@ -620,15 +655,19 @@ export type Database = {
           id?: string
           kind?: string
           note?: string | null
+          price_kes?: number
           published?: boolean
           screen_label?: string | null
           sold_out?: boolean
           sort_order?: number
           starts_at: string
+          ticket_terms?: string | null
           ticket_url?: string | null
+          tickets_enabled?: boolean
           updated_at?: string
         }
         Update: {
+          capacity?: number | null
           cinema_id?: string
           city?: string | null
           created_at?: string
@@ -637,12 +676,15 @@ export type Database = {
           id?: string
           kind?: string
           note?: string | null
+          price_kes?: number
           published?: boolean
           screen_label?: string | null
           sold_out?: boolean
           sort_order?: number
           starts_at?: string
+          ticket_terms?: string | null
           ticket_url?: string | null
+          tickets_enabled?: boolean
           updated_at?: string
         }
         Relationships: [
@@ -914,6 +956,92 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      tickets: {
+        Row: {
+          checked_in_at: string | null
+          created_at: string
+          email: string
+          email_error: string | null
+          email_sent_at: string | null
+          id: string
+          is_free: boolean
+          mpesa_checkout_request_id: string | null
+          mpesa_merchant_request_id: string | null
+          mpesa_phone: string | null
+          mpesa_receipt: string | null
+          name: string
+          payment_error: string | null
+          payment_method: string | null
+          phone: string | null
+          qr_token: string
+          quantity: number
+          reference: string
+          screening_id: string
+          status: string
+          total_kes: number
+          unit_price_kes: number
+          updated_at: string
+        }
+        Insert: {
+          checked_in_at?: string | null
+          created_at?: string
+          email: string
+          email_error?: string | null
+          email_sent_at?: string | null
+          id?: string
+          is_free?: boolean
+          mpesa_checkout_request_id?: string | null
+          mpesa_merchant_request_id?: string | null
+          mpesa_phone?: string | null
+          mpesa_receipt?: string | null
+          name: string
+          payment_error?: string | null
+          payment_method?: string | null
+          phone?: string | null
+          qr_token: string
+          quantity?: number
+          reference: string
+          screening_id: string
+          status?: string
+          total_kes?: number
+          unit_price_kes?: number
+          updated_at?: string
+        }
+        Update: {
+          checked_in_at?: string | null
+          created_at?: string
+          email?: string
+          email_error?: string | null
+          email_sent_at?: string | null
+          id?: string
+          is_free?: boolean
+          mpesa_checkout_request_id?: string | null
+          mpesa_merchant_request_id?: string | null
+          mpesa_phone?: string | null
+          mpesa_receipt?: string | null
+          name?: string
+          payment_error?: string | null
+          payment_method?: string | null
+          phone?: string | null
+          qr_token?: string
+          quantity?: number
+          reference?: string
+          screening_id?: string
+          status?: string
+          total_kes?: number
+          unit_price_kes?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_screening_id_fkey"
+            columns: ["screening_id"]
+            isOneToOne: false
+            referencedRelation: "screenings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {

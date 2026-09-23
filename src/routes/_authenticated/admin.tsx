@@ -37,6 +37,7 @@ import { AnalyticsPanel } from "@/components/admin/analytics-panel";
 import { AiPanel } from "@/components/admin/ai-panel";
 import { SettingsPanel } from "@/components/admin/settings-panel";
 import { HomepagePanel } from "@/components/admin/homepage-panel";
+import { TicketsPanel } from "@/components/admin/tickets-panel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -210,6 +211,7 @@ const TABS = [
   "Gallery",
   "News",
   "Screenings",
+  "Tickets",
   "Cinemas",
   "Videos",
   "Press",
@@ -295,6 +297,23 @@ function AdminDashboard() {
         placeholder: "Leave blank to use the cinema's default ticketing URL",
       },
       { key: "note", label: "Note (Q&A, guest, etc.)", type: "textarea", full: true },
+      {
+        key: "tickets_enabled",
+        label: "Sell / register tickets on this site",
+        type: "boolean",
+      },
+      {
+        key: "price_kes",
+        label: "Ticket price in KES (0 = free registration)",
+        type: "number",
+      },
+      { key: "capacity", label: "Tickets available (blank = unlimited)", type: "number" },
+      {
+        key: "ticket_terms",
+        label: "Ticket terms / door instructions",
+        type: "textarea",
+        full: true,
+      },
       { key: "sold_out", label: "Sold out", type: "boolean" },
       { key: "published", label: "Visible on site", type: "boolean" },
       { key: "sort_order", label: "Sort order", type: "number" },
@@ -516,6 +535,9 @@ function AdminDashboard() {
               starts_at: "",
               sold_out: false,
               published: true,
+              tickets_enabled: false,
+              price_kes: 0,
+              capacity: null,
               sort_order: screenings.length,
             }}
             save={saveScreening}
@@ -523,6 +545,9 @@ function AdminDashboard() {
             onDone={refetch}
           />
         )}
+
+        {tab === "Tickets" && <TicketsPanel data={data!} />}
+
 
         {tab === "Cinemas" && (
           <CrudSection

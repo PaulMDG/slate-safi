@@ -6,6 +6,7 @@ import { saveSocialAccount, type SocialSnapshot } from "@/lib/social.functions";
 import { saveChannelCredentials } from "@/lib/ai.functions";
 import { PLATFORM_LABEL, type Platform } from "@/lib/social.captions";
 import { CHANNELS, REQUIRED_KEYS } from "@/lib/social.channels";
+import { PaymentsSettings } from "./payments-settings";
 
 const inputClass =
   "w-full rounded-sm border border-input bg-background/60 px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary";
@@ -208,6 +209,8 @@ export function SettingsPanel({
 
   return (
     <div className="space-y-14">
+      <PaymentsSettings />
+
       <CredentialsSection keyStatus={social.keyStatus ?? {}} onDone={onDone} />
 
       <section>
