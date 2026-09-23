@@ -131,7 +131,8 @@ export function TicketsPanel({ data }: { data: AdminSnapshot }) {
                     {screeningLabel(t.screening_id)}
                   </p>
                   <p className="mt-2 text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
-                    {STATUS_LABEL[t.status] ?? t.status} · {t.quantity} ticket
+                    {STATUS_LABEL[t.status] ?? t.status} · {t.quantity}{" "}
+                    {t.ticket_type_name ?? "ticket"}
                     {t.quantity > 1 ? "s" : ""} ·{" "}
                     {t.total_kes > 0 ? `KES ${t.total_kes.toLocaleString("en-KE")}` : "Free"}
                     {t.mpesa_receipt ? ` · ${t.mpesa_receipt}` : ""}
