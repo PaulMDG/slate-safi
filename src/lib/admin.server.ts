@@ -68,6 +68,7 @@ export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapsho
     slides: slides.data ?? [],
     cinemas: cinemas.data ?? [],
     screenings: screenings.data ?? [],
+    ticketTypes: ticketTypes.data ?? [],
     videos: videos.data ?? [],
     videoLeads: videoLeads.data ?? [],
   };
