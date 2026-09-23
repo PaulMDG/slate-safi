@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ExternalLink, MapPin, Ticket } from "lucide-react";
 import { listScreenings } from "@/lib/content.functions";
 import type { ScreeningListing } from "@/lib/content.types";
+import { lowestPrice } from "@/lib/ticket-types";
 import { socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/screenings")({
@@ -120,6 +121,8 @@ function ScreeningsPage() {
 function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
   const ticketUrl = s.ticket_url || s.cinema?.ticketing_url || null;
   const city = s.city || s.cinema?.city;
+  const types = s.ticket_types ?? [];
+  const from = lowestPrice(types, Number(s.price_kes ?? 0));
 
   const poster = s.film?.poster_url ?? s.film?.hero_image_url ?? null;
 
