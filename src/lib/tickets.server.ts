@@ -117,6 +117,9 @@ export async function loadOffer(screeningId: string): Promise<ScreeningOffer | n
 
   return {
     ...data,
+    // Attaching a published ticket type to a date puts it on sale, even if the
+    // per-screening toggle was never flipped.
+    tickets_enabled: Boolean(data.tickets_enabled) || resolved.length > 0,
     price_kes: Number(data.price_kes ?? 0),
     remaining: screeningRemaining,
     types,
