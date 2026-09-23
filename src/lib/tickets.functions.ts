@@ -72,7 +72,7 @@ export const loadTicketAdmin = createServerFn({ method: "GET" })
       tickets: await listTickets(context.supabase as any),
       keyStatus,
       mpesaReady: MPESA_REQUIRED_KEYS.every((k) => keyStatus[k]),
-      emailReady: Boolean(keyStatus["TICKET_EMAIL_API_KEY"] && keyStatus["TICKET_EMAIL_FROM"]),
+      emailReady: Boolean(process.env["LOVABLE_API_KEY"] && process.env["RESEND_API_KEY"]),
       callbackUrl: `${siteUrl()}/api/public/mpesa/callback`,
     };
   });

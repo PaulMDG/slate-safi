@@ -52,8 +52,9 @@ export function PaymentsSettings() {
     <section>
       <h2 className="eyebrow">Ticketing: M-Pesa &amp; email delivery</h2>
       <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-        Paste the M-Pesa (Daraja) credentials and the ticket email details here. Values are stored
-        server-side and never shown again — leave a field blank to keep the saved value. Register
+        Paste the M-Pesa (Daraja) credentials here. Values are stored
+        server-side and never shown again — leave a field blank to keep the saved value. Ticket
+        emails are delivered through Resend. Register
         this callback URL with Safaricom:{" "}
         <span className="break-all text-foreground">
           {query.data?.callbackUrl ?? "…/api/public/mpesa/callback"}
