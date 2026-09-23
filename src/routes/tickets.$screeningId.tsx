@@ -131,19 +131,37 @@ function BookingPage() {
             </p>
           )}
 
-          <div className="mt-10 flex flex-wrap gap-8 border-t border-border pt-8 text-sm">
-            <div>
-              <p className={labelClass}>Price per ticket</p>
-              <p className="mt-2 font-display text-2xl font-bold">
-                {free ? "Free" : `KES ${Number(offer.price_kes).toLocaleString("en-KE")}`}
-              </p>
-            </div>
-            {offer.remaining !== null && (
-              <div>
-                <p className={labelClass}>Tickets left</p>
-                <p className="mt-2 font-display text-2xl font-bold">{offer.remaining}</p>
-              </div>
-            )}
+          <div className="mt-10 border-t border-border pt-8">
+            <p className={labelClass}>Tickets</p>
+            <ul className="mt-5 space-y-3">
+              {types.map((t) => (
+                <li
+                  key={t.id ?? "standard"}
+                  className={`flex flex-wrap items-baseline justify-between gap-3 rounded-sm border px-5 py-4 ${
+                    selected.id === t.id ? "border-primary" : "border-border"
+                  }`}
+                >
+                  <div className="min-w-0">
+                    <p className="font-display text-sm font-bold uppercase tracking-[0.12em]">
+                      {t.name}
+                    </p>
+                    {t.description && (
+                      <p className="mt-1 max-w-md text-sm text-muted-foreground">{t.description}</p>
+                    )}
+                    {t.remaining !== null && (
+                      <p className="mt-1 text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
+                        {t.remaining === 0 ? "Sold out" : `${t.remaining} left`}
+                      </p>
+                    )}
+                  </div>
+                  <p className="font-display text-xl font-bold">
+                    {Number(t.price_kes) > 0
+                      ? `KES ${Number(t.price_kes).toLocaleString("en-KE")}`
+                      : "Free"}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {offer.ticket_terms && (
