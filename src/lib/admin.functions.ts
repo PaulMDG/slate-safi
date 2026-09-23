@@ -11,6 +11,7 @@ import {
   pressSchema,
   screeningSchema,
   slideSchema,
+  ticketTypeSchema,
   submissionStatusSchema,
   videoSchema,
 } from "./content.schemas";

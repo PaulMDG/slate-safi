@@ -17,6 +17,7 @@ export type AdminSnapshot = {
   slides: Tables<"homepage_slides">[];
   cinemas: Tables<"cinemas">[];
   screenings: Tables<"screenings">[];
+  ticketTypes: Tables<"ticket_types">[];
   videos: Tables<"videos">[];
   videoLeads: Tables<"video_leads">[];
 };

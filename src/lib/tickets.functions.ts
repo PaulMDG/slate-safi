@@ -7,9 +7,15 @@ import {
   referenceInput,
   ticketIdInput,
 } from "./tickets.schemas";
-import type { AdminTicket, BookingResult, ScreeningOffer, TicketStatus } from "./tickets.server";
+import type {
+  AdminTicket,
+  BookingResult,
+  OfferTicketType,
+  ScreeningOffer,
+  TicketStatus,
+} from "./tickets.server";
 
-export type { AdminTicket, BookingResult, ScreeningOffer, TicketStatus };
+export type { AdminTicket, BookingResult, OfferTicketType, ScreeningOffer, TicketStatus };
 
 export const getScreeningOffer = createServerFn({ method: "GET" })
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
