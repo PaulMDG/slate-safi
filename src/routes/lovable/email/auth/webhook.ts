@@ -9,11 +9,11 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
-const SITE_NAME = "Slate Safi Showcase"
+const SITE_NAME = "Slate Safi"
 const SENDER_DOMAIN = "notify.slatesafi.co.ke"
 const ROOT_DOMAIN = "slatesafi.co.ke"
 const FROM_DOMAIN = "slatesafi.co.ke"
-const SITE_URL = `https://${ROOT_DOMAIN}`
+const SITE_URL = "https://www.slatesafi.app"
 
 // The SDK handler owns verification, dispatch, and retry semantics; this file
 // owns only the email decisions: subjects, templates, and per-type props.

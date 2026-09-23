@@ -18,7 +18,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "Slate Safi Showcase"
+const SITE_NAME = "Slate Safi"
 const ROOT_DOMAIN = "slatesafi.co.ke"
 
 // Sample data for preview mode ONLY (not used in actual email sending).
