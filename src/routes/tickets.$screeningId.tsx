@@ -54,6 +54,7 @@ function BookingPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [typeId, setTypeId] = useState<string | null>(offer?.types[0]?.id ?? null);
   const [honeypot, setHoneypot] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,10 +70,16 @@ function BookingPage() {
     );
   }
 
-  const free = Number(offer.price_kes) <= 0;
-  const closed = !offer.tickets_enabled || offer.sold_out || offer.remaining === 0;
-  const total = Number(offer.price_kes) * quantity;
-  const maxQty = Math.min(10, offer.remaining ?? 10) || 1;
+  const types = offer.types;
+  const selected =
+    types.find((t) => t.id === typeId) ?? types.find((t) => t.remaining !== 0) ?? types[0]!;
+  const price = Number(selected.price_kes ?? 0);
+  const free = price <= 0;
+  const soldOutEverywhere = types.every((t) => t.remaining === 0);
+  const closed =
+    !offer.tickets_enabled || offer.sold_out || offer.remaining === 0 || soldOutEverywhere;
+  const total = price * quantity;
+  const maxQty = Math.min(10, selected.remaining ?? 10) || 1;
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -82,10 +89,11 @@ function BookingPage() {
       const result = await book({
         data: {
           screening_id: offer!.id,
+          ticket_type_id: selected.id,
           name,
           email,
           phone: phone || null,
-          quantity,
+          quantity: Math.min(quantity, maxQty),
           honeypot,
           elapsed_ms: Date.now() - startedAt.current,
         },
@@ -123,19 +131,37 @@ function BookingPage() {
             </p>
           )}
 
-          <div className="mt-10 flex flex-wrap gap-8 border-t border-border pt-8 text-sm">
-            <div>
-              <p className={labelClass}>Price per ticket</p>
-              <p className="mt-2 font-display text-2xl font-bold">
-                {free ? "Free" : `KES ${Number(offer.price_kes).toLocaleString("en-KE")}`}
-              </p>
-            </div>
-            {offer.remaining !== null && (
-              <div>
-                <p className={labelClass}>Tickets left</p>
-                <p className="mt-2 font-display text-2xl font-bold">{offer.remaining}</p>
-              </div>
-            )}
+          <div className="mt-10 border-t border-border pt-8">
+            <p className={labelClass}>Tickets</p>
+            <ul className="mt-5 space-y-3">
+              {types.map((t) => (
+                <li
+                  key={t.id ?? "standard"}
+                  className={`flex flex-wrap items-baseline justify-between gap-3 rounded-sm border px-5 py-4 ${
+                    selected.id === t.id ? "border-primary" : "border-border"
+                  }`}
+                >
+                  <div className="min-w-0">
+                    <p className="font-display text-sm font-bold uppercase tracking-[0.12em]">
+                      {t.name}
+                    </p>
+                    {t.description && (
+                      <p className="mt-1 max-w-md text-sm text-muted-foreground">{t.description}</p>
+                    )}
+                    {t.remaining !== null && (
+                      <p className="mt-1 text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
+                        {t.remaining === 0 ? "Sold out" : `${t.remaining} left`}
+                      </p>
+                    )}
+                  </div>
+                  <p className="font-display text-xl font-bold">
+                    {Number(t.price_kes) > 0
+                      ? `KES ${Number(t.price_kes).toLocaleString("en-KE")}`
+                      : "Free"}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {offer.ticket_terms && (
@@ -161,6 +187,37 @@ function BookingPage() {
           ) : (
             <>
               <div className="mt-6 space-y-5">
+                {types.length > 1 && (
+                  <div>
+                    <label className={labelClass} htmlFor="t-type">
+                      Ticket type
+                    </label>
+                    <select
+                      id="t-type"
+                      className={`${inputClass} mt-2`}
+                      value={selected.id ?? ""}
+                      onChange={(e) => {
+                        setTypeId(e.target.value || null);
+                        setQuantity(1);
+                      }}
+                    >
+                      {types.map((t) => (
+                        <option
+                          key={t.id ?? "standard"}
+                          value={t.id ?? ""}
+                          disabled={t.remaining === 0}
+                          className="bg-background"
+                        >
+                          {t.name} —{" "}
+                          {Number(t.price_kes) > 0
+                            ? `KES ${Number(t.price_kes).toLocaleString("en-KE")}`
+                            : "Free"}
+                          {t.remaining === 0 ? " (sold out)" : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <div>
                   <label className={labelClass} htmlFor="t-name">
                     Full name

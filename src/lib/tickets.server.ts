@@ -17,8 +17,19 @@ function code(length: number) {
   return Array.from(bytes, (b) => ALPHABET[b % ALPHABET.length]).join("");
 }
 
+export type OfferTicketType = {
+  id: string | null;
+  name: string;
+  description: string | null;
+  price_kes: number;
+  capacity: number | null;
+  remaining: number | null;
+};
+
 export type ScreeningOffer = {
   id: string;
+  film_id: string | null;
+  cinema_id: string | null;
   starts_at: string;
   ends_at: string | null;
   kind: string;
@@ -31,20 +42,30 @@ export type ScreeningOffer = {
   price_kes: number;
   capacity: number | null;
   remaining: number | null;
+  types: OfferTicketType[];
   film: { title: string; slug: string; poster_url: string | null } | null;
   cinema: { name: string; city: string | null } | null;
 };
 
 const SELECT =
-  "id, starts_at, ends_at, kind, screen_label, city, note, ticket_terms, sold_out, tickets_enabled, price_kes, capacity, film:films(title, slug, poster_url), cinema:cinemas(name, city)";
+  "id, film_id, cinema_id, starts_at, ends_at, kind, screen_label, city, note, ticket_terms, sold_out, tickets_enabled, price_kes, capacity, film:films(title, slug, poster_url), cinema:cinemas(name, city)";
 
-async function soldCount(sb: Sb, screeningId: string) {
+/** Paid/issued quantities for a screening, in total and per ticket type. */
+async function soldTally(sb: Sb, screeningId: string) {
   const { data } = await sb
     .from("tickets")
-    .select("quantity, status")
+    .select("quantity, status, ticket_type_id")
     .eq("screening_id", screeningId)
     .in("status", PAID_STATUSES);
-  return (data ?? []).reduce((sum: number, row: { quantity: number }) => sum + row.quantity, 0);
+  let total = 0;
+  const byType = new Map<string, number>();
+  for (const row of (data ?? []) as { quantity: number; ticket_type_id: string | null }[]) {
+    total += row.quantity;
+    if (row.ticket_type_id) {
+      byType.set(row.ticket_type_id, (byType.get(row.ticket_type_id) ?? 0) + row.quantity);
+    }
+  }
+  return { total, byType };
 }
 
 export async function loadOffer(screeningId: string): Promise<ScreeningOffer | null> {
@@ -56,11 +77,49 @@ export async function loadOffer(screeningId: string): Promise<ScreeningOffer | n
     .eq("published", true)
     .maybeSingle();
   if (!data) return null;
-  const sold = data.capacity ? await soldCount(sb, screeningId) : 0;
+
+  const { typesForScreening } = await import("./ticket-types");
+  const { data: typeRows } = await sb.from("ticket_types").select("*").eq("published", true);
+  const resolved = typesForScreening(typeRows ?? [], data);
+
+  const sold = await soldTally(sb, screeningId);
+  const screeningRemaining = data.capacity ? Math.max(0, data.capacity - sold.total) : null;
+
+  const types: OfferTicketType[] =
+    resolved.length > 0
+      ? resolved.map((t: any) => ({
+          id: t.id as string,
+          name: t.name as string,
+          description: (t.description as string | null) ?? null,
+          price_kes: Number(t.price_kes ?? 0),
+          capacity: (t.capacity as number | null) ?? null,
+          remaining:
+            t.capacity != null
+              ? Math.max(
+                  0,
+                  Math.min(
+                    Number(t.capacity) - (sold.byType.get(t.id) ?? 0),
+                    screeningRemaining ?? Number.MAX_SAFE_INTEGER,
+                  ),
+                )
+              : screeningRemaining,
+        }))
+      : [
+          {
+            id: null,
+            name: Number(data.price_kes ?? 0) > 0 ? "Standard admission" : "Free entry",
+            description: null,
+            price_kes: Number(data.price_kes ?? 0),
+            capacity: data.capacity ?? null,
+            remaining: screeningRemaining,
+          },
+        ];
+
   return {
     ...data,
     price_kes: Number(data.price_kes ?? 0),
-    remaining: data.capacity ? Math.max(0, data.capacity - sold) : null,
+    remaining: screeningRemaining,
+    types,
   } as ScreeningOffer;
 }
 
@@ -107,7 +166,7 @@ export async function deliverTicket(reference: string) {
       <p style="margin:0 0 8px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#bdb8b0">Your ticket code</p>
       <p style="margin:0;font-size:30px;letter-spacing:.14em;font-weight:bold">${ticket.reference}</p>
       <p style="margin:14px 0 0;color:#bdb8b0;font-size:14px">
-        ${ticket.quantity} ${ticket.quantity > 1 ? "tickets" : "ticket"} · ${paid ? money(Number(ticket.total_kes)) : "Free entry"}
+        ${ticket.ticket_type_name ? `${ticket.ticket_type_name} · ` : ""}${ticket.quantity} ${ticket.quantity > 1 ? "tickets" : "ticket"} · ${paid ? money(Number(ticket.total_kes)) : "Free entry"}
         ${ticket.mpesa_receipt ? `<br/>M-Pesa receipt: ${ticket.mpesa_receipt}` : ""}
       </p>
     </div>
@@ -167,7 +226,21 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     );
   }
 
-  const unit = Number(offer.price_kes ?? 0);
+  const chosen = input.ticket_type_id
+    ? offer.types.find((t) => t.id === input.ticket_type_id)
+    : offer.types.length === 1
+      ? offer.types[0]
+      : undefined;
+  if (!chosen) throw new Error("Choose a ticket type for this screening.");
+  if (chosen.remaining !== null && chosen.remaining < input.quantity) {
+    throw new Error(
+      chosen.remaining === 0
+        ? `${chosen.name} is sold out.`
+        : `Only ${chosen.remaining} ${chosen.name} ticket${chosen.remaining === 1 ? "" : "s"} left.`,
+    );
+  }
+
+  const unit = Number(chosen.price_kes ?? 0);
   const total = unit * input.quantity;
   const free = total <= 0;
   const reference = `SS${code(6)}`;
@@ -184,6 +257,8 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     .insert({
       reference,
       screening_id: input.screening_id,
+      ticket_type_id: chosen.id,
+      ticket_type_name: chosen.name,
       name: input.name,
       email: input.email.toLowerCase(),
       phone: input.phone || null,
@@ -247,6 +322,7 @@ export type TicketStatus = {
   name: string;
   email: string;
   quantity: number;
+  ticket_type_name: string | null;
   total_kes: number;
   is_free: boolean;
   mpesa_receipt: string | null;
@@ -268,7 +344,7 @@ export async function ticketStatus(reference: string): Promise<TicketStatus | nu
   const { data } = await sb
     .from("tickets")
     .select(
-      "reference, status, name, email, quantity, total_kes, is_free, mpesa_receipt, payment_error, email_sent_at, qr_token, screening:screenings(starts_at, screen_label, city, ticket_terms, film:films(title, slug, poster_url), cinema:cinemas(name, city))",
+      "reference, status, name, email, quantity, ticket_type_name, total_kes, is_free, mpesa_receipt, payment_error, email_sent_at, qr_token, screening:screenings(starts_at, screen_label, city, ticket_terms, film:films(title, slug, poster_url), cinema:cinemas(name, city))",
     )
     .eq("reference", reference.toUpperCase())
     .maybeSingle();
@@ -333,6 +409,7 @@ export type AdminTicket = {
   email: string;
   phone: string | null;
   quantity: number;
+  ticket_type_name: string | null;
   total_kes: number;
   status: string;
   is_free: boolean;
@@ -348,7 +425,7 @@ export async function listTickets(sb: Sb): Promise<AdminTicket[]> {
   const { data, error } = await sb
     .from("tickets")
     .select(
-      "id, reference, screening_id, name, email, phone, quantity, total_kes, status, is_free, mpesa_receipt, payment_error, email_sent_at, email_error, checked_in_at, created_at",
+      "id, reference, screening_id, name, email, phone, quantity, ticket_type_name, total_kes, status, is_free, mpesa_receipt, payment_error, email_sent_at, email_error, checked_in_at, created_at",
     )
     .order("created_at", { ascending: false });
   if (error) throw new Error(error.message);

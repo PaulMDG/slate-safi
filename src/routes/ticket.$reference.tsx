@@ -135,7 +135,10 @@ function TicketPage() {
               <dt className="text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
                 Tickets
               </dt>
-              <dd className="mt-1">{data.quantity}</dd>
+              <dd className="mt-1">
+                {data.quantity}
+                {data.ticket_type_name ? ` × ${data.ticket_type_name}` : ""}
+              </dd>
             </div>
             <div>
               <dt className="text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">

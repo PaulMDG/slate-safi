@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ExternalLink, MapPin, Ticket } from "lucide-react";
 import { listScreenings } from "@/lib/content.functions";
 import type { ScreeningListing } from "@/lib/content.types";
+import { lowestPrice } from "@/lib/ticket-types";
 import { socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/screenings")({
@@ -120,6 +121,8 @@ function ScreeningsPage() {
 function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
   const ticketUrl = s.ticket_url || s.cinema?.ticketing_url || null;
   const city = s.city || s.cinema?.city;
+  const types = s.ticket_types ?? [];
+  const from = lowestPrice(types, Number(s.price_kes ?? 0));
 
   const poster = s.film?.poster_url ?? s.film?.hero_image_url ?? null;
 
@@ -187,13 +190,18 @@ function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
               className="inline-flex items-center gap-2 rounded-sm bg-primary px-6 py-3 font-display text-[0.65rem] font-bold uppercase tracking-[0.18em] text-primary-foreground transition-opacity hover:opacity-90"
             >
               <Ticket className="h-3.5 w-3.5" />
-              {Number(s.price_kes) > 0 ? "Buy tickets" : "Register free"}
+              {from > 0 ? "Buy tickets" : "Register free"}
             </Link>
             <span className="text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
-              {Number(s.price_kes) > 0
-                ? `KES ${Number(s.price_kes).toLocaleString("en-KE")} · M-Pesa`
+              {from > 0
+                ? `${types.length > 1 ? "From " : ""}KES ${from.toLocaleString("en-KE")} · M-Pesa`
                 : "Free entry · ticket by email"}
             </span>
+            {types.length > 1 && (
+              <span className="text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
+                {types.map((t) => t.name).join(" · ")}
+              </span>
+            )}
           </div>
         ) : ticketUrl && !s.sold_out ? (
           <a

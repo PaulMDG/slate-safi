@@ -191,6 +191,19 @@ export const screeningSchema = z.object({
   ticket_terms: z.string().trim().max(1000).optional().nullable(),
 });
 
+export const ticketTypeSchema = z.object({
+  id: z.string().uuid().optional(),
+  name: z.string().trim().min(1).max(120),
+  description: z.string().trim().max(600).optional().nullable(),
+  price_kes: z.number().min(0).max(1_000_000),
+  capacity: z.number().int().min(0).max(100_000).optional().nullable(),
+  screening_id: z.string().uuid().optional().nullable(),
+  film_id: z.string().uuid().optional().nullable(),
+  cinema_id: z.string().uuid().optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999),
+  published: z.boolean(),
+});
+
 export const videoSchema = z.object({
   id: z.string().uuid().optional(),
   title: z.string().trim().min(1).max(200),

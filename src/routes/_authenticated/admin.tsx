@@ -15,6 +15,8 @@ import {
   deleteHomepageSlide,
   deletePressItem,
   deleteScreening,
+  deleteTicketType,
+  saveTicketType,
   deleteVideo,
   loadAdminData,
   saveCinema,
@@ -321,6 +323,63 @@ function AdminDashboard() {
     [films, cinemas],
   );
 
+  const ticketTypes = data?.ticketTypes ?? [];
+
+  const TICKET_TYPE_FIELDS = useMemo<readonly FieldSpec[]>(
+    () => [
+      {
+        key: "name",
+        label: "Ticket name (e.g. Regular, VIP, Student)",
+        type: "text",
+        required: true,
+      },
+      { key: "price_kes", label: "Price in KES (0 = free)", type: "number" },
+      {
+        key: "description",
+        label: "What this ticket includes (optional)",
+        type: "textarea",
+        full: true,
+      },
+      { key: "capacity", label: "How many available (blank = unlimited)", type: "number" },
+      {
+        key: "screening_id",
+        label: "Only for this date (leave blank to reuse across dates)",
+        type: "select",
+        full: true,
+        options: [
+          { value: "", label: "— Not tied to one date —" },
+          ...screenings.map((s) => ({
+            value: s.id,
+            label: `${films.find((f) => f.id === s.film_id)?.title ?? "Film"} · ${
+              cinemas.find((c) => c.id === s.cinema_id)?.name ?? "Cinema"
+            } · ${new Date(s.starts_at).toLocaleDateString("en-KE", { dateStyle: "medium" })}`,
+          })),
+        ],
+      },
+      {
+        key: "film_id",
+        label: "Film (applies to every date of this film)",
+        type: "select",
+        options: [
+          { value: "", label: "— Any film —" },
+          ...films.map((f) => ({ value: f.id, label: f.title })),
+        ],
+      },
+      {
+        key: "cinema_id",
+        label: "Cinema (applies to every date at this cinema)",
+        type: "select",
+        options: [
+          { value: "", label: "— Any cinema —" },
+          ...cinemas.map((c) => ({ value: c.id, label: c.name })),
+        ],
+      },
+      { key: "sort_order", label: "Sort order", type: "number" },
+      { key: "published", label: "On sale", type: "boolean" },
+    ],
+    [films, cinemas, screenings],
+  );
+
   const gallery = useMemo(
     () => (data?.gallery ?? []).filter((g) => g.film_id === activeFilmId),
     [data, activeFilmId],
@@ -546,7 +605,52 @@ function AdminDashboard() {
           />
         )}
 
-        {tab === "Tickets" && <TicketsPanel data={data!} />}
+        {tab === "Tickets" && (
+          <div className="space-y-16">
+            <CrudSection
+              title="Ticket types & prices"
+              fields={TICKET_TYPE_FIELDS}
+              rows={ticketTypes}
+              label={(r) => {
+                const scope = r.screening_id
+                  ? (() => {
+                      const s = screenings.find((row) => row.id === r.screening_id);
+                      const film = films.find((f) => f.id === s?.film_id)?.title ?? "Film";
+                      return `${film} · ${
+                        s ? new Date(s.starts_at).toLocaleDateString("en-KE", { dateStyle: "medium" }) : "date"
+                      }`;
+                    })()
+                  : [
+                      r.film_id ? films.find((f) => f.id === r.film_id)?.title : null,
+                      r.cinema_id ? cinemas.find((c) => c.id === r.cinema_id)?.name : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ") || "All screenings";
+                return `${r.name as string} · KES ${Number(r.price_kes ?? 0).toLocaleString("en-KE")} — ${scope}${
+                  r.published ? "" : " (hidden)"
+                }`;
+              }}
+              blank={{
+                name: "",
+                price_kes: 0,
+                capacity: null,
+                screening_id: null,
+                film_id: null,
+                cinema_id: null,
+                published: true,
+                sort_order: ticketTypes.length,
+              }}
+              save={saveTicketType}
+              remove={deleteTicketType}
+              onDone={refetch}
+            />
+            <div className="rule-top pt-12">
+              <TicketsPanel data={data!} />
+            </div>
+          </div>
+        )}
+
+
 
 
         {tab === "Cinemas" && (
@@ -713,7 +817,11 @@ function CrudSection({
     setPending(true);
     try {
       const payload: RecordValues = {};
-      for (const field of fields) payload[field.key] = draft[field.key] ?? null;
+      for (const field of fields) {
+        const raw = draft[field.key] ?? null;
+        // Unselected relation dropdowns come through as "" — store them as empty.
+        payload[field.key] = raw === "" && field.key.endsWith("_id") ? null : raw;
+      }
       for (const key of ["id", "film_id"]) if (draft[key]) payload[key] = draft[key];
       if (payload["sort_order"] == null) payload["sort_order"] = 0;
       await saveFn({ data: payload });

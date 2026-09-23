@@ -957,6 +957,73 @@ export type Database = {
         }
         Relationships: []
       }
+      ticket_types: {
+        Row: {
+          capacity: number | null
+          cinema_id: string | null
+          created_at: string
+          description: string | null
+          film_id: string | null
+          id: string
+          name: string
+          price_kes: number
+          published: boolean
+          screening_id: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number | null
+          cinema_id?: string | null
+          created_at?: string
+          description?: string | null
+          film_id?: string | null
+          id?: string
+          name: string
+          price_kes?: number
+          published?: boolean
+          screening_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number | null
+          cinema_id?: string | null
+          created_at?: string
+          description?: string | null
+          film_id?: string | null
+          id?: string
+          name?: string
+          price_kes?: number
+          published?: boolean
+          screening_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_types_cinema_id_fkey"
+            columns: ["cinema_id"]
+            isOneToOne: false
+            referencedRelation: "cinemas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ticket_types_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ticket_types_screening_id_fkey"
+            columns: ["screening_id"]
+            isOneToOne: false
+            referencedRelation: "screenings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tickets: {
         Row: {
           checked_in_at: string | null
@@ -979,6 +1046,8 @@ export type Database = {
           reference: string
           screening_id: string
           status: string
+          ticket_type_id: string | null
+          ticket_type_name: string | null
           total_kes: number
           unit_price_kes: number
           updated_at: string
@@ -1004,6 +1073,8 @@ export type Database = {
           reference: string
           screening_id: string
           status?: string
+          ticket_type_id?: string | null
+          ticket_type_name?: string | null
           total_kes?: number
           unit_price_kes?: number
           updated_at?: string
@@ -1029,6 +1100,8 @@ export type Database = {
           reference?: string
           screening_id?: string
           status?: string
+          ticket_type_id?: string | null
+          ticket_type_name?: string | null
           total_kes?: number
           unit_price_kes?: number
           updated_at?: string
@@ -1039,6 +1112,13 @@ export type Database = {
             columns: ["screening_id"]
             isOneToOne: false
             referencedRelation: "screenings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_ticket_type_id_fkey"
+            columns: ["ticket_type_id"]
+            isOneToOne: false
+            referencedRelation: "ticket_types"
             referencedColumns: ["id"]
           },
         ]

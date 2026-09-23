@@ -11,6 +11,7 @@ import {
   pressSchema,
   screeningSchema,
   slideSchema,
+  ticketTypeSchema,
   submissionStatusSchema,
   videoSchema,
 } from "./content.schemas";
@@ -200,4 +201,20 @@ export const deleteVideo = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { adminDelete } = await import("./admin.server");
     return adminDelete(context.supabase as any, context.userId, "videos", data.id);
+  });
+
+export const saveTicketType = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => ticketTypeSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminUpsert } = await import("./admin.server");
+    return adminUpsert(context.supabase as any, context.userId, "ticket_types", data);
+  });
+
+export const deleteTicketType = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idInput.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminDelete } = await import("./admin.server");
+    return adminDelete(context.supabase as any, context.userId, "ticket_types", data.id);
   });
