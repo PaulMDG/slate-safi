@@ -817,7 +817,11 @@ function CrudSection({
     setPending(true);
     try {
       const payload: RecordValues = {};
-      for (const field of fields) payload[field.key] = draft[field.key] ?? null;
+      for (const field of fields) {
+        const raw = draft[field.key] ?? null;
+        // Unselected relation dropdowns come through as "" — store them as empty.
+        payload[field.key] = raw === "" && field.key.endsWith("_id") ? null : raw;
+      }
       for (const key of ["id", "film_id"]) if (draft[key]) payload[key] = draft[key];
       if (payload["sort_order"] == null) payload["sort_order"] = 0;
       await saveFn({ data: payload });

@@ -54,6 +54,7 @@ function BookingPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [typeId, setTypeId] = useState<string | null>(offer?.types[0]?.id ?? null);
   const [honeypot, setHoneypot] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,10 +70,16 @@ function BookingPage() {
     );
   }
 
-  const free = Number(offer.price_kes) <= 0;
-  const closed = !offer.tickets_enabled || offer.sold_out || offer.remaining === 0;
-  const total = Number(offer.price_kes) * quantity;
-  const maxQty = Math.min(10, offer.remaining ?? 10) || 1;
+  const types = offer.types;
+  const selected =
+    types.find((t) => t.id === typeId) ?? types.find((t) => t.remaining !== 0) ?? types[0]!;
+  const price = Number(selected.price_kes ?? 0);
+  const free = price <= 0;
+  const soldOutEverywhere = types.every((t) => t.remaining === 0);
+  const closed =
+    !offer.tickets_enabled || offer.sold_out || offer.remaining === 0 || soldOutEverywhere;
+  const total = price * quantity;
+  const maxQty = Math.min(10, selected.remaining ?? 10) || 1;
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -82,10 +89,11 @@ function BookingPage() {
       const result = await book({
         data: {
           screening_id: offer!.id,
+          ticket_type_id: selected.id,
           name,
           email,
           phone: phone || null,
-          quantity,
+          quantity: Math.min(quantity, maxQty),
           honeypot,
           elapsed_ms: Date.now() - startedAt.current,
         },
