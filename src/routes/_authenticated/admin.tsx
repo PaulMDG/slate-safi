@@ -15,6 +15,8 @@ import {
   deleteHomepageSlide,
   deletePressItem,
   deleteScreening,
+  deleteTicketType,
+  saveTicketType,
   deleteVideo,
   loadAdminData,
   saveCinema,
@@ -319,6 +321,63 @@ function AdminDashboard() {
       { key: "sort_order", label: "Sort order", type: "number" },
     ],
     [films, cinemas],
+  );
+
+  const ticketTypes = data?.ticketTypes ?? [];
+
+  const TICKET_TYPE_FIELDS = useMemo<readonly FieldSpec[]>(
+    () => [
+      {
+        key: "name",
+        label: "Ticket name (e.g. Regular, VIP, Student)",
+        type: "text",
+        required: true,
+      },
+      { key: "price_kes", label: "Price in KES (0 = free)", type: "number" },
+      {
+        key: "description",
+        label: "What this ticket includes (optional)",
+        type: "textarea",
+        full: true,
+      },
+      { key: "capacity", label: "How many available (blank = unlimited)", type: "number" },
+      {
+        key: "screening_id",
+        label: "Only for this date (leave blank to reuse across dates)",
+        type: "select",
+        full: true,
+        options: [
+          { value: "", label: "— Not tied to one date —" },
+          ...screenings.map((s) => ({
+            value: s.id,
+            label: `${films.find((f) => f.id === s.film_id)?.title ?? "Film"} · ${
+              cinemas.find((c) => c.id === s.cinema_id)?.name ?? "Cinema"
+            } · ${new Date(s.starts_at).toLocaleDateString("en-KE", { dateStyle: "medium" })}`,
+          })),
+        ],
+      },
+      {
+        key: "film_id",
+        label: "Film (applies to every date of this film)",
+        type: "select",
+        options: [
+          { value: "", label: "— Any film —" },
+          ...films.map((f) => ({ value: f.id, label: f.title })),
+        ],
+      },
+      {
+        key: "cinema_id",
+        label: "Cinema (applies to every date at this cinema)",
+        type: "select",
+        options: [
+          { value: "", label: "— Any cinema —" },
+          ...cinemas.map((c) => ({ value: c.id, label: c.name })),
+        ],
+      },
+      { key: "sort_order", label: "Sort order", type: "number" },
+      { key: "published", label: "On sale", type: "boolean" },
+    ],
+    [films, cinemas, screenings],
   );
 
   const gallery = useMemo(
