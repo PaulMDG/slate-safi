@@ -409,6 +409,7 @@ export type AdminTicket = {
   email: string;
   phone: string | null;
   quantity: number;
+  ticket_type_name: string | null;
   total_kes: number;
   status: string;
   is_free: boolean;
@@ -424,7 +425,7 @@ export async function listTickets(sb: Sb): Promise<AdminTicket[]> {
   const { data, error } = await sb
     .from("tickets")
     .select(
-      "id, reference, screening_id, name, email, phone, quantity, total_kes, status, is_free, mpesa_receipt, payment_error, email_sent_at, email_error, checked_in_at, created_at",
+      "id, reference, screening_id, name, email, phone, quantity, ticket_type_name, total_kes, status, is_free, mpesa_receipt, payment_error, email_sent_at, email_error, checked_in_at, created_at",
     )
     .order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
