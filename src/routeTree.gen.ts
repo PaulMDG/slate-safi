@@ -15,6 +15,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AwardsRouteImport } from './routes/awards'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as MusicRouteImport } from './routes/music'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as ScreeningsRouteImport } from './routes/screenings'
@@ -62,6 +63,11 @@ const AwardsRoute = AwardsRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MusicRoute = MusicRouteImport.update({
+  id: '/music',
+  path: '/music',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnerRoute = PartnerRouteImport.update({
@@ -167,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/awards': typeof AwardsRoute
   '/mcp': typeof McpRoute
+  '/music': typeof MusicRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
@@ -193,6 +200,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/awards': typeof AwardsRoute
   '/mcp': typeof McpRoute
+  '/music': typeof MusicRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
@@ -221,6 +229,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/awards': typeof AwardsRoute
   '/mcp': typeof McpRoute
+  '/music': typeof MusicRoute
   '/partner': typeof PartnerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
@@ -249,6 +258,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/awards'
     | '/mcp'
+    | '/music'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/awards'
     | '/mcp'
+    | '/music'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/awards'
     | '/mcp'
+    | '/music'
     | '/partner'
     | '/rss.xml'
     | '/screenings'
@@ -330,6 +342,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   AwardsRoute: typeof AwardsRoute
   McpRoute: typeof McpRoute
+  MusicRoute: typeof MusicRoute
   PartnerRoute: typeof PartnerRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   ScreeningsRoute: typeof ScreeningsRoute
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/music': {
+      id: '/music'
+      path: '/music'
+      fullPath: '/music'
+      preLoaderRoute: typeof MusicRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partner': {
@@ -548,6 +568,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   AwardsRoute: AwardsRoute,
   McpRoute: McpRoute,
+  MusicRoute: MusicRoute,
   PartnerRoute: PartnerRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   ScreeningsRoute: ScreeningsRoute,
