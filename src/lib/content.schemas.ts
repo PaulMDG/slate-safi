@@ -226,3 +226,16 @@ export const videoLeadSchema = z.object({
   source: z.string().trim().max(60).optional(),
   ...spamFields,
 });
+
+export const musicTrackSchema = z.object({
+  id: z.string().uuid().optional(),
+  title: z.string().trim().min(1).max(200),
+  artist: z.string().trim().max(200).optional().nullable(),
+  album: z.string().trim().max(200).optional().nullable(),
+  audio_url: z.string().trim().min(1).max(600),
+  cover_url: z.string().trim().max(600).optional().nullable(),
+  film_id: z.string().uuid().optional().nullable(),
+  description: z.string().trim().max(2000).optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999),
+  published: z.boolean(),
+});

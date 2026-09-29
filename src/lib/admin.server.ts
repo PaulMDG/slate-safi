@@ -20,6 +20,7 @@ export type AdminSnapshot = {
   ticketTypes: Tables<"ticket_types">[];
   videos: Tables<"videos">[];
   videoLeads: Tables<"video_leads">[];
+  music: Tables<"music_tracks">[];
 };
 
 export async function isAdmin(sb: SupabaseLike, userId: string) {
@@ -39,7 +40,7 @@ export async function assertAdmin(sb: SupabaseLike, userId: string) {
 }
 
 export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapshot> {
-  const [films, credits, gallery, posts, press, contact, subscribers, homepage, slides, cinemas, screenings, ticketTypes, videos, videoLeads] =
+  const [films, credits, gallery, posts, press, contact, subscribers, homepage, slides, cinemas, screenings, ticketTypes, videos, videoLeads, music] =
     await Promise.all([
     sb.from("films").select("*").order("sort_order", { ascending: true }),
     sb.from("film_credits").select("*").order("sort_order", { ascending: true }),
@@ -55,6 +56,7 @@ export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapsho
       sb.from("ticket_types").select("*").order("sort_order", { ascending: true }),
       sb.from("videos").select("*").order("sort_order", { ascending: true }),
       sb.from("video_leads").select("*").order("created_at", { ascending: false }),
+      sb.from("music_tracks").select("*").order("sort_order", { ascending: true }),
     ]);
   return {
     films: films.data ?? [],
@@ -71,6 +73,7 @@ export async function fetchAdminSnapshot(sb: SupabaseLike): Promise<AdminSnapsho
     ticketTypes: ticketTypes.data ?? [],
     videos: videos.data ?? [],
     videoLeads: videoLeads.data ?? [],
+    music: music.data ?? [],
   };
 }
 

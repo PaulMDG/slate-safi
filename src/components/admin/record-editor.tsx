@@ -5,7 +5,7 @@ import { VideoField } from "./video-field";
 export type FieldSpec = {
   key: string;
   label: string;
-  type: "text" | "textarea" | "number" | "boolean" | "select" | "image" | "video" | "datetime";
+  type: "text" | "textarea" | "number" | "boolean" | "select" | "image" | "video" | "audio" | "datetime";
   options?: readonly { value: string; label: string }[];
   placeholder?: string;
   full?: boolean;
@@ -65,12 +65,13 @@ export function RecordEditor({
                       onChange={(next) => set(field.key, next)}
                     />
                   </div>
-                ) : field.type === "video" ? (
+                ) : field.type === "video" || field.type === "audio" ? (
                   <div className="mt-2">
                     <VideoField
+                      kind={field.type}
                       id={`f-${field.key}`}
                       value={(raw as string) ?? ""}
-                      folder={field.folder ?? "videos"}
+                      folder={field.folder ?? (field.type === "audio" ? "music" : "videos")}
                       onChange={(next) => set(field.key, next)}
                     />
                   </div>

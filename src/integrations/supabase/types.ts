@@ -486,6 +486,59 @@ export type Database = {
         }
         Relationships: []
       }
+      music_tracks: {
+        Row: {
+          album: string | null
+          artist: string | null
+          audio_url: string
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          film_id: string | null
+          id: string
+          published: boolean
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          album?: string | null
+          artist?: string | null
+          audio_url: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          film_id?: string | null
+          id?: string
+          published?: boolean
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          album?: string | null
+          artist?: string | null
+          audio_url?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          film_id?: string | null
+          id?: string
+          published?: boolean
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "music_tracks_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_subscribers: {
         Row: {
           country: string | null

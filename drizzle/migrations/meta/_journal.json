@@ -15,6 +15,13 @@
       "when": 1790170958631,
       "tag": "0001_add_ticket_types",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790656157673,
+      "tag": "0002_add_music_tracks",
+      "breakpoints": true
     }
   ]
 }
