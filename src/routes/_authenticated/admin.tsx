@@ -18,6 +18,8 @@ import {
   deleteTicketType,
   saveTicketType,
   deleteVideo,
+  deleteMusicTrack,
+  saveMusicTrack,
   loadAdminData,
   saveCinema,
   saveScreening,
@@ -205,6 +207,17 @@ const VIDEO_FIELDS: readonly FieldSpec[] = [
   { key: "published", label: "Published", type: "boolean" },
 ];
 
+const MUSIC_FIELDS: readonly FieldSpec[] = [
+  { key: "title", label: "Track title", type: "text", required: true, full: true },
+  { key: "audio_url", label: "Audio file (MP3, WAV, M4A)", type: "audio", full: true, folder: "music", required: true },
+  { key: "artist", label: "Artist", type: "text" },
+  { key: "album", label: "Album / soundtrack", type: "text" },
+  { key: "cover_url", label: "Cover art", type: "image", full: true, folder: "music" },
+  { key: "description", label: "Description", type: "textarea", full: true },
+  { key: "sort_order", label: "Sort order", type: "number" },
+  { key: "published", label: "Published", type: "boolean" },
+];
+
 const TABS = [
   "Overview",
   "Homepage",
@@ -216,6 +229,7 @@ const TABS = [
   "Tickets",
   "Cinemas",
   "Videos",
+  "Music",
   "Press",
   "Social",
   "Automation",
@@ -713,6 +727,24 @@ function AdminDashboard() {
           ))}
 
         {tab === "AI studio" && <AiPanel admin={data!} onDone={refetchAll} />}
+
+        {tab === "Music" && (
+          <CrudSection
+            title="Music & soundtracks"
+            fields={MUSIC_FIELDS}
+            rows={data?.music ?? []}
+            label={(r) => `${r.title as string}${r.artist ? ` — ${r.artist as string}` : ""}${r.published ? "" : " (hidden)"}`}
+            blank={{
+              title: "",
+              audio_url: "",
+              sort_order: (data?.music ?? []).length,
+              published: true,
+            }}
+            save={saveMusicTrack}
+            remove={deleteMusicTrack}
+            onDone={refetch}
+          />
+        )}
 
         {tab === "Videos" && (
           <div className="space-y-16">

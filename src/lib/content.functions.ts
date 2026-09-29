@@ -269,3 +269,16 @@ export const submitVideoLead = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const listMusic = createServerFn({ method: "GET" }).handler(
+  async (): Promise<import("./content.types").MusicTrack[]> => {
+    const { publicSupabase } = await import("./content.server");
+    const { data, error } = await publicSupabase()
+      .from("music_tracks")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  },
+);

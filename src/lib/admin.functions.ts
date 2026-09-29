@@ -14,6 +14,7 @@ import {
   ticketTypeSchema,
   submissionStatusSchema,
   videoSchema,
+  musicTrackSchema,
 } from "./content.schemas";
 import type { AdminSnapshot } from "./admin.server";
 
@@ -217,4 +218,20 @@ export const deleteTicketType = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { adminDelete } = await import("./admin.server");
     return adminDelete(context.supabase as any, context.userId, "ticket_types", data.id);
+  });
+
+export const saveMusicTrack = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => musicTrackSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminUpsert } = await import("./admin.server");
+    return adminUpsert(context.supabase as any, context.userId, "music_tracks", data);
+  });
+
+export const deleteMusicTrack = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idInput.parse(data))
+  .handler(async ({ data, context }) => {
+    const { adminDelete } = await import("./admin.server");
+    return adminDelete(context.supabase as any, context.userId, "music_tracks", data.id);
   });

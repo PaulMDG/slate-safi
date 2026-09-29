@@ -59,3 +59,5 @@ export type ScreeningListing = Screening & {
 };
 
 export type Video = Tables<"videos">;
+
+export type MusicTrack = Tables<"music_tracks">;

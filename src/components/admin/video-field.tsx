@@ -22,19 +22,21 @@ export function VideoField({
   id,
   value,
   folder = "videos",
+  kind = "video",
   onChange,
 }: {
   id: string;
   value: string;
   folder?: string;
+  kind?: "video" | "audio";
   onChange: (next: string) => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
 
   async function upload(file: File) {
-    if (!file.type.startsWith("video/")) {
-      toast.error("Please choose a video file.");
+    if (!file.type.startsWith(`${kind}/`)) {
+      toast.error(`Please choose ${kind === "audio" ? "an audio" : "a video"} file.`);
       return;
     }
     setBusy(true);
@@ -49,7 +51,7 @@ export function VideoField({
     }
     const { data: pub } = supabase.storage.from("media").getPublicUrl(path);
     onChange(pub.publicUrl);
-    toast.success("Video uploaded.");
+    toast.success(kind === "audio" ? "Track uploaded." : "Video uploaded.");
   }
 
   return (
@@ -58,7 +60,7 @@ export function VideoField({
         id={id}
         type="text"
         value={value}
-        placeholder="Paste a YouTube/Vimeo link or upload a file"
+        placeholder={kind === "audio" ? "Upload an MP3/WAV file or paste a link" : "Paste a YouTube/Vimeo link or upload a file"}
         onChange={(e) => onChange(e.target.value)}
         className={inputClass}
       />
@@ -70,7 +72,7 @@ export function VideoField({
           className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-1.5 text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:opacity-60"
         >
           {busy ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
-          {busy ? "Uploading" : "Upload video"}
+          {busy ? "Uploading" : kind === "audio" ? "Upload music" : "Upload video"}
         </button>
         {value ? (
           <button
@@ -85,7 +87,7 @@ export function VideoField({
       <input
         ref={fileRef}
         type="file"
-        accept="video/*"
+        accept={`${kind}/*`}
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];
