@@ -35,6 +35,22 @@ function fmt(s: number) {
   return `${m}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 }
 
+/** Cross-origin storage URLs ignore the `download` attribute, so save via a blob. */
+async function downloadTrack(track: MusicTrack) {
+  const res = await fetch(track.audio_url);
+  if (!res.ok) return;
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const ext = track.audio_url.split(".").pop()?.split("?")[0] || "mp3";
+  a.href = url;
+  a.download = `${track.title}.${ext}`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function MusicPage() {
   const { tracks, homepage }: Data = Route.useLoaderData();
   const audioRef = useRef<HTMLAudioElement>(null);
