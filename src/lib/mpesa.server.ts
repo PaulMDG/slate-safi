@@ -13,7 +13,7 @@ export type MpesaConfig = {
 };
 
 export function siteUrl() {
-  return (process.env["SITE_URL"] || "https://www.slatesafi.app").replace(/\/$/, "");
+  return (process.env["SITE_URL"] || "https://slate-safi.lovable.app").replace(/\/$/, "");
 }
 
 export async function mpesaConfig(): Promise<MpesaConfig | null> {
