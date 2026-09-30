@@ -156,19 +156,31 @@ function MusicPage() {
           <ol className="divide-y divide-border border-y border-border">
             {tracks.map((t, i) => (
               <li key={t.id}>
-                <button
-                  type="button"
-                  onClick={() => select(i)}
-                  className={`flex w-full items-center gap-4 py-4 text-left transition-colors hover:text-primary ${i === index ? "text-primary" : ""}`}
-                >
-                  <span className="w-6 text-xs text-muted-foreground">
-                    {i === index && playing ? <Pause className="h-3.5 w-3.5" /> : String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate">{t.title}</span>
-                    {t.artist ? <span className="block truncate text-xs text-muted-foreground">{t.artist}</span> : null}
-                  </span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => select(i)}
+                    className={`flex min-w-0 flex-1 items-center gap-4 py-4 text-left transition-colors hover:text-primary ${i === index ? "text-primary" : ""}`}
+                  >
+                    <span className="w-6 text-xs text-muted-foreground">
+                      {i === index && playing ? <Pause className="h-3.5 w-3.5" /> : String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate">{t.title}</span>
+                      {t.artist ? <span className="block truncate text-xs text-muted-foreground">{t.artist}</span> : null}
+                    </span>
+                  </button>
+                  {t.downloadable ? (
+                    <a
+                      href={t.audio_url}
+                      download
+                      aria-label={`Download ${t.title}`}
+                      className="mr-1 text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      <Download className="h-4 w-4" />
+                    </a>
+                  ) : null}
+                </div>
                 {i === index && t.description ? (
                   <p className="pb-4 pl-10 text-sm text-muted-foreground">{t.description}</p>
                 ) : null}
