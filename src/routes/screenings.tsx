@@ -184,14 +184,13 @@ function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
       <div className="md:text-right">
         {(s.tickets_enabled || types.length > 0) && !s.sold_out ? (
           <div className="flex flex-col items-start gap-2 md:items-end">
-            <Link
-              to="/tickets/$screeningId"
-              params={{ screeningId: s.id }}
+            <a
+              href={`${TICKETS_ORIGIN}/tickets/${s.id}`}
               className="inline-flex items-center gap-2 rounded-sm bg-primary px-6 py-3 font-display text-[0.65rem] font-bold uppercase tracking-[0.18em] text-primary-foreground transition-opacity hover:opacity-90"
             >
               <Ticket className="h-3.5 w-3.5" />
               {from > 0 ? "Buy tickets" : "Register free"}
-            </Link>
+            </a>
             <span className="text-[0.6rem] uppercase tracking-[0.18em] text-muted-foreground">
               {from > 0
                 ? `${types.length > 1 ? "From " : ""}KES ${from.toLocaleString("en-KE")} · M-Pesa`
