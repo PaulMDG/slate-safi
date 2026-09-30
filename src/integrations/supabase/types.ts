@@ -494,6 +494,7 @@ export type Database = {
           cover_url: string | null
           created_at: string
           description: string | null
+          downloadable: boolean
           film_id: string | null
           id: string
           published: boolean
@@ -508,6 +509,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          downloadable?: boolean
           film_id?: string | null
           id?: string
           published?: boolean
@@ -522,6 +524,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          downloadable?: boolean
           film_id?: string | null
           id?: string
           published?: boolean

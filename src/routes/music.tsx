@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Music2, Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { Download, Music2, Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { getHomepage, listMusic } from "@/lib/content.functions";
 import type { Homepage, MusicTrack } from "@/lib/content.types";
 import { toSpotifyEmbed } from "@/components/site/video-player";
@@ -33,6 +33,22 @@ function fmt(s: number) {
   if (!Number.isFinite(s)) return "0:00";
   const m = Math.floor(s / 60);
   return `${m}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+}
+
+/** Cross-origin storage URLs ignore the `download` attribute, so save via a blob. */
+async function downloadTrack(track: MusicTrack) {
+  const res = await fetch(track.audio_url);
+  if (!res.ok) return;
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const ext = track.audio_url.split(".").pop()?.split("?")[0] || "mp3";
+  a.href = url;
+  a.download = `${track.title}.${ext}`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 function MusicPage() {
@@ -134,6 +150,15 @@ function MusicPage() {
                 <SkipForward className="h-5 w-5" />
               </button>
             </div>
+            {current.downloadable ? (
+              <button
+                type="button"
+                onClick={() => void downloadTrack(current)}
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-sm border border-border px-4 py-2.5 text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                <Download className="h-3.5 w-3.5" /> Download this track
+              </button>
+            ) : null}
             <audio
               ref={audioRef}
               src={current.audio_url}
@@ -147,19 +172,31 @@ function MusicPage() {
           <ol className="divide-y divide-border border-y border-border">
             {tracks.map((t, i) => (
               <li key={t.id}>
-                <button
-                  type="button"
-                  onClick={() => select(i)}
-                  className={`flex w-full items-center gap-4 py-4 text-left transition-colors hover:text-primary ${i === index ? "text-primary" : ""}`}
-                >
-                  <span className="w-6 text-xs text-muted-foreground">
-                    {i === index && playing ? <Pause className="h-3.5 w-3.5" /> : String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate">{t.title}</span>
-                    {t.artist ? <span className="block truncate text-xs text-muted-foreground">{t.artist}</span> : null}
-                  </span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => select(i)}
+                    className={`flex min-w-0 flex-1 items-center gap-4 py-4 text-left transition-colors hover:text-primary ${i === index ? "text-primary" : ""}`}
+                  >
+                    <span className="w-6 text-xs text-muted-foreground">
+                      {i === index && playing ? <Pause className="h-3.5 w-3.5" /> : String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate">{t.title}</span>
+                      {t.artist ? <span className="block truncate text-xs text-muted-foreground">{t.artist}</span> : null}
+                    </span>
+                  </button>
+                  {t.downloadable ? (
+                    <button
+                      type="button"
+                      onClick={() => void downloadTrack(t)}
+                      aria-label={`Download ${t.title}`}
+                      className="mr-1 text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      <Download className="h-4 w-4" />
+                    </button>
+                  ) : null}
+                </div>
                 {i === index && t.description ? (
                   <p className="pb-4 pl-10 text-sm text-muted-foreground">{t.description}</p>
                 ) : null}

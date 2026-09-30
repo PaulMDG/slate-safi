@@ -215,6 +215,7 @@ const MUSIC_FIELDS: readonly FieldSpec[] = [
   { key: "cover_url", label: "Cover art", type: "image", full: true, folder: "music" },
   { key: "description", label: "Description", type: "textarea", full: true },
   { key: "sort_order", label: "Sort order", type: "number" },
+  { key: "downloadable", label: "Allow listeners to download this track", type: "boolean" },
   { key: "published", label: "Published", type: "boolean" },
 ];
 
@@ -738,6 +739,7 @@ function AdminDashboard() {
               title: "",
               audio_url: "",
               sort_order: (data?.music ?? []).length,
+              downloadable: false,
               published: true,
             }}
             save={saveMusicTrack}
