@@ -151,13 +151,13 @@ function MusicPage() {
               </button>
             </div>
             {current.downloadable ? (
-              <a
-                href={current.audio_url}
-                download
-                className="mt-5 flex items-center justify-center gap-2 rounded-sm border border-border px-4 py-2.5 text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              <button
+                type="button"
+                onClick={() => void downloadTrack(current)}
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-sm border border-border px-4 py-2.5 text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary hover:text-primary"
               >
                 <Download className="h-3.5 w-3.5" /> Download this track
-              </a>
+              </button>
             ) : null}
             <audio
               ref={audioRef}
@@ -187,14 +187,14 @@ function MusicPage() {
                     </span>
                   </button>
                   {t.downloadable ? (
-                    <a
-                      href={t.audio_url}
-                      download
+                    <button
+                      type="button"
+                      onClick={() => void downloadTrack(t)}
                       aria-label={`Download ${t.title}`}
                       className="mr-1 text-muted-foreground transition-colors hover:text-primary"
                     >
                       <Download className="h-4 w-4" />
-                    </a>
+                    </button>
                   ) : null}
                 </div>
                 {i === index && t.description ? (
