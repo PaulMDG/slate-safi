@@ -1,4 +1,4 @@
-export const SITE_URL = "https://slate-safi.lovable.app";
+export const SITE_URL = "https://slatesafi.co.ke";
 export const SITE_NAME = "Slate Safi";
 
 /** Turns a stored image path into an absolute URL crawlers can fetch. */
