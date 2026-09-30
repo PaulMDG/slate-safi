@@ -237,5 +237,6 @@ export const musicTrackSchema = z.object({
   film_id: z.string().uuid().optional().nullable(),
   description: z.string().trim().max(2000).optional().nullable(),
   sort_order: z.number().int().min(0).max(9999),
+  downloadable: z.boolean().optional(),
   published: z.boolean(),
 });
