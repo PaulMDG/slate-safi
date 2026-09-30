@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Music2, Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { Download, Music2, Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { getHomepage, listMusic } from "@/lib/content.functions";
 import type { Homepage, MusicTrack } from "@/lib/content.types";
 import { toSpotifyEmbed } from "@/components/site/video-player";
@@ -134,6 +134,15 @@ function MusicPage() {
                 <SkipForward className="h-5 w-5" />
               </button>
             </div>
+            {current.downloadable ? (
+              <a
+                href={current.audio_url}
+                download
+                className="mt-5 flex items-center justify-center gap-2 rounded-sm border border-border px-4 py-2.5 text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                <Download className="h-3.5 w-3.5" /> Download this track
+              </a>
+            ) : null}
             <audio
               ref={audioRef}
               src={current.audio_url}
