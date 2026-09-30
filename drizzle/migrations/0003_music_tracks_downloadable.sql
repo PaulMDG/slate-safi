@@ -1,0 +1,1 @@
+ALTER TABLE public.music_tracks ADD COLUMN downloadable BOOLEAN NOT NULL DEFAULT false;
