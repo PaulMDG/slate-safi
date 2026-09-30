@@ -5,6 +5,10 @@ import type { ScreeningListing } from "@/lib/content.types";
 import { lowestPrice } from "@/lib/ticket-types";
 import { socialMeta } from "@/lib/seo";
 
+// Booking, M-Pesa and ticket emails run on the Lovable-hosted app; the
+// DigitalOcean static copy (slatesafi.co.ke) sends buyers there.
+const TICKETS_ORIGIN = "https://slate-safi.lovable.app";
+
 export const Route = createFileRoute("/screenings")({
   loader: (): Promise<ScreeningListing[]> => listScreenings(),
   head: () =>
