@@ -7,7 +7,7 @@ const NAV = [
   { to: "/films", label: "Films" },
   { to: "/videos", label: "Videos" },
   { to: "/music", label: "Music" },
-  { to: "/screenings", label: "Screenings" },
+  { to: "/screenings", label: "Showings" },
   { to: "/awards", label: "Awards" },
   { to: "/about", label: "About" },
   { to: "/news", label: "News" },
