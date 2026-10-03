@@ -10,10 +10,10 @@ export const Route = createFileRoute("/ticket/$reference")({
   head: () => ({
     meta: [
       { title: "Your ticket — Slate Safi" },
-      { name: "description", content: "Your Slate Safi screening ticket, code and QR pass." },
+      { name: "description", content: "Your Slate Safi showing ticket, code and QR pass." },
       { name: "robots", content: "noindex, nofollow" },
       { property: "og:title", content: "Your ticket — Slate Safi" },
-      { property: "og:description", content: "Your Slate Safi screening ticket." },
+      { property: "og:description", content: "Your Slate Safi showing ticket." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -97,7 +97,7 @@ function TicketPage() {
         {paid ? "Ticket confirmed" : pending ? "Waiting for payment" : "Payment not completed"}
       </p>
       <h1 className="mt-5 text-4xl leading-[0.95] sm:text-6xl">
-        {s?.film?.title ?? "Slate Safi screening"}
+        {s?.film?.title ?? "Slate Safi showing"}
       </h1>
       {s && (
         <>
@@ -185,7 +185,7 @@ function TicketPage() {
                   {data.payment_error ?? "The payment didn't go through."} You can start again from
                   the{" "}
                   <Link to="/screenings" className="text-primary hover:underline">
-                    screenings page
+                    showings page
                   </Link>
                   .
                 </p>

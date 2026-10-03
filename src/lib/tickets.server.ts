@@ -153,7 +153,7 @@ export async function deliverTicket(reference: string) {
   if (!ticket) throw new Error("Ticket not found");
 
   const s = ticket.screening ?? {};
-  const film = s.film?.title ?? "Slate Safi screening";
+  const film = s.film?.title ?? "Slate Safi showing";
   const venue = [s.cinema?.name, s.screen_label, s.city ?? s.cinema?.city]
     .filter(Boolean)
     .join(" · ");
@@ -218,13 +218,13 @@ export type BookingResult = {
 export async function createBooking(input: BookingInput): Promise<BookingResult> {
   const sb = await admin();
   const offer = await loadOffer(input.screening_id);
-  if (!offer) throw new Error("This screening is not available.");
+  if (!offer) throw new Error("This showing is not available.");
   if (!offer.tickets_enabled) throw new Error("Tickets are not on sale for this date.");
-  if (offer.sold_out) throw new Error("This screening is sold out.");
+  if (offer.sold_out) throw new Error("This showing is sold out.");
   if (offer.remaining !== null && offer.remaining < input.quantity) {
     throw new Error(
       offer.remaining === 0
-        ? "This screening is sold out."
+        ? "This showing is sold out."
         : `Only ${offer.remaining} ticket${offer.remaining === 1 ? "" : "s"} left.`,
     );
   }
@@ -234,7 +234,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     : offer.types.length === 1
       ? offer.types[0]
       : undefined;
-  if (!chosen) throw new Error("Choose a ticket type for this screening.");
+  if (!chosen) throw new Error("Choose a ticket type for this showing.");
   if (chosen.remaining !== null && chosen.remaining < input.quantity) {
     throw new Error(
       chosen.remaining === 0

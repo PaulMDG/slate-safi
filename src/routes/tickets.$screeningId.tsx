@@ -12,18 +12,18 @@ export const Route = createFileRoute("/tickets/$screeningId")({
     socialMeta({
       title: "Book tickets — Slate Safi",
       description:
-        "Reserve your seat for a Slate Safi screening. Pay with M-Pesa or register for free entry and get your ticket by email.",
+        "Reserve your seat for a Slate Safi showing. Pay with M-Pesa or register for free entry and get your ticket by email.",
       path: "/tickets",
     }),
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">
-      <h1 className="text-3xl">We couldn't load this screening</h1>
+      <h1 className="text-3xl">We couldn't load this showing</h1>
       <p className="mt-4 text-sm text-muted-foreground">Please refresh to try again.</p>
     </div>
   ),
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">
-      <h1 className="text-3xl">Screening not found</h1>
+      <h1 className="text-3xl">Showing not found</h1>
     </div>
   ),
   component: BookingPage,
@@ -62,9 +62,9 @@ function BookingPage() {
   if (!offer) {
     return (
       <div className="mx-auto max-w-2xl px-5 py-40 text-center">
-        <h1 className="text-3xl">This screening isn't available</h1>
+        <h1 className="text-3xl">This showing isn't available</h1>
         <Link to="/screenings" className="mt-6 inline-block text-sm text-primary">
-          See all screening dates
+          See all showing dates
         </Link>
       </div>
     );
@@ -109,14 +109,14 @@ function BookingPage() {
   return (
     <div className="mx-auto max-w-[1100px] px-5 pb-24 pt-36 md:px-10 md:pt-44">
       <Link to="/screenings" className="text-[0.6rem] uppercase tracking-[0.18em] text-primary">
-        ← All screening dates
+        ← All showing dates
       </Link>
 
       <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div>
           <p className="eyebrow">{free ? "Free registration" : "Buy tickets"}</p>
           <h1 className="mt-5 text-4xl leading-[0.95] sm:text-6xl">
-            {offer.film?.title ?? "Slate Safi screening"}
+            {offer.film?.title ?? "Slate Safi showing"}
           </h1>
           <p className="mt-6 text-base text-muted-foreground">{formatWhen(offer.starts_at)}</p>
           <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
