@@ -13,15 +13,15 @@ export const Route = createFileRoute("/screenings")({
   loader: (): Promise<ScreeningListing[]> => listScreenings(),
   head: () =>
     socialMeta({
-      title: "Screenings & Tickets — Slate Safi",
+      title: "Showings & Tickets — Slate Safi",
       description:
-        "Premiere and screening dates for Slate Safi films across Kenyan cinemas. Pick your cinema and book tickets through their own ticketing system.",
+        "Premiere and showing dates for Slate Safi films across Kenyan cinemas. Pick your cinema and book tickets through their own ticketing system.",
       path: "/screenings",
       image: "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/heroes/1787781256896-hq720.jpg",
     }),
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">
-      <h1 className="text-3xl">We couldn't load the screening dates</h1>
+      <h1 className="text-3xl">We couldn't load the showing dates</h1>
       <p className="mt-4 text-sm text-muted-foreground">Please refresh to try again.</p>
     </div>
   ),
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/screenings")({
 
 const KIND_LABEL: Record<string, string> = {
   premiere: "Premiere",
-  screening: "Screening",
+  screening: "Showing",
   festival: "Festival",
   special: "Special event",
 };
@@ -71,7 +71,7 @@ function ScreeningsPage() {
   return (
     <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-36 md:px-10 md:pt-44">
       <p className="eyebrow">Where to watch</p>
-      <h1 className="mt-5 max-w-3xl text-5xl leading-[0.92] sm:text-7xl">Screenings & tickets</h1>
+      <h1 className="mt-5 max-w-3xl text-5xl leading-[0.92] sm:text-7xl">Showings & tickets</h1>
       <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
         Slate Safi films play in cinemas across Kenya. Choose your cinema below and you'll be taken
         to that cinema's own ticketing system to complete your booking.
@@ -81,7 +81,7 @@ function ScreeningsPage() {
         <div className="mt-16 rounded-sm border border-border p-10">
           <h2 className="text-2xl">No dates announced right now</h2>
           <p className="mt-4 max-w-xl text-sm text-muted-foreground">
-            New premiere and screening dates are posted here first. Follow our{" "}
+            New premiere and showing dates are posted here first. Follow our{" "}
             <Link to="/news" className="text-primary underline-offset-4 hover:underline">
               news feed
             </Link>{" "}

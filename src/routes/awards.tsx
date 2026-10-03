@@ -360,7 +360,7 @@ function AwardsPage() {
           to="/screenings"
           className="mt-8 inline-flex items-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90"
         >
-          See screening dates
+          See showing dates
         </Link>
       </section>
     </div>
