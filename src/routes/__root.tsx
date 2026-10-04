@@ -96,6 +96,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/896eda11-ae2a-46ff-918e-ccd6a4b3694c/id-preview-5dae560f--bec2303c-9a08-4f73-8c2c-4f3c2f5d9608.lovable.app-1785424656094.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/896eda11-ae2a-46ff-918e-ccd6a4b3694c/id-preview-5dae560f--bec2303c-9a08-4f73-8c2c-4f3c2f5d9608.lovable.app-1785424656094.png" },
+      // Facebook Pixel
+      {
+        type: "text/javascript",
+        children: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','3504707569900720');fbq('track','PageView');`,
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
