@@ -96,6 +96,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/896eda11-ae2a-46ff-918e-ccd6a4b3694c/id-preview-5dae560f--bec2303c-9a08-4f73-8c2c-4f3c2f5d9608.lovable.app-1785424656094.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/896eda11-ae2a-46ff-918e-ccd6a4b3694c/id-preview-5dae560f--bec2303c-9a08-4f73-8c2c-4f3c2f5d9608.lovable.app-1785424656094.png" },
+    ],
+    scripts: [
       // Facebook Pixel
       {
         type: "text/javascript",
