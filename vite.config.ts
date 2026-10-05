@@ -13,11 +13,11 @@ const serverEnv = loadEnv(
 Object.assign(process.env, serverEnv);
 
 export default defineConfig({
-  // Build a normal Node.js HTTP server instead of a Cloudflare Worker.
   nitro: {
     preset: "node-server",
   },
 
+  
   tanstackStart: {
     server: {
       entry: "server",
