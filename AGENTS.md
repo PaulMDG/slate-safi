@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the video catalogue in the videos route and playback in a dedicated accessible watch dialog, so browsing portrait artwork does not force a landscape player into the catalogue layout.
