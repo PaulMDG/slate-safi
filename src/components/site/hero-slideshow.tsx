@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Pause, Play } from "lucide-react";
+import { toEmbedUrl } from "./video-player";
 
 export type HeroSlideView = {
   id: string;
   image_url: string;
+  video_url: string | null;
   eyebrow: string | null;
   title: string | null;
   logline: string | null;
@@ -33,6 +35,58 @@ function CtaButton({ label, url }: { label: string; url: string }) {
     <Link to={url} className={className}>
       {inner}
     </Link>
+  );
+}
+
+/** Builds a muted autoplay loop embed URL for background playback. */
+function backgroundEmbedSrc(embed: string): string {
+  const params = new URLSearchParams({
+    autoplay: "1",
+    mute: "1",
+    loop: "1",
+    controls: "0",
+    rel: "0",
+    playsinline: "1",
+    modestbranding: "1",
+    iv_load_policy: "3",
+    disablekb: "1",
+    fs: "0",
+  });
+  const id = embed.match(/\/embed\/([^/?#]+)/)?.[1];
+  if (embed.includes("youtube") && id) params.set("playlist", id);
+  return `${embed}?${params.toString()}`;
+}
+
+/** Muted, looping background video for the active hero slide. */
+function BackgroundVideo({ url, title }: { url: string; title: string }) {
+  const embed = toEmbedUrl(url);
+  if (embed) {
+    return (
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* 16:9 wrapper sized to cover the hero on any screen — never stretched. */}
+        <div className="absolute left-1/2 top-1/2 aspect-video w-[max(100vw,177.78vh)] -translate-x-1/2 -translate-y-1/2">
+          <iframe
+            src={backgroundEmbedSrc(embed)}
+            title={`${title} — trailer (muted)`}
+            allow="autoplay; encrypted-media; picture-in-picture"
+            referrerPolicy="strict-origin-when-cross-origin"
+            tabIndex={-1}
+            className="h-full w-full border-0"
+          />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <video
+      src={url}
+      autoPlay
+      muted
+      loop
+      playsInline
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+    />
   );
 }
 
@@ -97,6 +151,9 @@ export function HeroSlideshow({
               i === index ? "animate-hero-zoom" : ""
             } motion-reduce:animate-none`}
           />
+          {i === index && slide.video_url ? (
+            <BackgroundVideo url={slide.video_url} title={slide.title ?? "Featured film"} />
+          ) : null}
         </div>
       ))}
 

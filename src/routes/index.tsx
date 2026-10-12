@@ -124,6 +124,7 @@ function Home() {
       ? slides.map((s) => ({
           id: s.id,
           image_url: s.image_url,
+          video_url: s.video_url ?? null,
           eyebrow: s.eyebrow ?? heroEyebrow,
           title: s.title ?? heroTitle,
           logline: s.logline,
@@ -135,6 +136,7 @@ function Home() {
           .map((f) => ({
             id: f.id,
             image_url: (f.hero_image_url ?? f.poster_url) as string,
+            video_url: null,
             eyebrow: `${f.status === "released" ? "Now showing" : "In production"} · Slate Safi`,
             title: f.title,
             logline: f.logline ?? f.tagline,

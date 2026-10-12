@@ -144,11 +144,18 @@ const PRESS_FIELDS: readonly FieldSpec[] = [
 const SLIDE_FIELDS: readonly FieldSpec[] = [
   {
     key: "image_url",
-    label: "Slide image",
+    label: "Slide image (poster shown while the video loads)",
     type: "image",
     full: true,
     folder: "homepage",
     required: true,
+  },
+  {
+    key: "video_url",
+    label: "Background video (YouTube/Vimeo link or upload — muted, loops)",
+    type: "video",
+    full: true,
+    folder: "homepage",
   },
   { key: "eyebrow", label: "Eyebrow", type: "text" },
   { key: "title", label: "Headline", type: "text" },
