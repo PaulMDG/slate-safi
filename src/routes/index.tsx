@@ -124,6 +124,7 @@ function Home() {
       ? slides.map((s) => ({
           id: s.id,
           image_url: s.image_url,
+          video_url: s.video_url ?? null,
           eyebrow: s.eyebrow ?? heroEyebrow,
           title: s.title ?? heroTitle,
           logline: s.logline,

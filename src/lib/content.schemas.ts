@@ -150,6 +150,7 @@ export const homepageSchema = z.object({
 export const slideSchema = z.object({
   id: z.string().uuid().optional(),
   image_url: z.string().trim().min(1).max(600),
+  video_url: z.string().trim().max(600).optional().nullable(),
   eyebrow: z.string().trim().max(120).optional().nullable(),
   title: z.string().trim().max(160).optional().nullable(),
   logline: z.string().trim().max(600).optional().nullable(),
