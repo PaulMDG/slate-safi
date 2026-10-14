@@ -157,6 +157,8 @@ const SLIDE_FIELDS: readonly FieldSpec[] = [
     full: true,
     folder: "homepage",
   },
+  { key: "video_start_seconds", label: "Video starts at (seconds, optional)", type: "number" },
+  { key: "video_end_seconds", label: "Video stops at (seconds, optional — clip loops)", type: "number" },
   { key: "eyebrow", label: "Eyebrow", type: "text" },
   { key: "title", label: "Headline", type: "text" },
   { key: "logline", label: "Logline", type: "textarea", full: true },
