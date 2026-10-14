@@ -7,6 +7,8 @@ export type HeroSlideView = {
   id: string;
   image_url: string;
   video_url: string | null;
+  video_start?: number | null;
+  video_end?: number | null;
   eyebrow: string | null;
   title: string | null;
   logline: string | null;
@@ -39,7 +41,7 @@ function CtaButton({ label, url }: { label: string; url: string }) {
 }
 
 /** Builds a muted autoplay loop embed URL for background playback. */
-function backgroundEmbedSrc(embed: string): string {
+function backgroundEmbedSrc(embed: string, start?: number | null, end?: number | null): string {
   const params = new URLSearchParams({
     autoplay: "1",
     mute: "1",
@@ -54,19 +56,43 @@ function backgroundEmbedSrc(embed: string): string {
   });
   const id = embed.match(/\/embed\/([^/?#]+)/)?.[1];
   if (embed.includes("youtube") && id) params.set("playlist", id);
-  return `${embed}?${params.toString()}`;
+  if (start && start > 0) params.set("start", String(start));
+  if (end && end > (start ?? 0)) params.set("end", String(end));
+  const hash = embed.includes("vimeo") && start ? `#t=${start}s` : "";
+  return `${embed}?${params.toString()}${hash}`;
 }
 
 /** Muted, looping background video for the active hero slide. */
-function BackgroundVideo({ url, title }: { url: string; title: string }) {
+function BackgroundVideo({
+  url,
+  title,
+  start,
+  end,
+}: {
+  url: string;
+  title: string;
+  start?: number | null;
+  end?: number | null;
+}) {
   const embed = toEmbedUrl(url);
+  const from = start && start > 0 ? start : 0;
+  const clipMs = end && end > from ? (end - from) * 1000 : 0;
+  const [cycle, setCycle] = useState(0);
+  const ref = useRef<HTMLVideoElement>(null);
+  // Restart embedded clips when they reach their stop time so they loop.
+  useEffect(() => {
+    if (!embed || !clipMs) return;
+    const t = setInterval(() => setCycle((c) => c + 1), clipMs + 800);
+    return () => clearInterval(t);
+  }, [embed, clipMs]);
   if (embed) {
     return (
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* 16:9 wrapper sized to cover the hero on any screen — never stretched. */}
         <div className="absolute left-1/2 top-1/2 aspect-video w-[max(100vw,177.78vh)] -translate-x-1/2 -translate-y-1/2">
           <iframe
-            src={backgroundEmbedSrc(embed)}
+            key={cycle}
+            src={backgroundEmbedSrc(embed, from, end)}
             title={`${title} — trailer (muted)`}
             allow="autoplay; encrypted-media; picture-in-picture"
             referrerPolicy="strict-origin-when-cross-origin"
@@ -79,10 +105,17 @@ function BackgroundVideo({ url, title }: { url: string; title: string }) {
   }
   return (
     <video
+      ref={ref}
       src={url}
       autoPlay
       muted
       loop
+      onLoadedMetadata={(e) => {
+        if (from) e.currentTarget.currentTime = from;
+      }}
+      onTimeUpdate={(e) => {
+        if (clipMs && end && e.currentTarget.currentTime >= end) e.currentTarget.currentTime = from;
+      }}
       playsInline
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 h-full w-full object-cover"
@@ -104,7 +137,7 @@ export function HeroSlideshow({
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
   const count = slides.length;
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const go = useCallback((next: number) => setIndex(((next % count) + count) % count), [count]);
 
@@ -114,11 +147,17 @@ export function HeroSlideshow({
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
-    timer.current = setInterval(() => setIndex((i) => (i + 1) % count), Math.max(2500, intervalMs));
+    // Video slides with a clip length stay up for exactly that clip.
+    const s = slides[index];
+    const clip =
+      s?.video_url && s.video_end && s.video_end > (s.video_start ?? 0)
+        ? (s.video_end - (s.video_start ?? 0)) * 1000
+        : 0;
+    timer.current = setTimeout(() => setIndex((i) => (i + 1) % count), clip || Math.max(2500, intervalMs));
     return () => {
-      if (timer.current) clearInterval(timer.current);
+      if (timer.current) clearTimeout(timer.current);
     };
-  }, [playing, count, intervalMs, index]);
+  }, [playing, count, intervalMs, index, slides]);
 
   if (count === 0) return null;
 
@@ -152,7 +191,12 @@ export function HeroSlideshow({
             } motion-reduce:animate-none`}
           />
           {i === index && slide.video_url ? (
-            <BackgroundVideo url={slide.video_url} title={slide.title ?? "Featured film"} />
+            <BackgroundVideo
+              url={slide.video_url}
+              title={slide.title ?? "Featured film"}
+              start={slide.video_start}
+              end={slide.video_end}
+            />
           ) : null}
         </div>
       ))}
