@@ -427,6 +427,8 @@ export type Database = {
           sort_order: number
           title: string | null
           updated_at: string
+          video_end_seconds: number | null
+          video_start_seconds: number | null
           video_url: string | null
         }
         Insert: {
@@ -441,6 +443,8 @@ export type Database = {
           sort_order?: number
           title?: string | null
           updated_at?: string
+          video_end_seconds?: number | null
+          video_start_seconds?: number | null
           video_url?: string | null
         }
         Update: {
@@ -455,6 +459,8 @@ export type Database = {
           sort_order?: number
           title?: string | null
           updated_at?: string
+          video_end_seconds?: number | null
+          video_start_seconds?: number | null
           video_url?: string | null
         }
         Relationships: []
