@@ -1,0 +1,1 @@
+ALTER TABLE public.homepage_slides ADD COLUMN video_start_seconds integer, ADD COLUMN video_end_seconds integer;

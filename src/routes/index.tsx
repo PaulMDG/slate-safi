@@ -125,6 +125,8 @@ function Home() {
           id: s.id,
           image_url: s.image_url,
           video_url: s.video_url ?? null,
+          video_start: s.video_start_seconds ?? null,
+          video_end: s.video_end_seconds ?? null,
           eyebrow: s.eyebrow ?? heroEyebrow,
           title: s.title ?? heroTitle,
           logline: s.logline,

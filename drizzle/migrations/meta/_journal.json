@@ -29,6 +29,13 @@
       "when": 1790777529918,
       "tag": "0003_music_tracks_downloadable",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791977425855,
+      "tag": "0004_slide_video_clip",
+      "breakpoints": true
     }
   ]
 }
