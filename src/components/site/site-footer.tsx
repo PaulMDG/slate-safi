@@ -3,13 +3,13 @@ import { Instagram, Youtube, Mail, Facebook, Music2 } from "lucide-react";
 
 export function SiteFooter() {
   return (
-    <footer className="rule-top mt-24 bg-background">
+    <footer className="festival-footer mt-20">
       <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-20">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
               <span className="h-6 w-[3px] shrink-0 bg-primary" />
-              <span className="font-display text-base font-extrabold uppercase tracking-[0.28em]">
+              <span className="festival-wordmark text-4xl">
                 Slate Safi
               </span>
             </div>
@@ -64,7 +64,7 @@ export function SiteFooter() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-foreground transition-colors hover:border-primary hover:text-primary"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
