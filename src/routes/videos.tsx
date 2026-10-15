@@ -1,3 +1,4 @@
+import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowUpRight, Film, Play, Search, X } from "lucide-react";
@@ -45,20 +46,9 @@ function VideosPage() {
   return (
     <div className="pt-28 sm:pt-36">
       <section className="mx-auto max-w-[1400px] px-5 pb-16 md:px-10 md:pb-24">
-        <header className="grid gap-6 border-b border-border pb-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-primary">Slate Safi / Watch</p>
-            <h1 className="mt-3 max-w-3xl text-4xl leading-tight [letter-spacing:0] sm:text-5xl">
-              {homepage?.videos_heading || "Films, music & stories"}
-            </h1>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {homepage?.videos_body || "Trailers, music and a closer look at the people behind our films."}
-            </p>
-          </div>
-          <Button asChild variant="outline" className="w-fit shrink-0 gap-3">
-            <a href="https://www.youtube.com/@slatesafi" target="_blank" rel="noopener noreferrer">Slate Safi on YouTube <ArrowUpRight /></a>
-          </Button>
-        </header>
+        <PageIntro eyebrow="Watch / Slate Safi" title={homepage?.videos_heading || "Films, music & stories"} action={
+          <Button asChild variant="outline" className="w-fit gap-3"><a href="https://www.youtube.com/@slatesafi" target="_blank" rel="noopener noreferrer">Slate Safi on YouTube <ArrowUpRight /></a></Button>
+        }>{homepage?.videos_body || "Trailers, music and a closer look at the people behind our films."}</PageIntro>
 
         <div className="my-7 grid min-w-0 gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <div className="flex min-w-0 flex-wrap gap-2" aria-label="Video categories">
@@ -75,7 +65,7 @@ function VideosPage() {
           {visible.map((video) => <article key={video.id} className="group min-w-0">
             <Button variant="ghost" onClick={() => setActive(video)} aria-label={`Watch ${video.title}`} className="relative block aspect-[2/3] h-auto w-full overflow-hidden rounded-lg border border-border bg-surface p-0 transition-colors duration-200 hover:bg-secondary focus-visible:ring-2">
               {video.poster_url ? <img src={video.poster_url} alt={`${video.title} poster`} loading="lazy" decoding="async" className="h-full w-full object-contain" /> : <div className="flex h-full flex-col items-center justify-center gap-5 px-5 text-center whitespace-normal"><Film className="!size-10 text-primary/70" /><span className="font-display text-lg font-bold leading-snug text-foreground sm:text-2xl">{video.title}</span><span className="text-xs font-normal text-muted-foreground">Slate Safi</span></div>}
-              {video.featured ? <span className="absolute left-3 top-3 rounded-sm bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">Featured</span> : null}
+              {video.featured ? <span className="absolute left-3 top-3 rounded-sm bg-sunshine px-2.5 py-1 text-xs font-semibold text-sunshine-foreground">Featured</span> : null}
               <span className="absolute bottom-4 right-4 grid size-11 place-items-center rounded-full bg-primary text-primary-foreground shadow-[var(--shadow-lift)] transition-transform duration-200 group-hover:scale-110 motion-reduce:transition-none"><Play className="!size-5 fill-current" /></span>
             </Button>
             <p className="mt-4 text-xs font-medium text-primary">{video.category || "Video"}</p>

@@ -1,3 +1,4 @@
+import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute } from "@tanstack/react-router";
 import { listFilms } from "@/lib/content.functions";
 import { FilmCard } from "@/components/site/film-card";
@@ -28,13 +29,10 @@ function FilmsIndex() {
   const films: FilmSummary[] = Route.useLoaderData();
 
   return (
-    <div className="mx-auto max-w-[1400px] px-5 pb-8 pt-36 md:px-10 md:pt-44">
-      <p className="eyebrow">The slate</p>
-      <h1 className="mt-5 max-w-3xl text-5xl leading-[0.92] sm:text-7xl">Films</h1>
-      <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
-        Feature work produced in Nairobi with majority-Kenyan crews, financed and distributed across
-        five markets.
-      </p>
+    <div className="mx-auto max-w-[1400px] px-5 pb-8 pt-28 md:px-10 md:pt-36">
+      <PageIntro eyebrow="Made by Slate Safi" title="Our films">
+        Feature work produced in Nairobi with majority-Kenyan crews, financed and distributed across five markets.
+      </PageIntro>
 
       <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {films.map((film, i) => (
@@ -46,7 +44,7 @@ function FilmsIndex() {
             status={film.status}
             release_year={film.release_year}
             genre={film.genre}
-            image={film.hero_image_url ?? film.poster_url}
+            image={film.poster_url ?? film.hero_image_url}
             priority={i === 0}
           />
         ))}

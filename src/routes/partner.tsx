@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useRef, useState } from "react";
@@ -91,16 +93,10 @@ function Partner() {
 
   return (
     <div>
-      <section className="mx-auto max-w-[1400px] px-5 pt-36 md:px-10 md:pt-44">
-        <p className="eyebrow">Partner &amp; contact</p>
-        <h1 className="mt-5 max-w-4xl text-5xl leading-[0.92] sm:text-7xl">
-          Back films that already travel.
-        </h1>
-        <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Our work reaches audiences in Kenya, wider Africa, the UK, Canada and the US. Partners get
-          a Nairobi production base that delivers to international spec — and a slate with festival
-          form.
-        </p>
+      <section className="mx-auto max-w-[1400px] px-5 pt-28 md:px-10 md:pt-36">
+        <PageIntro eyebrow="Partner & contact" title="Let’s make great films">
+          Co-production, sponsorship, distribution or a conversation. We’d love to hear from you.
+        </PageIntro>
       </section>
 
       <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-20">
@@ -126,13 +122,13 @@ function Partner() {
                 <p className="mt-3 text-sm text-muted-foreground">
                   Thank you — our partnerships desk replies within two working days.
                 </p>
-                <button
+                <Button
                   type="button"
                   onClick={() => setDone(false)}
-                  className="mt-6 font-display text-xs font-bold uppercase tracking-[0.18em] text-primary"
+                  variant="link" className="mt-6 font-display text-xs font-bold uppercase tracking-[0.18em] text-primary"
                 >
                   Send another
-                </button>
+                </Button>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="mt-10 space-y-6">
@@ -230,10 +226,10 @@ function Partner() {
                   />
                 </div>
 
-                <button
+                <Button
                   type="submit"
                   disabled={pending}
-                  className="inline-flex items-center justify-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+                  className="h-auto inline-flex items-center justify-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
                 >
                   {pending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -241,7 +237,7 @@ function Partner() {
                     <Send className="h-4 w-4" />
                   )}
                   Send enquiry
-                </button>
+                </Button>
               </form>
             )}
           </div>

@@ -1,3 +1,4 @@
+import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ExternalLink, MapPin, Ticket } from "lucide-react";
 import { listScreenings } from "@/lib/content.functions";
@@ -69,13 +70,10 @@ function ScreeningsPage() {
   }, {});
 
   return (
-    <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-36 md:px-10 md:pt-44">
-      <p className="eyebrow">Where to watch</p>
-      <h1 className="mt-5 max-w-3xl text-5xl leading-[0.92] sm:text-7xl">Showings & tickets</h1>
-      <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
-        Slate Safi films play in cinemas across Kenya. Choose your cinema below and you'll be taken
-        to that cinema's own ticketing system to complete your booking.
-      </p>
+    <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-28 md:px-10 md:pt-36">
+      <PageIntro eyebrow="A night at the movies" title="Showings & tickets">
+        Slate Safi films play in cinemas across Kenya. Find your next movie night.
+      </PageIntro>
 
       {upcoming.length === 0 ? (
         <div className="mt-16 rounded-sm border border-border p-10">
@@ -93,7 +91,7 @@ function ScreeningsPage() {
           {Object.entries(grouped).map(([day, rows]) => (
             <section key={day}>
               <h2 className="font-display text-xs font-bold uppercase tracking-[0.22em] text-primary">
-                {formatDay(rows[0]!.starts_at)}
+                {formatDay(day + "T12:00:00")}
               </h2>
               <ul className="mt-6 space-y-4">
                 {rows.map((s) => (
@@ -131,19 +129,19 @@ function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
   const poster = s.film?.poster_url ?? s.film?.hero_image_url ?? null;
 
   return (
-    <li className="grid gap-6 rounded-sm border border-border p-6 transition-colors hover:border-primary/50 md:grid-cols-[auto_1fr_auto] md:items-stretch">
-      {poster ? (
+    <li className="grid grid-cols-[72px_minmax(0,1fr)] gap-5 rounded-lg border border-border bg-surface p-5 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lift)] md:grid-cols-[110px_1fr_auto] md:items-stretch">
+      {poster && s.film ? (
         <Link
           to="/films/$slug"
-          params={{ slug: s.film!.slug }}
-          className="hidden overflow-hidden rounded-sm border border-border md:block"
+          params={{ slug: s.film?.slug ?? "" }}
+          className="overflow-hidden rounded-md self-start"
         >
           <img
             src={poster}
             alt={`${s.film?.title ?? "Film"} poster`}
             loading="lazy"
             decoding="async"
-            className="h-full w-[110px] object-cover"
+            className="aspect-[2/3] w-full object-contain"
           />
         </Link>
       ) : null}
@@ -185,7 +183,7 @@ function ScreeningRow({ screening: s }: { screening: ScreeningListing }) {
         )}
       </div>
 
-      <div className="md:text-right">
+      <div className="col-span-full md:col-span-1 md:text-right">
         {(s.tickets_enabled || types.length > 0) && !s.sold_out ? (
           <div className="flex flex-col items-start gap-2 md:items-end">
             <a

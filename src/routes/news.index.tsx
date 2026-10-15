@@ -1,3 +1,4 @@
+import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { listPosts } from "@/lib/content.functions";
 import type { PostSummary } from "@/lib/content.types";
@@ -49,9 +50,8 @@ function NewsIndex() {
   const [lead, ...rest] = posts;
 
   return (
-    <div className="mx-auto max-w-[1400px] px-5 pb-8 pt-36 md:px-10 md:pt-44">
-      <p className="eyebrow">Newsroom</p>
-      <h1 className="mt-5 text-5xl leading-[0.92] sm:text-7xl">News &amp; notes</h1>
+    <div className="mx-auto max-w-[1400px] px-5 pb-8 pt-28 md:px-10 md:pt-36">
+      <PageIntro eyebrow="From the studio" title="News & notes" />
 
       {lead ? (
         <Link

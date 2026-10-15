@@ -123,7 +123,7 @@ function FilmDetail() {
           />
         ) : null}
         <div className="absolute inset-0 veil" />
-        <div className="relative mx-auto flex min-h-[70svh] max-w-[1400px] flex-col justify-end px-5 pb-14 pt-32 md:px-10">
+        <div className="cinema-copy relative mx-auto flex min-h-[70svh] max-w-[1400px] flex-col justify-end px-5 pb-14 pt-32 md:px-10">
           <Link
             to="/films"
             className="inline-flex items-center gap-2 font-display text-[0.7rem] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
@@ -218,10 +218,10 @@ function FilmDetail() {
                 {crew.map((person) => (
                   <li
                     key={person.id}
-                    className="rule-top grid grid-cols-[minmax(0,1fr)_auto] gap-4 pt-4 text-sm"
+                    className="rule-top flex flex-wrap justify-between gap-2 pt-4 text-sm"
                   >
                     <span className="truncate text-muted-foreground">{person.role}</span>
-                    <span className="shrink-0 font-display font-bold">{person.name}</span>
+                    <span className="font-display font-bold">{person.name}</span>
                   </li>
                 ))}
               </ul>
@@ -258,7 +258,7 @@ function FilmDetail() {
 
       <section className="rule-top">
         <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
-          <div className="frame rounded-sm border border-border p-8 md:p-14">
+          <div className="border-t-4 border-festival bg-secondary p-8 md:p-12">
             <h2 className="eyebrow">Support this film</h2>
             <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
               Help {film.title} reach the next audience.

@@ -84,7 +84,7 @@ function PostPage() {
   const post: Post = Route.useLoaderData();
 
   return (
-    <article className="mx-auto max-w-[880px] px-5 pt-36 md:pt-44">
+    <article className="mx-auto max-w-[880px] px-5 pt-28 md:pt-36">
       <Link
         to="/news"
         className="inline-flex items-center gap-2 font-display text-[0.7rem] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
@@ -113,7 +113,7 @@ function PostPage() {
         />
       ) : null}
 
-      <div className="mt-12 space-y-6 text-base leading-relaxed text-muted-foreground">
+      <div className="mt-12 max-w-[65ch] space-y-6 text-base leading-relaxed text-muted-foreground">
         {(post.body ?? "").split("\n\n").map((para, i) => (
           <p key={i}>{para}</p>
         ))}
