@@ -178,7 +178,7 @@ function BookingPage() {
           </h2>
 
           {closed ? (
-            <p variant="ghost" className="mt-6 text-sm text-muted-foreground">
+            <p className="mt-6 text-sm text-muted-foreground">
               Tickets for this date are closed. Follow our{" "}
               <Link to="/news" className="text-primary hover:underline">
                 news feed
