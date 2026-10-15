@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep the video catalogue in the videos route and playback in a dedicated accessible watch dialog, so browsing portrait artwork does not force a landscape player into the catalogue layout.
+- Use the shared PageIntro for public catalogue and editorial headers, and semantic cinema tokens for text over film imagery, so light page themes never reduce video-overlay contrast.

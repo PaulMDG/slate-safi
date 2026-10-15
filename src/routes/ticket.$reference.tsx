@@ -50,7 +50,7 @@ function QrCode({ value }: { value: string }) {
   }, [value]);
 
   if (!src) return <div className="h-[220px] w-[220px] animate-pulse rounded-sm bg-muted" />;
-  return <img src={src} alt="Ticket QR code" className="h-[220px] w-[220px] rounded-sm bg-white p-2" />;
+  return <img src={src} alt="Ticket QR code" className="h-[220px] w-[220px] rounded-sm bg-surface p-2" />;
 }
 
 function TicketPage() {
@@ -163,7 +163,7 @@ function TicketPage() {
           <div className="mt-8 flex items-start gap-3 text-sm">
             {paid ? (
               <>
-                <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-400" />
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" />
                 <p className="text-muted-foreground">
                   {data.email_sent_at
                     ? `Emailed to ${data.email}. Show this code or QR at the door.`

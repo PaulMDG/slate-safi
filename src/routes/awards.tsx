@@ -1,3 +1,4 @@
+import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award } from "lucide-react";
 import { socialMeta } from "@/lib/seo";
@@ -214,16 +215,10 @@ function HonourList({ items }: { items: Honour[] }) {
 
 function AwardsPage() {
   return (
-    <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-36 md:px-10 md:pt-44">
-      <p className="eyebrow">Awards &amp; recognition</p>
-      <h1 className="mt-5 max-w-3xl text-5xl leading-[0.92] sm:text-7xl">
-        Celebrating stories that make an impact
-      </h1>
-      <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
-        Our films have received recognition from international film festivals and major African film
-        awards, celebrating excellence in documentary filmmaking, cinematography, storytelling,
-        music, acting and direction.
-      </p>
+    <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-28 md:px-10 md:pt-36">
+      <PageIntro eyebrow="Awards & recognition" title="Stories worth celebrating">
+        Recognition for our films, and the people who bring them to life.
+      </PageIntro>
 
       <section className="rule-top mt-20 pt-12">
         <div className="grid items-center gap-10 md:grid-cols-[1.7fr_auto]">

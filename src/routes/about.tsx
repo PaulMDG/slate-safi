@@ -1,3 +1,4 @@
+import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { listPress, getFilm } from "@/lib/content.functions";
@@ -61,16 +62,10 @@ function About() {
 
   return (
     <div>
-      <section className="mx-auto max-w-[1400px] px-5 pt-36 md:px-10 md:pt-44">
-        <p className="eyebrow">Who we are</p>
-        <h1 className="mt-5 max-w-4xl text-5xl leading-[0.92] sm:text-7xl">
-          Kenyan stories, built to travel.
-        </h1>
-        <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Slate Safi is an independent film production company in Nairobi. We develop, produce and
-          deliver feature work with majority-Kenyan crews and international finance — films that
-          hold up in a Nairobi cinema and in a festival theatre in London, Toronto or Austin.
-        </p>
+      <section className="mx-auto max-w-[1400px] px-5 pt-28 md:px-10 md:pt-36">
+        <PageIntro eyebrow="The people behind the pictures" title="Slate Safi">
+          Kenyan stories, built to travel. We are an independent film production company in Nairobi, making films for audiences at home and around the world.
+        </PageIntro>
       </section>
 
 
@@ -200,7 +195,7 @@ function About() {
 
       <section className="rule-top">
         <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
-          <div className="frame rounded-sm border border-border p-8 md:p-14">
+          <div className="border-t-4 border-festival bg-secondary p-8 md:p-12">
             <h2 className="eyebrow">Work with us</h2>
             <p className="mt-4 max-w-2xl text-3xl leading-tight sm:text-4xl">
               Financing, co-production, distribution or press?

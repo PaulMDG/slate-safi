@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -16,17 +17,10 @@ export const Route = createFileRoute("/auth")({
     const next = safeNext(s.next);
     return next ? { next } : {};
   },
-  head: () => ({
-    ...socialMeta({
-      title: "Studio sign in — Slate Safi",
-      description: "Sign in to the Slate Safi studio dashboard.",
-      path: "/auth",
-    }),
-    meta: [
-      { title: "Studio sign in — Slate Safi" },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
+  head: () => {
+    const social = socialMeta({ title: "Studio sign in — Slate Safi", description: "Sign in to the Slate Safi studio dashboard.", path: "/auth" });
+    return { ...social, meta: [...social.meta, { name: "robots", content: "noindex, nofollow" }] };
+  },
   component: AuthPage,
 });
 
@@ -132,25 +126,25 @@ function AuthPage() {
                 placeholder="••••••••"
               />
             </div>
-            <button
+            <Button
               type="submit"
               disabled={pending}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+              className="h-auto inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             >
               {pending && <Loader2 className="h-4 w-4 animate-spin" />}
               {mode === "signin" ? "Sign in" : "Create account"}
-            </button>
+            </Button>
           </form>
 
-          <button
+          <Button
             type="button"
             onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-            className="mt-6 text-sm text-muted-foreground hover:text-primary"
+            variant="ghost" className="mt-6 text-sm text-muted-foreground hover:text-primary"
           >
             {mode === "signin"
               ? "Need an account? Create one"
               : "Already have an account? Sign in"}
-          </button>
+          </Button>
         </>
       )}
 

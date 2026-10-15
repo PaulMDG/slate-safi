@@ -23,37 +23,16 @@ export function FilmCard({
   priority,
 }: FilmCardProps) {
   return (
-    <Link
-      to="/films/$slug"
-      params={{ slug }}
-      className="group relative block overflow-hidden rounded-sm border border-border frame"
-    >
-      <div className="relative aspect-[4/5] w-full overflow-hidden">
-        {image ? (
-          <img
-            src={image}
-            alt={`${title} — film still`}
-            loading={priority ? "eager" : "lazy"}
-            decoding="async"
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          />
-        ) : null}
-        <div className="absolute inset-0 veil" />
-        <div className="absolute inset-x-0 bottom-0 p-6">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">
-            <span className="text-primary">{status === "released" ? "Released" : "Upcoming"}</span>
-            {release_year ? <span>{release_year}</span> : null}
-            {genre ? <span className="truncate">{genre}</span> : null}
-          </div>
-          <h3 className="mt-3 text-3xl leading-none">{title}</h3>
-          {tagline ? (
-            <p className="mt-3 line-clamp-2 max-w-sm text-sm text-muted-foreground">{tagline}</p>
-          ) : null}
-          <span className="mt-5 inline-flex items-center gap-1.5 font-display text-[0.7rem] font-bold uppercase tracking-[0.18em] text-foreground">
-            View film
-            <ArrowUpRight className="h-4 w-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </span>
-        </div>
+    <Link to="/films/$slug" params={{ slug }} className="group block min-w-0">
+      <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-muted shadow-[var(--shadow-lift)]">
+        {image ? <img src={image} alt={`${title} — film poster`} loading={priority ? "eager" : "lazy"} decoding="async" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.025] motion-reduce:transform-none" /> : <div className="grid h-full place-items-center p-6 font-display text-3xl font-bold">{title}</div>}
+        <span className="absolute left-4 top-4 rounded-sm bg-sunshine px-3 py-1.5 text-xs font-semibold text-sunshine-foreground">{status === "released" ? "Released" : "Upcoming"}</span>
+        <span className="absolute bottom-4 right-4 grid size-11 place-items-center rounded-full bg-surface text-primary transition-transform group-hover:-translate-y-1"><ArrowUpRight className="size-5" /></span>
+      </div>
+      <div className="pt-5">
+        <p className="text-xs font-medium text-muted-foreground">{[release_year, genre].filter(Boolean).join(" · ")}</p>
+        <h3 className="mt-2 text-2xl leading-tight transition-colors group-hover:text-primary">{title}</h3>
+        {tagline ? <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{tagline}</p> : null}
       </div>
     </Link>
   );

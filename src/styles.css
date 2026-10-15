@@ -6,7 +6,7 @@
 
 /*
  * Slate Safi design system.
- * Dark cinematic base + a single warm amber accent.
+ * Light festival surfaces + coral and sunlit yellow accents.
  * All colours are oklch tokens; never hardcode colours in components.
  */
 
@@ -19,9 +19,17 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
-  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
 
+  --color-festival: var(--festival);
+  --color-sunshine: var(--sunshine);
+  --color-sunshine-foreground: var(--sunshine-foreground);
+  --color-cinema: var(--cinema);
+  --color-cinema-foreground: var(--cinema-foreground);
+  --color-cinema-muted: var(--cinema-muted);
+  --color-cinema-border: var(--cinema-border);
+  --color-success: var(--success);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -60,56 +68,51 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.5rem;
 
-  --background: oklch(0.145 0.006 60);
-  --foreground: oklch(0.965 0.006 80);
-  --surface: oklch(0.198 0.008 62);
-  --surface-foreground: oklch(0.965 0.006 80);
-  --card: oklch(0.198 0.008 62);
-  --card-foreground: oklch(0.965 0.006 80);
-  --popover: oklch(0.198 0.008 62);
-  --popover-foreground: oklch(0.965 0.006 80);
-
-  /* Single warm accent */
-  --primary: oklch(0.78 0.155 62);
-  --primary-foreground: oklch(0.16 0.02 60);
-
-  --secondary: oklch(0.245 0.009 62);
-  --secondary-foreground: oklch(0.965 0.006 80);
-  --muted: oklch(0.235 0.008 62);
-  --muted-foreground: oklch(0.705 0.014 70);
-  --accent: oklch(0.26 0.02 62);
-  --accent-foreground: oklch(0.965 0.006 80);
-  --destructive: oklch(0.61 0.2 27);
-  --destructive-foreground: oklch(0.98 0.005 80);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.78 0.155 62);
-
-  --sidebar: oklch(0.198 0.008 62);
-  --sidebar-foreground: oklch(0.965 0.006 80);
-  --sidebar-primary: oklch(0.78 0.155 62);
-  --sidebar-primary-foreground: oklch(0.16 0.02 60);
-  --sidebar-accent: oklch(0.245 0.009 62);
-  --sidebar-accent-foreground: oklch(0.965 0.006 80);
-  --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.78 0.155 62);
-
-  --gradient-veil: linear-gradient(
-    to top,
-    oklch(0.145 0.006 60 / 92%) 4%,
-    oklch(0.145 0.006 60 / 60%) 34%,
-    oklch(0.145 0.006 60 / 15%) 72%,
-    oklch(0.145 0.006 60 / 30%) 100%
-  );
-  --gradient-frame: linear-gradient(
-    160deg,
-    oklch(0.24 0.01 62) 0%,
-    oklch(0.17 0.007 60) 100%
-  );
-  --shadow-lift: 0 24px 60px -28px oklch(0 0 0 / 85%);
-  --shadow-glow: 0 0 0 1px oklch(0.78 0.155 62 / 35%), 0 18px 50px -24px oklch(0.78 0.155 62 / 45%);
+  --background: oklch(0.984 0.003 247.86);
+  --foreground: oklch(0.277 0 0);
+  --surface: oklch(1 0 0);
+  --surface-foreground: var(--foreground);
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.53 0.164 29);
+  --primary-foreground: oklch(1 0 0);
+  --festival: oklch(0.678 0.16 30);
+  --sunshine: oklch(0.854 0.142 89);
+  --sunshine-foreground: var(--foreground);
+  --secondary: oklch(0.951 0.016 30);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.955 0.003 247);
+  --muted-foreground: oklch(0.49 0.012 250);
+  --accent: oklch(0.965 0.047 89);
+  --accent-foreground: var(--foreground);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(1 0 0);
+  --success: oklch(0.47 0.12 155);
+  --border: oklch(0.277 0 0 / 13%);
+  --input: oklch(0.277 0 0 / 22%);
+  --ring: var(--primary);
+  --cinema: oklch(0.22 0.006 250);
+  --cinema-foreground: oklch(0.995 0 0);
+  --cinema-muted: oklch(0.94 0 0);
+  --cinema-border: oklch(1 0 0 / 40%);
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+  --gradient-veil: linear-gradient(to top, oklch(0.22 0.006 250 / 85%), oklch(0.22 0.006 250 / 20%) 65%, transparent);
+  --gradient-frame: linear-gradient(140deg, var(--surface), var(--secondary));
+  --shadow-lift: 0 16px 36px -18px oklch(0.277 0.01 250 / 24%);
+  --shadow-glow: 0 0 0 1px var(--border), 0 12px 30px -18px oklch(0.678 0.16 30 / 30%);
+  --shadow-header: 0 4px 24px -12px oklch(0.277 0.01 250 / 20%);
+  --shadow-cinema-text: 0 2px 12px oklch(0.1 0 0 / 70%), 0 4px 36px oklch(0.1 0 0 / 55%);
 }
 
 @layer base {
@@ -136,7 +139,7 @@
   h4 {
     font-family: var(--font-display);
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
     text-wrap: balance;
   }
 
@@ -150,8 +153,8 @@
   font-family: var(--font-display);
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color-primary);
 }
 
@@ -178,4 +181,32 @@
 
 @utility animate-hero-zoom {
   animation: hero-zoom 12s ease-out forwards;
+}
+
+@layer base {
+  body { letter-spacing: 0; }
+  a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+  a:focus-visible { outline: 2px solid var(--ring); outline-offset: 5px; }
+  input, textarea, select { background-color: var(--surface); border-radius: var(--radius); }
+  p { text-wrap: pretty; }
+}
+.page-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-intro .eyebrow { display: flex; align-items: center; gap: .65rem; }
+.page-intro .eyebrow::before { content: ""; width: 1.5rem; height: .35rem; background: var(--festival); }
+.cinema-copy { color: var(--cinema-foreground); text-shadow: var(--shadow-cinema-text); }
+.cinema-copy .eyebrow { color: var(--sunshine); }
+.cinema-copy p:not(.eyebrow), .cinema-copy ul, .cinema-copy > a { color: var(--cinema-muted); }
+.festival-footer { background: var(--secondary); border-top: .4rem solid var(--festival); }
+.festival-wordmark { font-family: var(--font-display); font-weight: 800; line-height: 1; }
+@media (max-width: 639px) { .page-intro { align-items: start; flex-direction: column; gap: 1.5rem; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }

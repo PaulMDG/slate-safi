@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Pause, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { toEmbedUrl } from "./video-player";
 
 export type HeroSlideView = {
@@ -17,8 +18,7 @@ export type HeroSlideView = {
 };
 
 function CtaButton({ label, url }: { label: string; url: string }) {
-  const className =
-    "group inline-flex items-center gap-3 rounded-full border border-primary/40 bg-primary/90 px-8 py-4 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground shadow-[0_0_40px_-8px_var(--color-primary)] backdrop-blur transition-all hover:bg-primary hover:shadow-[0_0_60px_-6px_var(--color-primary)]";
+  const className = "group gap-3 h-auto rounded-md bg-sunshine px-6 py-3.5 text-sm font-semibold text-sunshine-foreground hover:bg-sunshine/90";
   const inner = (
     <>
       <Play className="h-4 w-4 fill-current" />
@@ -28,15 +28,15 @@ function CtaButton({ label, url }: { label: string; url: string }) {
   );
   if (/^https?:\/\//i.test(url)) {
     return (
-      <a href={url} target="_blank" rel="noreferrer" className={className}>
+      <Button asChild className={className}><a href={url} target="_blank" rel="noreferrer">
         {inner}
-      </a>
+      </a></Button>
     );
   }
   return (
-    <Link to={url} className={className}>
+    <Button asChild className={className}><Link to={url}>
       {inner}
-    </Link>
+    </Link></Button>
   );
 }
 
@@ -165,7 +165,7 @@ export function HeroSlideshow({
     <section
       aria-roledescription="carousel"
       aria-label="Featured films"
-      className="relative min-h-[92svh] w-full overflow-hidden bg-background"
+      className="relative min-h-[82svh] w-full overflow-hidden bg-cinema"
       onKeyDown={(e) => {
         if (e.key === "ArrowRight") go(index + 1);
         if (e.key === "ArrowLeft") go(index - 1);
@@ -201,7 +201,7 @@ export function HeroSlideshow({
         </div>
       ))}
 
-      <div className="relative mx-auto flex min-h-[92svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
+      <div className="cinema-copy relative mx-auto flex min-h-[82svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
         {slides.map((slide, i) => (
           <div
             key={slide.id}
@@ -214,12 +214,12 @@ export function HeroSlideshow({
           >
             {slide.eyebrow ? <p className="eyebrow">{slide.eyebrow}</p> : null}
             {slide.title ? (
-              <h1 className="mt-5 max-w-4xl text-6xl leading-[0.88] [text-shadow:0_2px_12px_rgba(0,0,0,0.55),0_4px_36px_rgba(0,0,0,0.45)] sm:text-7xl lg:text-[7.5rem]">
+              <h1 className="mt-5 max-w-4xl text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
                 {slide.title}
               </h1>
             ) : null}
             {slide.logline ? (
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-cinema-muted sm:text-lg">
                 {slide.logline}
               </p>
             ) : null}
@@ -233,34 +233,34 @@ export function HeroSlideshow({
 
         {count > 1 ? (
           <div className="mt-12 flex flex-wrap items-center gap-5">
-            <button
+            <Button variant="ghost" size="icon"
               type="button"
               onClick={() => setPlaying((p) => !p)}
               aria-label={playing ? "Pause slideshow" : "Play slideshow"}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/40 text-foreground backdrop-blur transition-colors hover:border-primary hover:text-primary"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-cinema-border bg-cinema/40 text-cinema-foreground backdrop-blur transition-colors hover:border-primary hover:text-primary"
             >
               {playing ? (
                 <Pause className="h-3.5 w-3.5 fill-current" />
               ) : (
                 <Play className="h-3.5 w-3.5 fill-current" />
               )}
-            </button>
+            </Button>
             <div className="flex flex-1 flex-wrap items-center gap-3">
               {slides.map((slide, i) => (
-                <button
+                <Button variant="ghost" size="icon"
                   key={slide.id}
                   type="button"
                   onClick={() => go(i)}
                   aria-label={`Go to slide ${i + 1}`}
                   aria-current={i === index}
-                  className="group relative h-[3px] w-14 overflow-hidden rounded-full bg-border/70 sm:w-20"
+                  className="group relative h-[3px] w-14 overflow-hidden rounded-full bg-cinema-border sm:w-20"
                 >
                   <span
                     className={`absolute inset-y-0 left-0 bg-primary transition-all duration-500 ${
                       i === index ? "w-full" : "w-0 group-hover:w-1/3"
                     }`}
                   />
-                </button>
+                </Button>
               ))}
             </div>
             <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.24em] text-muted-foreground">

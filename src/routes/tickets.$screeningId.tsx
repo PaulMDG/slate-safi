@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useRef, useState } from "react";
@@ -177,7 +178,7 @@ function BookingPage() {
           </h2>
 
           {closed ? (
-            <p className="mt-6 text-sm text-muted-foreground">
+            <p variant="ghost" className="mt-6 text-sm text-muted-foreground">
               Tickets for this date are closed. Follow our{" "}
               <Link to="/news" className="text-primary hover:underline">
                 news feed
@@ -295,10 +296,10 @@ function BookingPage() {
 
               {error && <p className="mt-5 text-sm text-destructive">{error}</p>}
 
-              <button
+              <Button
                 type="submit"
                 disabled={pending}
-                className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 py-4 font-display text-[0.65rem] font-bold uppercase tracking-[0.18em] text-primary-foreground disabled:opacity-50"
+                className="mt-7 h-auto inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 py-4 font-display text-[0.65rem] font-bold uppercase tracking-[0.18em] text-primary-foreground disabled:opacity-50"
               >
                 {pending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -306,7 +307,7 @@ function BookingPage() {
                   <Ticket className="h-4 w-4" />
                 )}
                 {free ? "Get my free ticket" : "Pay with M-Pesa"}
-              </button>
+              </Button>
 
               <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
                 {free
