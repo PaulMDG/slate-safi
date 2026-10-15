@@ -153,7 +153,7 @@ function Home() {
       {useSlideshow ? (
         <HeroSlideshow slides={heroSlides} intervalMs={cms?.slideshow_interval_ms ?? 6500} />
       ) : (
-        <section className="relative min-h-[92svh] w-full overflow-hidden">
+        <section className="relative min-h-[82svh] w-full overflow-hidden">
           {heroImage ? (
             <img
               src={heroImage}
@@ -165,7 +165,7 @@ function Home() {
           ) : null}
           
 
-          <div className="relative mx-auto flex min-h-[92svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
+          <div className="cinema-copy relative mx-auto flex min-h-[82svh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:px-10 md:pb-24">
             <p className="eyebrow">{heroEyebrow}</p>
             <h1 className="mt-5 max-w-4xl text-6xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">
               {heroTitle}
@@ -201,7 +201,7 @@ function Home() {
       )}
 
 
-      <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
+      <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-20">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
           <div className="min-w-0">
             <h2 className="eyebrow">{cms?.slate_eyebrow || "The slate"}</h2>
@@ -227,7 +227,7 @@ function Home() {
               status={film.status}
               release_year={film.release_year}
               genre={film.genre}
-              image={film.hero_image_url ?? film.poster_url}
+              image={film.poster_url ?? film.hero_image_url}
               priority={i === 0}
             />
           ))}
@@ -236,7 +236,7 @@ function Home() {
 
 
       {cms?.show_quotes !== false && quotes.length > 0 && (
-        <section className="rule-top border-b border-border">
+        <section className="rule-top border-b border-border bg-accent">
           <div className="mx-auto grid max-w-[1400px] gap-10 px-5 py-16 md:grid-cols-3 md:px-10 md:py-20">
             {quotes.map((q) => (
               <blockquote key={q.id} className="min-w-0">
@@ -251,7 +251,7 @@ function Home() {
       )}
 
       {cms?.show_news !== false && (
-        <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
+        <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-20">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
             <div className="min-w-0">
               <h2 className="eyebrow">{cms?.news_eyebrow || "Latest"}</h2>
@@ -321,8 +321,8 @@ function Home() {
 
       {cms?.show_partner !== false && (
         <section className="rule-top">
-          <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
-            <div className="frame rounded-sm border border-border p-8 md:p-16">
+          <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-20">
+            <div className="border-t-4 border-festival bg-secondary p-8 md:p-12">
               <div className="grid gap-10 md:grid-cols-[1.6fr_1fr] md:items-end">
                 <div className="min-w-0">
                   <h2 className="eyebrow">{cms?.partner_eyebrow || "Partners & sponsors"}</h2>
