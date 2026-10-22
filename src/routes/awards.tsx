@@ -1,7 +1,7 @@
 import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award } from "lucide-react";
-import { socialMeta } from "@/lib/seo";
+import { SITE_LOGO, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/awards")({
   head: () =>
