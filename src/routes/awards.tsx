@@ -1,7 +1,7 @@
 import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award } from "lucide-react";
-import { socialMeta } from "@/lib/seo";
+import { SITE_LOGO, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/awards")({
   head: () =>
@@ -10,8 +10,7 @@ export const Route = createFileRoute("/awards")({
       description:
         "International festival awards and African film honours for Sleeping Warrior (2021) and Boda Love (2024–2025), from Cannes World Film Festival to the Africa Movie Academy Awards.",
       path: "/awards",
-      image:
-        "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/heroes/1787781256896-hq720.jpg",
+      image: SITE_LOGO,
     }),
   component: AwardsPage,
 });
