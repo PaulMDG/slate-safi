@@ -18,7 +18,6 @@ export const Route = createFileRoute("/screenings")({
       description:
         "Premiere and showing dates for Slate Safi films across Kenyan cinemas. Pick your cinema and book tickets through their own ticketing system.",
       path: "/screenings",
-      image: "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/heroes/1787781256896-hq720.jpg",
     }),
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-5 py-40 text-center">

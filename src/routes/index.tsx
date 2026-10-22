@@ -43,7 +43,6 @@ export const Route = createFileRoute("/")({
       description:
         "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences.",
       path: "/",
-      image: "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/heroes/1787781256896-hq720.jpg",
     });
     return {
       ...social,
