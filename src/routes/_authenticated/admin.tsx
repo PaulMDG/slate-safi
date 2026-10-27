@@ -131,6 +131,7 @@ const PRESS_FIELDS: readonly FieldSpec[] = [
       { value: "award", label: "Award" },
       { value: "quote", label: "Quote" },
       { value: "coverage", label: "Coverage" },
+      { value: "review", label: "Review" },
     ],
   },
   { key: "outlet", label: "Outlet", type: "text" },
