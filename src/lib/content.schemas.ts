@@ -92,7 +92,7 @@ export const postSchema = z.object({
 export const pressSchema = z.object({
   id: z.string().uuid().optional(),
   film_id: z.string().uuid().optional().nullable(),
-  kind: z.enum(["laurel", "quote", "award", "coverage"]),
+  kind: z.enum(["laurel", "quote", "award", "coverage", "review"]),
   title: z.string().trim().min(1).max(200),
   outlet: z.string().trim().max(160).optional().nullable(),
   quote: z.string().trim().max(1000).optional().nullable(),

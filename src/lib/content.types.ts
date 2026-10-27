@@ -31,6 +31,13 @@ export type PressItem = Pick<
   "id" | "kind" | "title" | "outlet" | "quote" | "year"
 >;
 
+export type ReviewSummary = Pick<
+  Tables<"press_items">,
+  "id" | "title" | "outlet" | "quote" | "link_url" | "year" | "film_id"
+> & {
+  film: Pick<Film, "slug" | "title" | "poster_url"> | null;
+};
+
 export type Post = Tables<"posts">;
 export type PostSummary = Pick<
   Post,

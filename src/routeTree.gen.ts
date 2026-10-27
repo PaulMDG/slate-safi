@@ -17,6 +17,7 @@ import { Route as AwardsRouteImport } from './routes/awards'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as PartnerRouteImport } from './routes/partner'
+import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as ScreeningsRouteImport } from './routes/screenings'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -73,6 +74,11 @@ const MusicRoute = MusicRouteImport.update({
 const PartnerRoute = PartnerRouteImport.update({
   id: '/partner',
   path: '/partner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/music': typeof MusicRoute
   '/partner': typeof PartnerRoute
+  '/reviews': typeof ReviewsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/music': typeof MusicRoute
   '/partner': typeof PartnerRoute
+  '/reviews': typeof ReviewsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/music': typeof MusicRoute
   '/partner': typeof PartnerRoute
+  '/reviews': typeof ReviewsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/screenings': typeof ScreeningsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/music'
     | '/partner'
+    | '/reviews'
     | '/rss.xml'
     | '/screenings'
     | '/sitemap.xml'
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/music'
     | '/partner'
+    | '/reviews'
     | '/rss.xml'
     | '/screenings'
     | '/sitemap.xml'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/music'
     | '/partner'
+    | '/reviews'
     | '/rss.xml'
     | '/screenings'
     | '/sitemap.xml'
@@ -344,6 +356,7 @@ export interface RootRouteChildren {
   McpRoute: typeof McpRoute
   MusicRoute: typeof MusicRoute
   PartnerRoute: typeof PartnerRoute
+  ReviewsRoute: typeof ReviewsRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   ScreeningsRoute: typeof ScreeningsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -419,6 +432,13 @@ declare module '@tanstack/react-router' {
       path: '/partner'
       fullPath: '/partner'
       preLoaderRoute: typeof PartnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rss.xml': {
@@ -570,6 +590,7 @@ const rootRouteChildren: RootRouteChildren = {
   McpRoute: McpRoute,
   MusicRoute: MusicRoute,
   PartnerRoute: PartnerRoute,
+  ReviewsRoute: ReviewsRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   ScreeningsRoute: ScreeningsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
