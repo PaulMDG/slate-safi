@@ -36,7 +36,7 @@ function ReviewCard({ review }: { review: ReviewSummary }) {
         {review.title}
       </h2>
       {review.quote ? (
-        <p className="cinema-copy mt-5 flex-1 text-sm leading-relaxed sm:text-base">
+        <p className="mt-5 flex-1 text-sm leading-relaxed text-muted-foreground sm:text-base">
           {review.quote}
         </p>
       ) : null}
