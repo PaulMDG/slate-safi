@@ -7,6 +7,7 @@ import type {
   PostSummary,
   Post,
   Homepage,
+  ReviewSummary,
   HomepageSlide,
   ScreeningListing,
   Video,
@@ -77,6 +78,25 @@ export const listPress = createServerFn({ method: "GET" }).handler(
       .order("sort_order", { ascending: true });
     if (error) throw new Error(error.message);
     return data ?? [];
+  },
+);
+
+export const listReviews = createServerFn({ method: "GET" }).handler(
+  async (): Promise<ReviewSummary[]> => {
+    const { publicSupabase } = await import("./content.server");
+    const { data, error } = await publicSupabase()
+      .from("press_items")
+      .select(
+        "id, title, outlet, quote, link_url, year, film_id, film:films(id, slug, title, poster_url)",
+      )
+      .eq("kind", "review")
+      .eq("published", true)
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return ((data ?? []) as unknown as ReviewSummary[]).map((r) => ({
+      ...r,
+      film: r.film ?? null,
+    }));
   },
 );
 
