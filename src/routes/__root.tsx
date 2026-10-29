@@ -96,6 +96,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Nairobi-based film production company behind Boda Love and Kibera Hustle. Kenyan stories built for global audiences." },
     ],
     scripts: [
+      // Google Tag Manager (GA4 / Analytics tags run inside this container)
+      {
+        type: "text/javascript",
+        children: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5VQR2SWB');window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());`,
+      },
       // Facebook Pixel
       {
         type: "text/javascript",
@@ -127,6 +132,13 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <noscript>
+          <iframe
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5VQR2SWB"
+          />
           <img
             height="1"
             width="1"
