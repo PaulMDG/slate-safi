@@ -1,8 +1,8 @@
 export const SITE_URL = "https://slatesafi.co.ke";
 export const SITE_NAME = "Slate Safi";
-/** Link-preview (og:image) image: the Slate Safi Productions logo. */
+/** Default link-preview image: the Kibera Hustle film poster. */
 export const SITE_LOGO =
-  "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/brand/slatesafi-og.jpg";
+  "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/posters/1787779970852-flyer-2-by-3.png";
 
 /** Turns a stored image path into an absolute URL crawlers can fetch. */
 export function absoluteUrl(path: string | null | undefined): string | null {
