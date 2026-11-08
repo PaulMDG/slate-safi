@@ -1,7 +1,7 @@
 import { PageIntro } from "@/components/site/page-intro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award } from "lucide-react";
-import { SITE_LOGO, socialMeta } from "@/lib/seo";
+import { DEFAULT_SHARE_IMAGE, socialMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/awards")({
   head: () =>
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/awards")({
       description:
         "International festival awards and African film honours for Sleeping Warrior (2021) and Boda Love (2024–2025), from Cannes World Film Festival to the Africa Movie Academy Awards.",
       path: "/awards",
-      image: SITE_LOGO,
+      image: DEFAULT_SHARE_IMAGE,
     }),
   component: AwardsPage,
 });

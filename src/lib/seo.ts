@@ -1,7 +1,7 @@
 export const SITE_URL = "https://slatesafi.co.ke";
 export const SITE_NAME = "Slate Safi";
 /** Default link-preview image: the Kibera Hustle film poster. */
-export const SITE_LOGO =
+export const DEFAULT_SHARE_IMAGE =
   "https://dvlfzfvbxntgfkpuliyb.supabase.co/storage/v1/object/public/media/films/posters/1787779970852-flyer-2-by-3.png";
 
 /** Turns a stored image path into an absolute URL crawlers can fetch. */
@@ -32,7 +32,7 @@ export function socialMeta({
   type?: "website" | "article" | "video.movie";
 }) {
   const url = `${SITE_URL}${path}`;
-  const img = image ? absoluteUrl(image) : SITE_LOGO;
+  const img = image ? absoluteUrl(image) : DEFAULT_SHARE_IMAGE;
   return {
     meta: [
       { title },
