@@ -593,6 +593,36 @@ export type Database = {
         }
         Relationships: []
       }
+      photo_gallery: {
+        Row: {
+          alt_text: string | null
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          published: boolean
+          sort_order: number
+        }
+        Insert: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          published?: boolean
+          sort_order?: number
+        }
+        Update: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          published?: boolean
+          sort_order?: number
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           author: string | null

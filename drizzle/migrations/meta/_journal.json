@@ -36,6 +36,13 @@
       "when": 1791977425855,
       "tag": "0004_slide_video_clip",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794228018140,
+      "tag": "0005_create_photo_gallery",
+      "breakpoints": true
     }
   ]
 }
