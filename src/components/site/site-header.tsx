@@ -68,7 +68,7 @@ export function SiteHeader() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="font-display h-9 gap-1 px-1.5 text-xs font-medium text-muted-foreground hover:text-foreground md:px-2 md:text-sm"
+                    className="font-display h-9 gap-1 px-1.5 text-xs font-bold text-foreground hover:text-primary md:px-2 md:text-sm"
                   >
                     {item.label}
                     <ChevronDown className="size-3.5" />
@@ -90,8 +90,8 @@ export function SiteHeader() {
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
                 activeProps={{ className: "text-primary" }}
-                inactiveProps={{ className: "text-muted-foreground hover:text-foreground" }}
-                className="font-display whitespace-nowrap text-xs font-medium transition-colors md:text-sm"
+                inactiveProps={{ className: "text-foreground hover:text-primary" }}
+                className="font-display whitespace-nowrap text-xs font-bold transition-colors md:text-sm"
               >
                 {item.label}
               </Link>
@@ -122,7 +122,7 @@ export function SiteHeader() {
                     aria-expanded={mobileMediaOpen}
                     aria-controls="mobile-media-links"
                     onClick={() => setMobileMediaOpen((value) => !value)}
-                    className="font-display h-auto w-full justify-between rounded-none px-0 py-4 text-2xl font-semibold"
+                    className="font-display h-auto w-full justify-between rounded-none px-0 py-4 text-2xl font-bold"
                   >
                     {item.label}
                     <ChevronDown className={`size-5 transition-transform ${mobileMediaOpen ? "rotate-180" : ""}`} />
@@ -153,7 +153,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: item.to === "/" }}
                   activeProps={{ className: "text-primary" }}
                   inactiveProps={{ className: "text-foreground" }}
-                  className="font-display border-b border-border py-4 text-2xl font-semibold last:border-b-0"
+                  className="font-display border-b border-border py-4 text-2xl font-bold last:border-b-0"
                 >
                   {item.label}
                 </Link>
